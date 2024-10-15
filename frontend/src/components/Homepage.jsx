@@ -1,5 +1,6 @@
 // Homepage.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './css/Homepage.css';
 import logo from '../assets/WePetLogo.png';
 import jelly from '../assets/jelly.png';
@@ -50,10 +51,12 @@ const Homepage = () => {
       
       {/* 로그인 및 찜 목록 버튼 */}
       <div className="bottom-buttons">
-        <button className="bottom-btn">
-          로그인
-          <img src={jelly} alt="paw" className="icon" />
-        </button>
+      <Link to="/login">
+          <button className="bottom-btn">
+            로그인
+            <img src={jelly} alt="paw" className="icon" />
+          </button>
+        </Link>
         <button className="bottom-btn">
           찜 목록
           <img src={jelly} alt="paw" className="icon" />
