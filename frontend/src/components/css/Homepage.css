@@ -1,9 +1,47 @@
 .homepage-background {
-    width: 100%;
-    height: 100%;
-    background-image: url('../../assets/background.png');
-    background-size: cover; /* 이미지가 컨테이너 크기에 맞게 조절됨 */
-    background-position: center; /* 이미지가 중앙에 위치함 */
-    background-repeat: no-repeat; /* 이미지 반복 방지 */
-  }
-  
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+}
+
+.mySwiper {
+  width: 240px;
+  height: 320px;
+  margin-top: 200px; /* 로고와 겹치지 않도록 간격 조절 */
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* 슬라이드 배경색 설정 */
+.swiper-slide:nth-child(1n) { background-color: rgb(206, 17, 17); }
+.swiper-slide:nth-child(2n) { background-color: rgb(0, 140, 255); }
+.swiper-slide:nth-child(3n) { background-color: rgb(10, 184, 111); }
+.swiper-slide:nth-child(4n) { background-color: rgb(211, 122, 7); }
+.swiper-slide:nth-child(5n) { background-color: rgb(118, 163, 12); }
+.swiper-slide:nth-child(6n) { background-color: rgb(180, 10, 47); }
+.swiper-slide:nth-child(7n) { background-color: rgb(35, 99, 19); }
+.swiper-slide:nth-child(8n) { background-color: rgb(0, 68, 255); }
+.swiper-slide:nth-child(9n) { background-color: rgb(218, 12, 218); }
