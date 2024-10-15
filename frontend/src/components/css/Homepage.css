@@ -1,19 +1,20 @@
 @font-face {
-  font-family: 'KCC-Ganpan';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
+  font-family: "KCC-Ganpan";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
-  font-family: 'KCC-Ganpan', sans-serif;
-  color: #855B3B;
+  font-family: "KCC-Ganpan", sans-serif;
+  color: #855b3b;
 }
 
 .homepage-background {
   width: 100%;
   height: 100%;
-  background-image: url('../../assets/background.png');
+  background-image: url("../../assets/background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -42,11 +43,11 @@ body {
   border: 2px solid #c7d2ad;
   border-radius: 10px;
   font-size: 16px;
-  color: #855B3B;
+  color: #855b3b;
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-family: 'KCC-Ganpan', sans-serif;
+  font-family: "KCC-Ganpan", sans-serif;
 }
 
 .chatbot-btn {
@@ -82,11 +83,11 @@ body {
   border-radius: 18px;
   font-size: 22px;
   font-weight: bold;
-  color: #855B3B;
+  color: #855b3b;
   background-color: #4caf50;
   opacity: 1 !important;
   z-index: 1;
-  font-family: 'KCC-Ganpan', sans-serif;
+  font-family: "KCC-Ganpan", sans-serif;
 }
 
 /* 로그인 및 찜 목록 버튼 */
@@ -99,17 +100,17 @@ body {
 
 .bottom-btn {
   padding: 10px 20px;
-  background-color: #FFFFF0;
+  background-color: #fffff0;
   border: 5px solid #c7d2ad;
   border-radius: 20px;
   font-size: 18px;
-  color: #855B3B;
+  color: #855b3b;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: 'KCC-Ganpan', sans-serif;
+  font-family: "KCC-Ganpan", sans-serif;
 }
 
 .icon {
@@ -117,21 +118,22 @@ body {
   height: 20px;
 }
 @font-face {
-  font-family: 'KCC-Ganpan';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
+  font-family: "KCC-Ganpan";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
-  font-family: 'KCC-Ganpan', sans-serif;
-  color: #855B3B;
+  font-family: "KCC-Ganpan", sans-serif;
+  color: #855b3b;
 }
 
 .homepage-background {
   width: 100%;
   height: 100%;
-  background-image: url('../../assets/background.png');
+  background-image: url("../../assets/background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -156,17 +158,17 @@ body {
 
 .consultation-btn {
   padding: 10px 15px;
-  background-color: #FFFFF0;
+  background-color: #fffff0;
   border: 5px solid #c7d2ad;
   border-radius: 20px;
   font-size: 18px;
-  color: #855B3B;
+  color: #855b3b;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: 'KCC-Ganpan', sans-serif;
+  font-family: "KCC-Ganpan", sans-serif;
 }
 
 .chatbot-btn {
@@ -202,11 +204,11 @@ body {
   border-radius: 18px;
   font-size: 22px;
   font-weight: bold;
-  color: #855B3B;
+  color: #855b3b;
   background-color: #4caf50;
   opacity: 1 !important;
   z-index: 1;
-  font-family: 'KCC-Ganpan', sans-serif;
+  font-family: "KCC-Ganpan", sans-serif;
 }
 
 /* 로그인 및 찜 목록 버튼 */
@@ -219,17 +221,17 @@ body {
 
 .bottom-btn {
   padding: 10px 20px;
-  background-color: #FFFFF0;
+  background-color: #fffff0;
   border: 5px solid #c7d2ad;
   border-radius: 20px;
   font-size: 18px;
-  color: #855B3B;
+  color: #855b3b;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: 'KCC-Ganpan', sans-serif;
+  font-family: "KCC-Ganpan", sans-serif;
 }
 
 .icon {

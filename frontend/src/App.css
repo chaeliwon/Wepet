@@ -4,6 +4,7 @@
   align-items: center;
   min-height: 100vh;
   background-color: #f8f4e6; /* 페이지 배경색 */
+  flex-direction: column;
 }
 .mobile-container {
   width: 468px;
@@ -13,4 +14,34 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.naviBar {
+  width: 460px;
+  height: 50px;
+  background-color: #fffff5;
+  border: 5px solid #b8ce86;
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.backButton {
+  font-family: "KCC-Ganpan";
+  color: #855b3b;
+  position: relative;
+  top: 30px;
+  right: 150px;
+}
+@font-face {
+  font-family: "KCC-Ganpan";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
 }
