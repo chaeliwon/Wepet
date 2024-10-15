@@ -1,3 +1,15 @@
+@font-face {
+  font-family: 'KCC-Ganpan';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'KCC-Ganpan', sans-serif;
+  color: #855B3B;
+}
+
 .homepage-background {
   width: 100%;
   height: 100%;
@@ -12,17 +24,55 @@
 }
 
 .logo {
-  position: absolute;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 300px;
+  margin-top: 25px;
+  width: 260px;
 }
 
+/* 상담하기 및 챗봇 버튼 */
+.consultation-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* 버튼 간 간격 */
+}
+
+.consultation-btn {
+  padding: 10px 20px;
+  background-color: #c7d2ad;
+  border: 2px solid #c7d2ad;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #855B3B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-family: 'KCC-Ganpan', sans-serif;
+}
+
+.chatbot-btn {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  background-color: #c7d2ad;
+  border: 2px solid #c7d2ad;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.chatbot-btn .icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Swiper 스타일 */
 .mySwiper {
-  width: 240px;
-  height: 320px;
-  margin-top: 200px; /* 로고와 겹치지 않도록 간격 조절 */
+  width: 220px;
+  height: 300px;
+  margin-top: 20px;
 }
 
 .swiper-slide {
@@ -32,16 +82,157 @@
   border-radius: 18px;
   font-size: 22px;
   font-weight: bold;
-  color: #fff;
+  color: #855B3B;
+  background-color: #4caf50;
+  opacity: 1 !important;
+  z-index: 1;
+  font-family: 'KCC-Ganpan', sans-serif;
 }
 
-/* 슬라이드 배경색 설정 */
-.swiper-slide:nth-child(1n) { background-color: rgb(206, 17, 17); }
-.swiper-slide:nth-child(2n) { background-color: rgb(0, 140, 255); }
-.swiper-slide:nth-child(3n) { background-color: rgb(10, 184, 111); }
-.swiper-slide:nth-child(4n) { background-color: rgb(211, 122, 7); }
-.swiper-slide:nth-child(5n) { background-color: rgb(118, 163, 12); }
-.swiper-slide:nth-child(6n) { background-color: rgb(180, 10, 47); }
-.swiper-slide:nth-child(7n) { background-color: rgb(35, 99, 19); }
-.swiper-slide:nth-child(8n) { background-color: rgb(0, 68, 255); }
-.swiper-slide:nth-child(9n) { background-color: rgb(218, 12, 218); }
+/* 로그인 및 찜 목록 버튼 */
+.bottom-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
+  margin-top: 20px;
+}
+
+.bottom-btn {
+  padding: 10px 20px;
+  background-color: #FFFFF0;
+  border: 5px solid #c7d2ad;
+  border-radius: 20px;
+  font-size: 18px;
+  color: #855B3B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'KCC-Ganpan', sans-serif;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+@font-face {
+  font-family: 'KCC-Ganpan';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'KCC-Ganpan', sans-serif;
+  color: #855B3B;
+}
+
+.homepage-background {
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  margin-top: 25px;
+  width: 260px;
+}
+
+/* 상담하기 및 챗봇 버튼 */
+.consultation-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* 버튼 간 간격 */
+}
+
+.consultation-btn {
+  padding: 10px 15px;
+  background-color: #FFFFF0;
+  border: 5px solid #c7d2ad;
+  border-radius: 20px;
+  font-size: 18px;
+  color: #855B3B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'KCC-Ganpan', sans-serif;
+}
+
+.chatbot-btn {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  background-color: #c7d2ad;
+  border: 2px solid #c7d2ad;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.chatbot-btn .icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Swiper 스타일 */
+.mySwiper {
+  width: 220px;
+  height: 300px;
+  margin-top: 20px;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #855B3B;
+  background-color: #4caf50;
+  opacity: 1 !important;
+  z-index: 1;
+  font-family: 'KCC-Ganpan', sans-serif;
+}
+
+/* 로그인 및 찜 목록 버튼 */
+.bottom-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
+  margin-top: 20px;
+}
+
+.bottom-btn {
+  padding: 10px 20px;
+  background-color: #FFFFF0;
+  border: 5px solid #c7d2ad;
+  border-radius: 20px;
+  font-size: 18px;
+  color: #855B3B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'KCC-Ganpan', sans-serif;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
