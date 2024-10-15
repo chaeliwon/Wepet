@@ -51,7 +51,7 @@ const Homepage = () => {
       
       {/* 로그인 및 찜 목록 버튼 */}
       <div className="bottom-buttons">
-      <Link to="/login">
+      <Link to="/login" style={{ textDecoration: 'none' }}>
           <button className="bottom-btn">
             로그인
             <img src={jelly} alt="paw" className="icon" />

@@ -1,4 +1,3 @@
-/* LoginForm.css */
 
 .login-container {
   display: flex;
@@ -14,12 +13,12 @@
   background-repeat: no-repeat;
 }
 
-.login-container h2 {
-  color: #855B3B;
+.login-container h1 {
+  font-size: 35px;
+  color: #c7d2ad;
   margin-bottom: 20px;
-  -webkit-text-stroke: 1px #c7d2ad; /* 외곽선 두께와 색상 설정 */
+  -webkit-text-stroke: 0.3px #855B3B; /* 외곽선 두께와 색상 설정 */
 }
-
 
 form {
   display: flex;
@@ -30,11 +29,14 @@ form {
   padding: 20px;
   border-radius: 8px;
   margin: 0 auto;
+  align-items: center; /* 폼 내부 요소 가운데 정렬 */
 }
 
 label {
   margin-bottom: 8px;
   color: #855B3B;
+  text-align: left; /* 글자를 좌측 정렬 */
+  width: 100%; /* 전체 너비 사용 */
 }
 
 input {
@@ -42,6 +44,7 @@ input {
   margin-bottom: 20px;
   border: 2px solid #c7d2ad;
   border-radius: 8px;
+  width: 100%; /* 인풋 너비를 form 안에서 꽉 차게 */
 }
 
 /* 로그인 버튼 스타일 */
@@ -50,14 +53,12 @@ input {
   background-color: #fffff0;
   border: 5px solid #c7d2ad;
   border-radius: 20px;
-  font-size: 18px;
+  font-size: 21px;
   color: #855B3B;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-family: "KCC-Ganpan", sans-serif;
   transition: background-color 0.3s, transform 0.3s;
+  width: 150px; /* 버튼 최대 너비 제한 */
 }
 
 .login-btn:hover {
