@@ -4,7 +4,11 @@ import './css/Homepage.css';
 import logo from '../assets/WePetLogo.png';
 import jelly from '../assets/jelly.png';
 import chatbot from '../assets/chatbot.png';
-import slidedog1 from '../assets/slidedog1.jpg'; // 경로 수정
+import slidedog1 from '../assets/slidedog1.jpg';
+import slidedog2 from '../assets/slidedog2.jpg';
+import slidedog3 from '../assets/slidedog3.jpg';
+import slidecat1 from '../assets/slidecat1.jpg';
+import slidecat2 from '../assets/slidecat2.jpg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
@@ -30,10 +34,18 @@ const Homepage = () => {
         <SwiperSlide>
           <img src={slidedog1} alt="Dog 1" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '18px' }} />
         </SwiperSlide>
-        <SwiperSlide>Slide 2</SwiperSlide>
-        <SwiperSlide>Slide 3</SwiperSlide>
-        <SwiperSlide>Slide 4</SwiperSlide>
-        <SwiperSlide>Slide 5</SwiperSlide>
+        <SwiperSlide>
+          <img src={slidedog2} alt="Dog 1" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '18px' }} />
+          </SwiperSlide>
+        <SwiperSlide>
+        <img src={slidedog3} alt="Dog 1" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '18px' }} />
+        </SwiperSlide>
+        <SwiperSlide>
+        <img src={slidecat1} alt="Dog 1" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '18px' }} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src={slidecat2} alt="Dog 1" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '18px' }} />
+        </SwiperSlide>
       </Swiper>
       
       {/* 로그인 및 찜 목록 버튼 */}
