@@ -1,23 +1,28 @@
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
 const app = express();
 
-// 미들웨어
-app.use(bodyParser.json());
-
-// React 정적 파일 제공
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-// 라우터 등록
 const mainRouter = require("./routes/mainRouter");
 const userRouter = require("./routes/userRouter");
 
-// API 라우트
-app.use("/api/user", userRouter); // user 관련 API는 /api/user로 설정
+const cors = require("cors");
 
-// 메인 페이지 라우트
-app.use("/", mainRouter); // 루트 경로는 mainRouter로 설정
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+app.use(cors());
+
+// 정적 파일 제공
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+// 라우터 등록
+app.use("/", mainRouter);
+app.use("/user", userRouter);
+
+// 모든 경로에서 index.html 제공
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+});
 
 // 포트 설정
 app.set("port", process.env.PORT || 3001);
