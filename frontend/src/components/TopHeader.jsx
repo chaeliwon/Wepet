@@ -3,28 +3,12 @@ import { Link } from "react-router-dom";
 
 const TopHeader = () => {
   return (
-    <header
-      style={{
-        background: "#FFFFFF",
-        padding: "10px",
-        color: "white",
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-      }}
-    >
-      <nav
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+    <header className="headerBG">
+      <nav className="headerNav">
         <div>
           <Link to="/">
             <img
-              style={{ width: "20px", marginLeft: "10px", marginTop: "5px" }}
+              className="headerBackBtn"
               src="./static/BackBtnIcon2.png"
               alt=""
             />

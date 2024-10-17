@@ -25,85 +25,31 @@ const Homepage = () => {
         className="mySwiper"
       >
         <SwiperSlide>
-          <img
-            src={slidedog1}
-            alt="Dog 1"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "18px",
-            }}
-          />
+          <img src={slidedog1} alt="동물사진" className="swiperImages" />
         </SwiperSlide>
         <SwiperSlide>
-          <img
-            src={slidedog2}
-            alt="Dog 1"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "18px",
-            }}
-          />
+          <img src={slidedog2} alt="동물사진" className="swiperImages" />
         </SwiperSlide>
         <SwiperSlide>
-          <img
-            src={slidedog3}
-            alt="Dog 1"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "18px",
-            }}
-          />
+          <img src={slidedog3} alt="동물사진" className="swiperImages" />
         </SwiperSlide>
         <SwiperSlide>
-          <img
-            src={slidecat1}
-            alt="Dog 1"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "18px",
-            }}
-          />
+          <img src={slidecat1} alt="동물사진" className="swiperImages" />
         </SwiperSlide>
         <SwiperSlide>
           <Link to="/findpet">
-            <div
-              style={{ position: "relative", width: "100%", height: "100%" }}
-            >
+            <div className="swiperImagesLink">
               <img
                 src={slidecat2}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "18px",
-                  filter: "blur(4px) brightness(40%)",
-                }}
-                alt=""
+                className="swiperImagesLinkImg"
+                alt="둘러보기"
               />
-              <p
-                style={{
-                  position: "absolute",
-                  top: "45%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  color: "#b8ce86",
-                  fontSize: "22px",
-                  textShadow: "2px 2px 8px rgba(0, 0, 0, 0.7)", // 텍스트 가독성을 높이기 위한 그림자
-                }}
-              >
+              <p className="swiperImagesLinkTxt">
                 둘러보기
                 <br />
                 <br />
                 <img
-                  style={{ width: "30px" }}
+                  className="swiperImagesLinkIcon"
                   src="./static/Arrow-right-circle.png"
                   alt=""
                 />
@@ -115,25 +61,24 @@ const Homepage = () => {
 
       {/* 로그인 및 찜 목록 버튼 */}
       <div className="bottom-buttons">
-        <Link to="/findpet" style={{ textDecoration: "none" }}>
+        <Link to="/findpet">
           <button className="bottom-btn">
             둘러보기
             <img src={jelly} alt="paw" className="icon" />
           </button>
         </Link>
-        <Link to="/login" style={{ textDecoration: "none" }}>
+        <Link to="/login">
           <button className="bottom-btn">
             로그인
             <img src={jelly} alt="paw" className="icon" />
           </button>
         </Link>
-        
       </div>
 
       <button className="signup-btn">
-            회원가입하기
-            <img src={jelly} alt="paw" className="icon" />
-          </button>
+        회원가입하기
+        <img src={jelly} alt="paw" className="icon" />
+      </button>
     </div>
   );
 };
