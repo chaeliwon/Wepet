@@ -127,7 +127,13 @@ const Homepage = () => {
             <img src={jelly} alt="paw" className="icon" />
           </button>
         </Link>
+        
       </div>
+
+      <button className="signup-btn">
+            회원가입하기
+            <img src={jelly} alt="paw" className="icon" />
+          </button>
     </div>
   );
 };
