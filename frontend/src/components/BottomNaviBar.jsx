@@ -2,14 +2,13 @@ import React from "react";
 
 const BottomNaviBar = () => {
   const iconStyle = {
-    width: "20px",
-    height: "20px",
+    width: "16px",
+    height: "16px",
   };
   const containerStyle = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: "5px",
   };
   const naviBarStyle = {
     display: "flex",

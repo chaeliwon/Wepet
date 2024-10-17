@@ -1,14 +1,8 @@
 import React from "react";
-import "./css/findPetPage.css";
-import BackButton from "./BackButton";
+import "../css/findPetPage.css";
+import BackButton from "../components/BackButton";
 
 const FindPet = () => {
-  const iconStyle = {
-    width: "130px",
-    position: "relative",
-    left: "29%",
-    top: "-24px",
-  };
   const images = [
     "./static/침착맨/침착맨1.jpg",
     "./static/침착맨/침착맨2.jpg",
@@ -35,7 +29,6 @@ const FindPet = () => {
   return (
     <div className="findPageBG">
       <BackButton />
-      <img style={iconStyle} src="./static/findPageCloud.png" alt="" />
       <div className="petGallery">
         {images.map((image, index) => (
           <img key={index} src={image} alt="" className="petImage" />

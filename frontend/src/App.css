@@ -1,6 +1,7 @@
 @font-face {
-  font-family: 'Pretendard-Regular';
-  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
   font-weight: 400;
   font-style: normal;
 }
@@ -47,13 +48,6 @@ body {
   box-sizing: border-box;
 }
 
-.naviBar .icon {
-  width: 14px; /* 원하는 아이콘 너비 */
-  height: 14px; /* 원하는 아이콘 높이 */
-}
-
-
-
 .backButton {
   font-family: "Pretendard-Regular";
   color: #855b3b;
@@ -64,7 +58,8 @@ body {
 
 /* 모바일 대응 미디어 쿼리 */
 @media (max-width: 393px) {
-  .mobile-container, .naviBar {
+  .mobile-container,
+  .naviBar {
     width: 100%;
   }
 }

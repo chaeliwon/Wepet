@@ -1,21 +1,36 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Homepage from "./components/Homepage";
-import LoginForm from "./components/LoginForm";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Outlet,
+} from "react-router-dom";
+import Homepage from "./pages/Homepage";
+import LoginForm from "./pages/LoginForm";
 import BottomNaviBar from "./components/BottomNaviBar";
-import FindPet from "./components/FindPet";
+import FindPet from "./pages/FindPet";
+import TopHeader from "./components/TopHeader";
 import "./App.css";
 
 function App() {
+  function DefaultHeader() {
+    return (
+      <>
+        <TopHeader />
+        <Outlet />
+      </>
+    );
+  }
   return (
     <Router>
       <div className="App">
         <div className="mobile-container">
           <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route path="/login" element={<LoginForm />} />{" "}
-            {/* LoginForm 경로 설정 */}
-            <Route path="/findpet" element={<FindPet />} />
+            <Route path="/" element={<DefaultHeader />}>
+              <Route path="login" element={<LoginForm />} />
+              <Route path="findpet" element={<FindPet />} />
+            </Route>
           </Routes>
         </div>
         <BottomNaviBar />

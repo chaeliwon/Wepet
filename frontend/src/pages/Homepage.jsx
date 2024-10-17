@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./css/Homepage.css";
+import "../css/Homepage.css";
 import logo from "../assets/WePetLogo.png";
 import jelly from "../assets/jelly.png";
 import slidedog1 from "../assets/slidedog1.jpg";
@@ -100,6 +100,7 @@ const Homepage = () => {
                 }}
               >
                 둘러보기
+                <br />
                 <br />
                 <img
                   style={{ width: "30px" }}
