@@ -1,7 +1,14 @@
 @import url('https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/static/pretendard.css'); /* Pretendard 폰트 임포트 */
 
-* {
-  font-family: 'Pretendard', sans-serif; /* 전체 폰트를 Pretendard로 설정 */
+@font-face {
+  font-family: 'KCC-Ganpan';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body, * {
+  font-family: 'Pretendard', sans-serif; /* 기본 텍스트를 Pretendard로 설정 */
 }
 
 .login-container {
@@ -23,15 +30,12 @@
   height: auto;
 }
 
-.login-container h1 {
+h1 {
+  font-family: 'KCC-Ganpan', sans-serif; /* h1에만 KCC-Ganpan 폰트를 적용 */
   font-size: 35px;
   color: #c7d2ad;
   margin-bottom: 20px;
   -webkit-text-stroke: 0.3px #855b3b;
-}
-
-.login-title {
-  font-family: 'Pretendard', sans-serif;
 }
 
 form {
@@ -53,6 +57,11 @@ label {
   width: 100%;
 }
 
+.password-label {
+  margin-top: 10px; /* 비밀번호 입력창 위에 여백 추가 */
+}
+
+
 .input-container {
   position: relative;
   width: 100%;
@@ -60,12 +69,14 @@ label {
 
 input {
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 40px; /* 간격을 20px로 조정 */
   border: 2px solid #c7d2ad;
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
 }
+
+
 
 .email-domain {
   position: absolute;
@@ -78,17 +89,18 @@ input {
   opacity: 0.8;
 }
 
-/* 아이디/비밀번호 찾기 링크 스타일 */
+
+
 .find-link {
-  margin-bottom: 8px; /* 비밀번호 입력창 위로 이동 */
+  margin-bottom: 8px;
   color: #855b3b;
   font-size: 14px;
   text-decoration: underline;
   cursor: pointer;
-  align-self: flex-end; /* 오른쪽 정렬 */
+  align-self: flex-end;
+  margin-top: 5px;
 }
 
-/* 로그인 버튼 스타일 */
 .login-btn {
   padding: 10px 20px;
   background-color: #fffff0;
@@ -99,6 +111,7 @@ input {
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
   width: 150px;
+  margin-top: 15px;
 }
 
 .login-btn:hover {
@@ -106,7 +119,6 @@ input {
   transform: translateY(-2px);
 }
 
-/* 유효성 검사 메시지 스타일 */
 .validation-error {
   color: red;
   font-size: 14px;
@@ -117,11 +129,10 @@ input {
   z-index: 10;
 }
 
-/* 추가된 SNS 로그인 버튼 스타일 */
 .social-login {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .social-login button {

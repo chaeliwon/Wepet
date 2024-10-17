@@ -9,15 +9,17 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [showDomain, setShowDomain] = useState(true); // @gmail.com 표시 여부 상태 추가
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setEmailError(false); // 입력 시 에러 상태 초기화
+    setEmailError(false);
+    setShowDomain(e.target.value === ""); // 입력값이 없으면 @gmail.com 표시
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setPasswordError(false); // 입력 시 에러 상태 초기화
+    setPasswordError(false);
   };
 
   const handleSubmit = (e) => {
@@ -34,7 +36,6 @@ const LoginForm = () => {
     }
 
     if (valid) {
-      // 여기에서 폼 제출 처리
       console.log("Form submitted successfully!");
     }
   };
@@ -42,7 +43,7 @@ const LoginForm = () => {
   return (
     <div className="login-container">
       <img src={WePetLoginLogo} alt="We Pet Login Logo" className="login-logo" />
-      <h1><span className="login-title">로그인</span></h1>
+      <h1 className="login-title">로그인</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="useremail">이메일</label>
         <div className="input-container">
@@ -53,14 +54,16 @@ const LoginForm = () => {
             value={email}
             onChange={handleEmailChange}
             placeholder="이메일을 입력하세요"
+            onFocus={() => setShowDomain(false)} // 포커스 시 @gmail.com 숨김
+            onBlur={() => setShowDomain(email === "")} // 블러 시 입력값 없으면 @gmail.com 표시
             required
           />
-          <span className="email-domain">@gmail.com</span>
+          {showDomain && <span className="email-domain">@gmail.com</span>}
         </div>
         {emailError && (
           <p className="validation-error">이메일 주소를 정확하게 입력해주세요.</p>
         )}
-        <label htmlFor="password">비밀번호</label>
+        <label htmlFor="password" className="password-label">비밀번호</label>
         <input
           type="password"
           id="password"
@@ -75,7 +78,7 @@ const LoginForm = () => {
         )}
         <span className="find-link" style={{ textDecoration: "none" }}>아이디/비밀번호 찾기</span>
         <button type="submit" className="login-btn">
-          로그인🥑
+          로그인🍀
         </button>
         <div className="social-login">
           <button className="kakao-login">
