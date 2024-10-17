@@ -6,8 +6,16 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
 body {
-  font-family: "KCC-Ganpan", sans-serif;
+  font-family: "Pretendard-Regular", sans-serif;
   color: #855b3b;
   margin: 0;
   padding: 0;
@@ -33,11 +41,11 @@ body {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(120px, 1fr)
+    minmax(100px, 1fr)
   ); /* 이미지 너비를 120px로 약간 넓힘 */
   gap: 12px; /* 갭을 조금 더 넓게 설정 */
   width: 90%; /* 갤러리가 화면에 잘 맞도록 폭 설정 */
-  max-height: 60vh; /* 스크롤 가능한 영역의 높이 */
+  max-height: 100%; /* 스크롤 가능한 영역의 높이 */
   overflow-y: auto; /* 스크롤바가 필요할 때만 표시되도록 자동으로 설정 */
   padding: 20px; /* 갤러리 내부 여백 */
 }
@@ -65,5 +73,111 @@ body {
 }
 
 .petGallery::-webkit-scrollbar-track {
-  background-color: #f0e6dc; /* 스크롤바 트랙 배경 */
+  background-color: transparent; /* 스크롤바 트랙 배경 */
+}
+
+.imageWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.heartIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 15px;
+  height: 15px;
+  background-image: url("../assets/heart-outline.png");
+  background-size: cover;
+  transition: transform 0.2s ease-in-out; /* 애니메이션 효과 */
+}
+
+/* 채워진 하트 스타일 */
+.filledHeart {
+  background-image: url("../assets/heart-filled.png");
+}
+
+/* 클릭 시 커지는 애니메이션 */
+.animateHeart {
+  animation: pulse 0.3s ease-in-out;
+}
+
+/* 커지는 애니메이션 정의 */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.filter-button {
+  margin-left: 10px;
+  background-image: url("../assets/filterButton.png");
+  background-size: auto;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  position: relative;
+  left: 145px;
+  top: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-section {
+  position: absolute;
+  bottom: -400px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background-color: white;
+  border: 1px solid #ccc;
+  transition: bottom 0.5s ease;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.filter-section.visible {
+  bottom: -10px; /* 원하는 위치로 필터가 올라오게 설정 */
+}
+
+.filter-section.hidden {
+  bottom: -410px; /* 필터가 숨겨진 상태 */
+}
+
+.filter-options {
+  padding: 20px;
+}
+
+.viewAnimalBtn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #b8ce86;
+  border-radius: 10px;
+  color: #271304;
+  border: none;
+  cursor: pointer;
+  font-family: "Pretendard-Regular";
+  width: 345px;
+  height: 34px;
+}
+
+.filterCheckBox {
+  display: grid;
+  grid-template-columns: 0fr 1fr;
+  grid-gap: 30px;
+  font-family: "Pretendard-Regular";
+  font-size: 12px;
+  align-items: center;
+  padding-bottom: 10px;
+}
+input {
+  margin: 0px;
 }

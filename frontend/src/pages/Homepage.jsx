@@ -115,10 +115,12 @@ const Homepage = () => {
 
       {/* 로그인 및 찜 목록 버튼 */}
       <div className="bottom-buttons">
-        <button className="bottom-btn">
-          둘러보기
-          <img src={jelly} alt="paw" className="icon" />
-        </button>
+        <Link to="/findpet" style={{ textDecoration: "none" }}>
+          <button className="bottom-btn">
+            둘러보기
+            <img src={jelly} alt="paw" className="icon" />
+          </button>
+        </Link>
         <Link to="/login" style={{ textDecoration: "none" }}>
           <button className="bottom-btn">
             로그인

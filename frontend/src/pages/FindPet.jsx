@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import "../css/findPetPage.css";
-import BackButton from "../components/BackButton";
 
 const FindPet = () => {
   const images = [
@@ -26,13 +25,61 @@ const FindPet = () => {
     "./static/침착맨/침착맨20.jpg",
     "./static/침착맨/침착맨21.jpg",
   ];
+
+  const [likedImages, setLikedImages] = useState(new Set());
+  const [filterVisible, setFilterVisible] = useState(false);
+
+  const toggleFilter = () => {
+    setFilterVisible(!filterVisible);
+  };
+
+  const toggleLike = (index) => {
+    const newLikedImages = new Set(likedImages);
+    if (newLikedImages.has(index)) {
+      newLikedImages.delete(index);
+    } else {
+      newLikedImages.add(index);
+    }
+    setLikedImages(newLikedImages);
+  };
+
   return (
     <div className="findPageBG">
-      <BackButton />
+      <div>
+        <input type="button" className="filter-button" onClick={toggleFilter} />
+      </div>
       <div className="petGallery">
         {images.map((image, index) => (
-          <img key={index} src={image} alt="" className="petImage" />
+          <div
+            key={index}
+            className="imageWrapper"
+            onClick={() => toggleLike(index)}
+          >
+            <img src={image} alt="사진" className="petImage" />
+            <div
+              className={`heartIcon ${
+                likedImages.has(index) ? "filledHeart animateHeart" : ""
+              }`}
+            ></div>
+          </div>
         ))}
+      </div>
+      <div className={`filter-section ${filterVisible ? "visible" : "hidden"}`}>
+        <div className="filter-options">
+          <div>
+            <label className="filterCheckBox">
+              <input type="checkbox" name="animalSelect" value="dog" /> 멍멍이
+            </label>
+            <label className="filterCheckBox">
+              <input type="checkbox" name="animalSelect" value="cat" /> 야옹이
+            </label>
+            <label className="filterCheckBox">
+              <input type="checkbox" name="animalSelect" value="other" /> 기타
+              외
+            </label>
+          </div>
+          <button className="viewAnimalBtn">검색</button>
+        </div>
       </div>
     </div>
   );
