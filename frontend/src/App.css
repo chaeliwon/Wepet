@@ -66,6 +66,25 @@ a {
   color: #855b3b;
 }
 
+.headerBG {
+  background: #ffffff;
+  padding: 10px;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.headerNav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.headerBackBtn {
+  width: 20px;
+  margin-left: 10px;
+  margin-top: 5px;
+}
 /* 모바일 대응 미디어 쿼리 */
 @media (max-width: 393px) {
   .mobile-container,
