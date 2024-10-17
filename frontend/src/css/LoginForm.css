@@ -1,4 +1,8 @@
-/* LoginForm.css */
+@import url('https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/static/pretendard.css'); /* Pretendard 폰트 임포트 */
+
+* {
+  font-family: 'Pretendard', sans-serif; /* 전체 폰트를 Pretendard로 설정 */
+}
 
 .login-container {
   display: flex;
@@ -8,10 +12,15 @@
   padding: 0;
   width: 100%;
   height: 100vh;
-  background-image: url("../assets/loginbackground.png");
+  background-image: url("../assets/background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.login-logo {
+  width: 200px;
+  height: auto;
 }
 
 .login-container h1 {
@@ -21,12 +30,16 @@
   -webkit-text-stroke: 0.3px #855b3b;
 }
 
+.login-title {
+  font-family: 'Pretendard', sans-serif;
+}
+
 form {
   display: flex;
   flex-direction: column;
   max-width: 300px;
   width: 90%;
-  background-color: rgba(255, 255, 240, 0.9);
+  background-color: rgba(255, 255, 240, 0.7);
   padding: 20px;
   border-radius: 8px;
   margin: 0 auto;
@@ -40,23 +53,39 @@ label {
   width: 100%;
 }
 
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
 input {
   padding: 10px;
-  margin-bottom: 10px; /* 간격 조정 */
+  margin-bottom: 10px;
   border: 2px solid #c7d2ad;
   border-radius: 8px;
   width: 100%;
+  box-sizing: border-box;
+}
+
+.email-domain {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #c7d2ad;
+  pointer-events: none;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
 /* 아이디/비밀번호 찾기 링크 스타일 */
 .find-link {
-  margin-bottom: 20px;
+  margin-bottom: 8px; /* 비밀번호 입력창 위로 이동 */
   color: #855b3b;
   font-size: 14px;
   text-decoration: underline;
   cursor: pointer;
-  font-family: "KCC-Ganpan", sans-serif;
-  align-self: flex-start; /* 왼쪽 정렬 */
+  align-self: flex-end; /* 오른쪽 정렬 */
 }
 
 /* 로그인 버튼 스타일 */
@@ -68,7 +97,6 @@ input {
   font-size: 21px;
   color: #855b3b;
   cursor: pointer;
-  font-family: "KCC-Ganpan", sans-serif;
   transition: background-color 0.3s, transform 0.3s;
   width: 150px;
 }
@@ -76,4 +104,53 @@ input {
 .login-btn:hover {
   background-color: #e0e8c0;
   transform: translateY(-2px);
+}
+
+/* 유효성 검사 메시지 스타일 */
+.validation-error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  align-self: flex-start;
+  position: relative;
+  z-index: 10;
+}
+
+/* 추가된 SNS 로그인 버튼 스타일 */
+.social-login {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.social-login button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  width: 45%;
+  background: none;
+}
+
+.social-login img {
+  width: 40px;
+  height: 40px;
+}
+
+.kakao-login {
+  background-color: transparent;
+}
+
+.google-login {
+  background-color: transparent;
+}
+
+.not-member {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #855b3b;
 }

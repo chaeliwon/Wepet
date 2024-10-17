@@ -10,6 +10,7 @@ import LoginForm from "./pages/LoginForm";
 import BottomNaviBar from "./components/BottomNaviBar";
 import FindPet from "./pages/FindPet";
 import TopHeader from "./components/TopHeader";
+
 import "./App.css";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       </>
     );
   }
+
   return (
     <Router>
       <div className="App">
@@ -30,11 +32,12 @@ function App() {
             <Route path="/" element={<DefaultHeader />}>
               <Route path="login" element={<LoginForm />} />
               <Route path="findpet" element={<FindPet />} />
+             
             </Route>
           </Routes>
         </div>
         <BottomNaviBar />
-      </div>
+      </div> 
     </Router>
   );
 }
