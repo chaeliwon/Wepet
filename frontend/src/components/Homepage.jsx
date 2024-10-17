@@ -1,10 +1,8 @@
-// Homepage.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "./css/Homepage.css";
 import logo from "../assets/WePetLogo.png";
 import jelly from "../assets/jelly.png";
-import chatbot from "../assets/chatbot.png";
 import slidedog1 from "../assets/slidedog1.jpg";
 import slidedog2 from "../assets/slidedog2.jpg";
 import slidedog3 from "../assets/slidedog3.jpg";
@@ -19,17 +17,6 @@ const Homepage = () => {
   return (
     <div className="homepage-background">
       <img src={logo} alt="We Pet Logo" className="logo" />
-
-      {/* 상담하기 버튼 및 챗봇 버튼 */}
-      <div className="consultation-container">
-        <button className="chatbot-btn">
-          <img src={chatbot} alt="Chatbot" className="icon" />
-        </button>
-        <button className="consultation-btn">
-          상담 하기
-          <img src={jelly} alt="paw" className="icon" />
-        </button>
-      </div>
 
       <Swiper
         effect={"cards"}
@@ -113,7 +100,7 @@ const Homepage = () => {
                 }}
               >
                 둘러보기
-                <br></br>
+                <br />
                 <img
                   style={{ width: "30px" }}
                   src="./static/Arrow-right-circle.png"
@@ -127,16 +114,16 @@ const Homepage = () => {
 
       {/* 로그인 및 찜 목록 버튼 */}
       <div className="bottom-buttons">
+        <button className="bottom-btn">
+          둘러보기
+          <img src={jelly} alt="paw" className="icon" />
+        </button>
         <Link to="/login" style={{ textDecoration: "none" }}>
           <button className="bottom-btn">
             로그인
             <img src={jelly} alt="paw" className="icon" />
           </button>
         </Link>
-        <button className="bottom-btn">
-          찜 목록
-          <img src={jelly} alt="paw" className="icon" />
-        </button>
       </div>
     </div>
   );
