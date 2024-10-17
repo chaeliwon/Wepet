@@ -58,6 +58,7 @@ label {
 }
 
 .password-label {
+  text-align: left;
   margin-top: 10px; /* 비밀번호 입력창 위에 여백 추가 */
 }
 
