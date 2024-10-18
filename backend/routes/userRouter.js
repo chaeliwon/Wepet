@@ -8,10 +8,13 @@ router.post("/join", userController.join);
 // 로그인
 router.post("/login", userController.login);
 
+// 로그아웃
+router.post("/logout", userController.logout);
+
 // 회원 정보 수정
-router.post("/update", userController.update);
+router.post("/update", userController.updateUser);
 
 // 회원 탈퇴
-router.post("/delete", userController.delete);
+router.post("/delete", userController.deleteUser);
 
 module.exports = router;

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const conn = require("../config/db");
 const jwt = require("jsonwebtoken");
 
@@ -38,7 +39,7 @@ exports.join = (req, res) => {
   });
 };
 
-// 로그인 로직 (JWT 발급)
+// 로그인 로직 (JWT 발급 및 쿠키에 저장)
 exports.login = (req, res) => {
   let { id, pw } = req.body;
 
@@ -55,7 +56,16 @@ exports.login = (req, res) => {
 
       // JWT 발급
       const token = jwt.sign({ userId: id }, JWT_SECRET, { expiresIn: "1h" });
-      res.json({ result: "로그인 성공", token });
+
+      // JWT를 쿠키에 저장
+      res.cookie("jwtToken", token, {
+        httpOnly: true, // JavaScript로 접근할 수 없게 설정 (XSS 공격 방지)
+        secure: false, // HTTPS 환경에서는 true로 설정
+        maxAge: 3600000, // 쿠키 유효 시간 (1시간)
+      });
+
+      console.log("JWT 토큰 발급:", token); // JWT 토큰 콘솔에 출력
+      res.json({ result: "로그인 성공" });
     } else {
       console.log("로그인 실패!");
       res.json({ result: "로그인 실패" });
@@ -63,27 +73,41 @@ exports.login = (req, res) => {
   });
 };
 
-// 로그아웃 로직 (클라이언트 측에서 JWT 삭제)
+// 로그아웃 로직 (쿠키에서 JWT 삭제)
 exports.logout = (req, res) => {
+  res.clearCookie("jwtToken"); // 쿠키에서 jwtToken 삭제
   res.json({ result: "로그아웃 성공" });
 };
 
-// 회원 정보 수정 로직
-exports.update = (req, res) => {};
+// 회원정보 수정 로직
+exports.updateUser = (req, res) => {
+  const userId = req.user.user_id; // JWT 토큰에서 사용자 ID 추출
+  const { nick, pw } = req.body; // 클라이언트에서 새로운 정보 입력
 
-// 회원 정보 삭제 로직
-exports.delete = (req, res) => {};
+  const updateSql = `UPDATE user_info SET user_nick = ?, user_pw = SHA2(?, 256) WHERE user_id = ?`;
+  conn.query(updateSql, [nick, pw, userId], (err, result) => {
+    if (err) {
+      console.error("회원정보 수정 실패:", err);
+      return res.status(500).json({ result: "회원정보 수정 실패" });
+    }
 
-// 소셜 로그인 성공 시 처리 로직
-exports.socialLoginSuccess = (req, res) => {
-  // req.user에는 Passport를 통해 인증된 사용자 정보가 들어옵니다.
-  const token = jwt.sign({ userId: req.user.id }, JWT_SECRET, {
-    expiresIn: "1h",
+    console.log("회원정보 수정 성공:", result);
+    return res.json({ result: "회원정보 수정 성공" });
   });
+};
 
-  res.json({
-    result: "소셜 로그인 성공",
-    token,
-    user: req.user, // 사용자 정보 전달
+// 회원탈퇴 로직
+exports.deleteUser = (req, res) => {
+  const userId = req.user.user_id; // JWT 토큰에서 사용자 ID 추출
+
+  const deleteSql = `DELETE FROM user_info WHERE user_id = ?`;
+  conn.query(deleteSql, [userId], (err, result) => {
+    if (err) {
+      console.error("회원 탈퇴 실패:", err);
+      return res.status(500).json({ result: "회원 탈퇴 실패" });
+    }
+
+    console.log("회원 탈퇴 성공:", result);
+    return res.json({ result: "회원 탈퇴 성공" });
   });
 };

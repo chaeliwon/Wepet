@@ -13,7 +13,13 @@ router.get("/", (req, res) => {
 
   conn.query(
     mainPetsql,
-    ["pet_num01", "pet_num02", "pet_num03", "pet_num04", "pet_num05"],
+    [
+      "경북-포항-2024-00156",
+      "광주-광산-2024-00646",
+      "경기-수원-2023-00802",
+      "부산-동래-2024-00156",
+      "강원-강릉-2024-00230",
+    ],
     (err, rows) => {
       if (err) {
         console.log("이미지 검색 오류", err);
