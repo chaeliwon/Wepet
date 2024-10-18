@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 화면 위로 올리기 위해 flex-start 사용 */
-  padding: 20px;
+  justify-content: flex-start;
+  /* padding: 20px; */
   width: 100%;
   height: 100vh;
   background-image: url("../assets/background.png");
@@ -18,30 +18,34 @@
   color: #c7d2ad;
   -webkit-text-stroke: 0.3px #855b3b;
   width: 100%;
-  text-align: left; /* 제목만 왼쪽으로 정렬 */
-  margin-bottom: 10px;
+  text-align: left;
+  margin-top: 30px;
+  margin-bottom: 5px; /* 간격을 줄여줌 */
+  padding-left: 80px;
 }
 
 .signup-subtitle {
   font-size: 14px;
   color: #855b3b;
-  margin-bottom: 20px;
   width: 100%;
   text-align: left;
+  padding-left: 80px;
+  margin-top: 0px; /* 간격을 줄여서 바로 아래에 붙이도록 설정 */
+  margin-bottom: 50px;
 }
+
 
 form {
   display: flex;
   flex-direction: column;
-  max-width: 300px;
-  width: 100%; /* 폼을 화면 너비에 맞춤 */
+  max-width: 340px; /* 적당한 최대 너비 설정 */
+  width: 100%; /* 100%가 아닌 적절한 비율로 너비를 설정 */
   background-color: rgba(255, 255, 240, 0.7);
-  padding: 10px; /* padding을 10px로 줄임 */
+  padding: 10px; 
   border-radius: 8px;
-  align-items: center; /* 입력창을 가운데 정렬 */
-  margin: 0 auto; /* 폼을 수평 중앙에 정렬 */
+  align-items: center;
+  margin: 0 auto; /* 폼을 중앙 정렬 */
 }
-
 
 .signup-label {
   margin-top: 15px;
@@ -61,7 +65,7 @@ input {
   margin-bottom: 20px;
   border: 2px solid #c7d2ad;
   border-radius: 8px;
-  width: 100%; /* 입력창이 폼의 너비를 따르게 함 */
+  width: 100%;
 }
 
 .email-domain {
@@ -92,13 +96,13 @@ input {
 .signup-btn {
   padding: 10px 20px;
   background-color: #fffff0;
-  border: 5px solid #c7d2ad;
-  border-radius: 20px;
+  border: 2px solid #c7d2ad;
+  border-radius: 10px;
   font-size: 18px;
   color: #855b3b;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .signup-btn:hover {

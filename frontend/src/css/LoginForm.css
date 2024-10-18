@@ -103,21 +103,28 @@ input {
 }
 
 .login-btn {
-  padding: 10px 20px;
+  padding: 10px 10px;
   background-color: #fffff0;
-  border: 5px solid #c7d2ad;
-  border-radius: 20px;
-  font-size: 21px;
+  border: 2px solid #c7d2ad;
+  border-radius: 10px;
+  font-size: 20px;
   color: #855b3b;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
-  width: 150px;
+  width: 130px;
   margin-top: 15px;
 }
 
 .login-btn:hover {
   background-color: #e0e8c0;
   transform: translateY(-2px);
+}
+
+
+.jelleyicon {
+  padding-left: 10px;
+  width: 16px;
+  height: 16px;
 }
 
 .validation-error {
@@ -161,8 +168,13 @@ input {
   background-color: transparent;
 }
 
-.not-member {
-  margin-top: 20px;
+.signup-link {
+  display: inline; /* 링크가 텍스트만큼의 크기만 차지하게 설정 */
+  text-decoration: none;
+}
+
+.signup-link .not-member {
   font-size: 14px;
   color: #855b3b;
+  text-decoration: underline;
 }

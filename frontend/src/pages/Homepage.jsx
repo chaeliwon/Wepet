@@ -64,20 +64,20 @@ const Homepage = () => {
         <Link to="/findpet">
           <button className="bottom-btn">
             둘러보기
-            <img src={jelly} alt="paw" className="icon" />
+            <img src={jelly} alt="paw" className="jelleyicon" />
           </button>
         </Link>
         <Link to="/login">
           <button className="bottom-btn">
             로그인
-            <img src={jelly} alt="paw" className="icon" />
+            <img src={jelly} alt="paw" className="jelleyicon" />
           </button>
         </Link>
       </div>
 
       {/* 회원가입 버튼 */}
       <Link to="/signup">
-        <button className="signup-small-btn"> {/* 클래스명 수정 */}
+        <button className="signup-small-btn"> 
           회원가입 하기
         </button>
       </Link>

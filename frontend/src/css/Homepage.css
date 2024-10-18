@@ -91,7 +91,7 @@ a {
   background-color: #fffff0;
   border: 3px solid #c7d2ad;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 18px;
   color: #855b3b;
   cursor: pointer;
   display: flex;
@@ -101,7 +101,15 @@ a {
   font-family: "Pretendard-Regular", sans-serif;
 }
 
-.icon {
+.bottom-btn:hover {
+  background-color: #e0e8c0; /* hover 시 색상 변경 */
+  transform: scale(1.05); /* 버튼 크기 확대 */
+  transition: transform 0.3s; /* 크기 변경 애니메이션 부드럽게 */
+}
+
+
+
+.jelleyicon {
   width: 16px;
   height: 16px;
 }
@@ -131,3 +139,4 @@ a {
   margin-top: 5px; 
   margin-left: 130px;
 }
+

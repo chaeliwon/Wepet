@@ -12,10 +12,7 @@ import BottomNaviBar from "./components/BottomNaviBar";
 import FindPet from "./pages/FindPet";
 import TopHeader from "./components/TopHeader";
 
-
-
 import "./App.css";
-
 
 function App() {
   function DefaultHeader() {
@@ -32,11 +29,14 @@ function App() {
       <div className="App">
         <div className="mobile-container">
           <Routes>
+            {/* Homepage는 Header 없이 */}
             <Route path="/" element={<Homepage />} />
-            <Route path="/" element={<DefaultHeader />}>
+
+            {/* Header가 포함된 페이지들 */}
+            <Route element={<DefaultHeader />}>
               <Route path="login" element={<LoginForm />} />
+              <Route path="signup" element={<SignUpForm />} /> {/* 회원가입 경로 */}
               <Route path="findpet" element={<FindPet />} />
-              <Route path="signup" element={<SignUpForm />} /> {/* 회원가입 경로 추가 */}
             </Route>
           </Routes>
         </div>

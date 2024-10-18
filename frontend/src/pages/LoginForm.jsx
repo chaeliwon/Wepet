@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; // Link 추가
 import "../css/LoginForm.css";
 import googleIcon from "../assets/google.png";
 import kakaoIcon from "../assets/kakaotalk.png";
 import WePetLoginLogo from "../assets/WePetLoginLogo.png";
+import jelly from "../assets/jelly.png";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -78,8 +80,10 @@ const LoginForm = () => {
         )}
         <span className="find-link" style={{ textDecoration: "none" }}>아이디/비밀번호 찾기</span>
         <button type="submit" className="login-btn">
-          로그인🍀
+          로그인
+          <img src={jelly} alt="paw" className="jelleyicon" />
         </button>
+        
         <div className="social-login">
           <button className="kakao-login">
             <img src={kakaoIcon} alt="Kakao" />
@@ -88,7 +92,12 @@ const LoginForm = () => {
             <img src={googleIcon} alt="Google" />
           </button>
         </div>
-        <p className="not-member">아직 회원이 아니신가요?</p>
+       
+        <Link to="/signup" className="signup-link" >
+          <p className="not-member" style={{ textDecoration: "none" }}>
+            아직 회원이 아니신가요?
+          </p>
+        </Link>
       </form>
     </div>
   );
