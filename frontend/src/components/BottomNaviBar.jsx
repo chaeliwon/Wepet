@@ -14,14 +14,16 @@ const BottomNaviBar = () => {
           <span>홈</span>
         </div>
       </Link>
-      <div className="naviContainer">
-        <img
-          className="naviIcon"
-          src="./static/MyPage.png"
-          alt="마이페이지 아이콘"
-        />
-        <span>마이</span>
-      </div>
+      <Link to="mypage">
+        <div className="naviContainer">
+          <img
+            className="naviIcon"
+            src="./static/MyPage.png"
+            alt="마이페이지 아이콘"
+          />
+          <span>마이</span>
+        </div>
+      </Link>
     </div>
   );
 };

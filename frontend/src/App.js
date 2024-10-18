@@ -8,6 +8,7 @@ import {
 import Homepage from "./pages/Homepage";
 import SignUpForm from "./pages/SignUpForm"; 
 import LoginForm from "./pages/LoginForm";
+import MyPage from "./pages/MyPage";
 import BottomNaviBar from "./components/BottomNaviBar";
 import FindPet from "./pages/FindPet";
 import TopHeader from "./components/TopHeader";
@@ -35,8 +36,9 @@ function App() {
             {/* Header가 포함된 페이지들 */}
             <Route element={<DefaultHeader />}>
               <Route path="login" element={<LoginForm />} />
-              <Route path="signup" element={<SignUpForm />} /> {/* 회원가입 경로 */}
+              <Route path="signup" element={<SignUpForm />} /> 
               <Route path="findpet" element={<FindPet />} />
+              <Route path="mypage" element={<MyPage />} />
             </Route>
           </Routes>
         </div>
