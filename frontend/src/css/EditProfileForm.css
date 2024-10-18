@@ -1,0 +1,112 @@
+/* Pretendard 폰트 설정 */
+@font-face {
+    font-family: "Pretendard-Regular";
+    src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+      format("woff");
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: "Pretendard-Regular", sans-serif;
+    color: #855b3b;
+}
+
+.homepage-background {
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit-title {
+    font-family: 'KCC-Ganpan', sans-serif;
+    font-size: 30px;
+    color: #c7d2ad;
+    -webkit-text-stroke: 0.9px #855b3b;
+    margin-top: 100px;
+    margin-bottom: 20px;
+    text-align: left; 
+    width: 100%;
+    padding-left: 50px; 
+    padding-bottom: 20px;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 340px;
+    width: 100%;
+    background-color: rgba(255, 255, 240, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    align-items: center;
+}
+
+.edit-label {
+    margin-top: 15px;
+    color: #855b3b;
+    width: 100%;
+    text-align: left;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+input {
+    width: 100%; /* 입력창 전체 너비 고정 */
+    padding: 10px;
+    border: 2px solid #c7d2ad;
+    border-radius: 8px;
+}
+
+.check-nickname-btn {
+    font-size: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+    margin-left: 10px;
+    height: auto;
+}
+
+.edit-btn {
+    padding: 10px 20px;
+    background-color: #fffff0;
+    border: 2px solid #c7d2ad;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #855b3b;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.edit-btn:hover {
+    background-color: #e0e8c0;
+}
+
+.jelly-icon {
+    margin-left: 10px;
+    width: 24px;
+    height: 24px;
+}
+
+.validation-error {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 10px;
+}

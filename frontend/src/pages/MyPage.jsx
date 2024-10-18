@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // Link import 추가
 import "../css/MyPage.css";
 import userprofile from "../assets/userprofile.png";
 import logout from "../assets/mylogout.png";
@@ -38,11 +39,11 @@ const MyPage = () => {
           <span>회원탈퇴</span>
           <span className="arrow">></span>
         </div>
-        <div className="menu-item">
+        <Link to="/edit-profile" className="menu-item">
           <img src={myuseredit} alt="회원정보 수정 아이콘" className="menu-icon" />
           <span>회원정보 수정</span>
           <span className="arrow">></span>
-        </div>
+        </Link>
         <div className="menu-item">
           <img src={mydonation} alt="후원하기 아이콘" className="menu-icon" />
           <span>후원하기</span>
