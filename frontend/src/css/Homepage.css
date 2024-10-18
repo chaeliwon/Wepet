@@ -1,3 +1,4 @@
+/* Pretendard 폰트 설정 */
 @font-face {
   font-family: "Pretendard-Regular";
   src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
@@ -12,7 +13,7 @@ body {
 }
 
 .logo {
-  margin-top: 80px;
+  margin-top: 60px;
   width: 280px;
 }
 
@@ -43,11 +44,13 @@ body {
   object-fit: cover;
   border-radius: 18px;
 }
+
 .swiperImagesLink {
   position: relative;
   width: 100%;
   height: 100%;
 }
+
 .swiperImagesLinkImg {
   width: 100%;
   height: 100%;
@@ -55,6 +58,7 @@ body {
   border-radius: 18px;
   filter: blur(4px) brightness(40%);
 }
+
 .swiperImagesLinkTxt {
   position: absolute;
   top: 45%;
@@ -64,16 +68,19 @@ body {
   font-size: 22px;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
+
 .swiperImagesLinkIcon {
   width: 30px;
 }
+
 /* 로그인 및 찜 목록 버튼 */
 .bottom-buttons {
   display: flex;
-  justify-content: center; /* 버튼들이 중앙에 오도록 설정 */
-  gap: 10px; /* 버튼 사이 여백 */
-  margin-top: 10px;
+  justify-content: center; 
+  gap: 15px; /* 버튼 사이 여백 */
+  margin-top: 5px;
 }
+
 a {
   text-decoration: none;
 }
@@ -84,7 +91,7 @@ a {
   background-color: #fffff0;
   border: 3px solid #c7d2ad;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 20px;
   color: #855b3b;
   cursor: pointer;
   display: flex;
@@ -110,4 +117,17 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* 회원가입하기 버튼 */
+.signup-small-btn {
+  background-color: transparent; /* 배경색 제거 */
+  border: none; /* 테두리 제거 */
+  font-size: 12px; /* 글씨 크기 작게 설정 */
+  color: #a9a9a9; /* 회색 글씨 */
+  cursor: pointer;
+  text-align: center;
+  display: block;
+  margin-top: 5px; 
+  margin-left: 130px;
 }

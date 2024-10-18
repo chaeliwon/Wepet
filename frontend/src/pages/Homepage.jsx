@@ -77,9 +77,8 @@ const Homepage = () => {
 
       {/* 회원가입 버튼 */}
       <Link to="/signup">
-        <button className="signup-btn">
-          회원가입하기
-          <img src={jelly} alt="paw" className="icon" />
+        <button className="signup-small-btn"> {/* 클래스명 수정 */}
+          회원가입 하기
         </button>
       </Link>
     </div>
