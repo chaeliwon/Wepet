@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Link import 추가
+import { Link, useNavigate } from "react-router-dom"; // useNavigate로 변경
 import "../css/MyPage.css";
 import userprofile from "../assets/userprofile.png";
 import logout from "../assets/mylogout.png";
@@ -9,11 +9,39 @@ import mydonation from "../assets/mydonation.png";
 
 const MyPage = () => {
   const [username, setUsername] = useState("마루"); // 기본 유저 이름
+  const navigate = useNavigate(); // useHistory 대신 useNavigate 사용
 
   useEffect(() => {
     // 실제 유저 데이터를 가져오는 API 호출 부분
     // setUsername("실제유저이름");
   }, []);
+
+  // 회원탈퇴 함수 추가
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm("정말 탈퇴하시겠습니까?");
+    
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`/api/delete-user`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username }) // 유저 이름 전송
+        });
+
+        if (response.ok) {
+          alert('회원 탈퇴가 완료되었습니다.');
+          navigate("/"); // 탈퇴 후 홈으로 리다이렉트 (useNavigate 사용)
+        } else {
+          alert('회원 탈퇴에 실패했습니다. 다시 시도해주세요.');
+        }
+      } catch (error) {
+        console.error("회원 탈퇴 중 에러:", error);
+        alert('에러가 발생했습니다. 다시 시도해주세요.');
+      }
+    }
+  };
 
   return (
     <div className="homepage-background">
@@ -34,7 +62,7 @@ const MyPage = () => {
           <span>로그아웃</span>
           <span className="arrow">></span>
         </div>
-        <div className="menu-item">
+        <div className="menu-item" onClick={handleDeleteAccount}> {/* onClick 추가 */}
           <img src={mydelete} alt="회원탈퇴 아이콘" className="menu-icon" />
           <span>회원탈퇴</span>
           <span className="arrow">></span>
