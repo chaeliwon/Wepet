@@ -75,10 +75,13 @@ const Homepage = () => {
         </Link>
       </div>
 
-      <button className="signup-btn">
-        회원가입하기
-        <img src={jelly} alt="paw" className="icon" />
-      </button>
+      {/* 회원가입 버튼 */}
+      <Link to="/signup">
+        <button className="signup-btn">
+          회원가입하기
+          <img src={jelly} alt="paw" className="icon" />
+        </button>
+      </Link>
     </div>
   );
 };

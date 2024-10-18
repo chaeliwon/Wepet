@@ -6,12 +6,16 @@ import {
   Outlet,
 } from "react-router-dom";
 import Homepage from "./pages/Homepage";
+import SignUpForm from "./pages/SignUpForm"; 
 import LoginForm from "./pages/LoginForm";
 import BottomNaviBar from "./components/BottomNaviBar";
 import FindPet from "./pages/FindPet";
 import TopHeader from "./components/TopHeader";
 
+
+
 import "./App.css";
+
 
 function App() {
   function DefaultHeader() {
@@ -32,7 +36,7 @@ function App() {
             <Route path="/" element={<DefaultHeader />}>
               <Route path="login" element={<LoginForm />} />
               <Route path="findpet" element={<FindPet />} />
-             
+              <Route path="signup" element={<SignUpForm />} /> {/* 회원가입 경로 추가 */}
             </Route>
           </Routes>
         </div>

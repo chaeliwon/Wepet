@@ -1,0 +1,100 @@
+@import url('https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/static/pretendard.css');
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url("../assets/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.signup-logo {
+  width: 200px;
+  height: auto;
+}
+
+.signup-title {
+  font-family: 'KCC-Ganpan', sans-serif;
+  font-size: 35px;
+  color: #c7d2ad;
+  -webkit-text-stroke: 0.3px #855b3b;
+}
+
+.signup-subtitle {
+  font-size: 14px;
+  color: #855b3b;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  width: 90%;
+  background-color: rgba(255, 255, 240, 0.7);
+  padding: 20px;
+  border-radius: 8px;
+  align-items: center;
+}
+
+label {
+  margin-bottom: 8px;
+  color: #855b3b;
+  width: 100%;
+  text-align: left;
+}
+
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+input {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #c7d2ad;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.email-domain {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #c7d2ad;
+  pointer-events: none;
+  font-size: 14px;
+}
+
+.check-nickname-btn {
+  font-size: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.signup-btn {
+  padding: 10px 20px;
+  background-color: #fffff0;
+  border: 5px solid #c7d2ad;
+  border-radius: 20px;
+  font-size: 18px;
+  color: #855b3b;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signup-btn:hover {
+  background-color: #e0e8c0;
+}
