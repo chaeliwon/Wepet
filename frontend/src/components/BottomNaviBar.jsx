@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 const BottomNaviBar = () => {
   return (
     <div className="naviBar">
-      <div className="naviContainer">
-        <img className="naviIcon" src="./static/Like.png" alt="찜 아이콘" />
-        <span>찜</span>
-      </div>
+      <Link to="liked">
+        <div className="naviContainer">
+          <img className="naviIcon" src="./static/Like.png" alt="찜 아이콘" />
+          <span>찜</span>
+        </div>
+      </Link>
       <Link to="/">
         <div className="naviContainer">
           <img className="naviIcon" src="./static/Home.png" alt="홈 아이콘" />

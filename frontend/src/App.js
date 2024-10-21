@@ -15,6 +15,7 @@ import TopHeader from "./components/TopHeader";
 import MyPage from "./pages/MyPage"; // MyPage import
 import EditProfileForm from "./pages/EditProfileForm"; // EditProfileForm import
 import PetDetail from "./pages/PetDetail";
+import LikedPage from "./pages/LikedPage";
 
 import "./App.css";
 
@@ -40,6 +41,8 @@ function App() {
               {/* 회원정보 수정 경로 */}
               <Route path="petdetail" element={<PetDetail />} />
               {/* 상세페이지 경로 */}
+              <Route path="liked" element={<LikedPage />} />
+              {/* 찜페이지 경로 */}
             </Route>
           </Routes>
         </div>
@@ -63,6 +66,18 @@ function DefaultHeader() {
         break;
       case "/petdetail":
         setPageTitle("상세페이지");
+        break;
+      case "/mypage":
+        setPageTitle("마이페이지");
+        break;
+      case "/signup":
+        setPageTitle("회원가입");
+        break;
+      case "/edit-profile":
+        setPageTitle("회원정보수정");
+        break;
+      case "/liked":
+        setPageTitle("찜페이지");
         break;
       default:
         setPageTitle("Page Not Found");
