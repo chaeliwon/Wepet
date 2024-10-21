@@ -45,7 +45,7 @@ function App() {
               <Route path="liked" element={<LikedPage />} />
               {/* 찜페이지 경로 */}
               <Route path="chatbot" element={<ChatBot />} />
-               {/* 챗봇페이지 경로 */}
+              {/* 챗봇페이지 경로 */}
             </Route>
           </Routes>
         </div>
@@ -81,6 +81,9 @@ function DefaultHeader() {
         break;
       case "/liked":
         setPageTitle("찜페이지");
+        break;
+      case "/chatbot":
+        setPageTitle("상담페이지");
         break;
       default:
         setPageTitle("Page Not Found");
