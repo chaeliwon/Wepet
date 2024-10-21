@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const TopHeader = () => {
+const TopHeader = ({ title }) => {
   return (
     <header className="headerBG">
       <nav className="headerNav">
@@ -10,12 +10,12 @@ const TopHeader = () => {
             <img
               className="headerBackBtn"
               src="./static/BackBtnIcon2.png"
-              alt=""
+              alt="Back"
             />
           </Link>
         </div>
-        <div>
-          <Link to="/login">Login</Link>
+        <div className="headerTxt">
+          <h1 id="headerTxt">{title}</h1> {/* 페이지 타이틀 표시 */}
         </div>
       </nav>
     </header>

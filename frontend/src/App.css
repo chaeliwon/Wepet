@@ -69,16 +69,27 @@ a {
 .headerBG {
   background: #ffffff;
   padding: 10px;
-  color: white;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  height: 30px;
+  border: 1px solid #b8ce86;
 }
 .headerNav {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+#headerTxt {
+  color: #855b3b;
+  font-size: 1.2em;
+  margin-right: 20px;
+  font-family: "Pretendard-Regular";
+  margin: 0;
+  margin-right: 10px;
+  -webkit-text-stroke: 0;
 }
 .headerBackBtn {
   width: 20px;

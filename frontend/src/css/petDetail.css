@@ -1,0 +1,171 @@
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KCC-Ganpan";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+.petDetail {
+  background-image: url("../assets/detailBG.png");
+  width: 100%;
+  height: 100%;
+}
+
+.detailHeadTxt {
+  font-family: "KCC-Ganpan";
+  font-size: 25px;
+  -webkit-text-stroke: 1.8px #855b3b;
+  color: #b8ce86;
+  margin-top: 20px;
+  display: flex;
+  margin-left: 26px;
+}
+.detailBox {
+  background-color: white;
+  width: 345px;
+  height: 430px;
+  border: 0.5px solid lightgray;
+  flex-direction: column;
+  justify-items: flex-start;
+  gap: 5px;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 20px;
+  border-radius: 15px;
+}
+.detailProfilBox {
+  position: relative;
+  text-align: left;
+  width: 95%;
+  margin-top: 10px;
+  height: 8%;
+  display: flex;
+  align-items: center;
+}
+.detailProfilIcon {
+  width: 50px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+}
+.detailProfilTxt {
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  display: flex;
+}
+
+.detailPhotoBox {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  display: flex;
+  background-color: antiquewhite;
+}
+
+.detailPhoto {
+  object-fit: scale-down;
+  width: 100%;
+  background-color: whitesmoke;
+}
+
+.detailInsideBox {
+  width: 80%;
+  height: 30%;
+  position: relative;
+  bottom: 10px;
+}
+
+.detailIconBox {
+  width: 80%;
+  text-align: left;
+}
+
+.detailIcon {
+  width: 20px;
+  height: 20px;
+  margin-top: 20px;
+  margin-right: 12px;
+}
+
+.detailHashTag {
+  margin-top: 15px;
+  font-size: 12px;
+  text-align: left;
+}
+.detailInfo {
+  margin-top: 15px;
+
+  text-align: left;
+}
+
+.detailBottomTxt {
+  width: 80%;
+  display: flex;
+  margin-left: 26px;
+  margin-top: 40px;
+  color: #b38c6e;
+  margin-bottom: 40px;
+}
+#app {
+  height: 100%;
+}
+html,
+body {
+  position: relative;
+  height: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.detailSwiper .swiper-slide {
+  text-align: center;
+  font-size: 10px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+}
+
+.detailSwiper .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.detailSwiper .swiper {
+  width: 80%;
+  height: 100px;
+  margin: 20px auto;
+}
+
+.detailSwiper .swiper-button-prev,
+.detailSwiper .swiper-button-next {
+  color: #855b3b !important;
+}
+
+.detailSwiper .swiper-pagination-fraction,
+.detailSwiper .swiper-pagination-custom,
+.detailSwiper .swiper-horizontal > .detailSwiper .swiper-pagination-bullets,
+.detailSwiper .swiper-pagination-bullets.swiper-pagination-horizontal {
+  font-size: 12px;
+}
