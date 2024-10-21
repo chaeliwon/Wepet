@@ -45,7 +45,7 @@ const Homepage = () => {
                 alt="둘러보기"
               />
               <p className="swiperImagesLinkTxt">
-                TEST
+              둘러보기
                 <br />
                 <br />
                 <img
@@ -63,7 +63,7 @@ const Homepage = () => {
       <div className="bottom-buttons">
         <Link to="/findpet">
           <button className="bottom-btn">
-            둘러보기
+            TEST
             <img src={jelly} alt="paw" className="jelleyicon" />
           </button>
         </Link>
