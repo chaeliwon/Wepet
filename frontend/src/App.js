@@ -16,6 +16,7 @@ import MyPage from "./pages/MyPage"; // MyPage import
 import EditProfileForm from "./pages/EditProfileForm"; // EditProfileForm import
 import PetDetail from "./pages/PetDetail";
 import LikedPage from "./pages/LikedPage";
+import ChatBot from "./pages/ChatBot";
 
 import "./App.css";
 
@@ -43,6 +44,8 @@ function App() {
               {/* 상세페이지 경로 */}
               <Route path="liked" element={<LikedPage />} />
               {/* 찜페이지 경로 */}
+              <Route path="chatbot" element={<ChatBot />} />
+               {/* 챗봇페이지 경로 */}
             </Route>
           </Routes>
         </div>

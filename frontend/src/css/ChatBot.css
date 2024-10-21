@@ -1,0 +1,110 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* mobile-container에 맞추기 위해 height 100% 설정 */
+    background-color: #f8f6e9; /* 밝은 배경 */
+  }
+  
+  .chat-window {
+    width: 100%;
+    max-width: 390px;
+    height: calc(100vh - 60px); /* BottomNaviBar를 고려한 높이 설정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chat-header {
+    height: 40px; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    background-color:#FFE254; 
+    padding: 0 10px; 
+  }
+  
+  .chat-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .chat-title {
+    font-size: 18px;
+    color: #4d4d4d;
+  }
+  
+  .chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 80%;
+    display: inline-block;
+  }  
+  
+  .bot {
+    background-color: #ffffff; /* 배경을 화이트로 설정 */
+    border: 1px solid #B8CE86; /* 1px 실선과 지정된 색상 추가 */
+    align-self: flex-start; /* 왼쪽 정렬 */
+    border-radius: 10px; /* 메시지 모서리를 둥글게 유지 */
+  }
+  
+  .user {
+    background-color: #FFE254;
+    align-self: flex-end; /* 오른쪽 정렬 */
+    text-align: right;
+  }
+
+  .chat-input {
+    display: flex;
+    padding: 5px; /* 패딩을 줄여서 높이를 조정 */
+    background-color: rgba(255, 255, 255, 0.7); /* 반투명 배경 */
+    border-radius: 30px; /* 둥근 모서리 */
+    position: fixed;
+    bottom: 90px; /* BottomNaviBar 위에 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%; /* 가로 폭을 80%로 설정해서 줄임 */
+    max-width: 350px; /* 최대 너비 제한 */
+    height: 40px; /* 높이를 40px로 설정 */
+    border: 1px solid #B8CE86; /* 연한 테두리 */
+    z-index: 100;
+  }
+  
+  
+  textarea {
+    flex-grow: 1;
+    padding: 5px; /* 패딩을 줄여서 높이를 맞춤 */
+    border-radius: 20px;
+    border: none;
+    resize: none;
+    outline: none;
+    font-size: 14px;
+    background-color: transparent; /* 투명 배경 */
+    height: 100%; /* 높이 조정 */
+  }
+  
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .send-icon {
+    width: 25px; /* 버튼 아이콘 크기를 살짝 줄임 */
+    height: 25px;
+  }
+  
