@@ -63,7 +63,7 @@ const Homepage = () => {
       <div className="bottom-buttons">
         <Link to="/findpet">
           <button className="bottom-btn">
-            TEST
+            둘러보기
             <img src={jelly} alt="paw" className="jelleyicon" />
           </button>
         </Link>
