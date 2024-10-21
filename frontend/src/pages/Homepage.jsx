@@ -45,7 +45,7 @@ const Homepage = () => {
                 alt="둘러보기"
               />
               <p className="swiperImagesLinkTxt">
-                둘러보기
+                TEST
                 <br />
                 <br />
                 <img
