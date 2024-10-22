@@ -125,17 +125,16 @@ a {
   align-items: center;
 }
 
-/* 회원가입하기 버튼 */
 .signup-small-btn {
-  background-color: transparent; 
-  border: none; 
-  font-size: 12px; 
-  color: #a9a9a9; 
+  position: absolute; /* 절대 위치 설정 */
+  bottom: 65px; /* 하단에서 20px 위로 */
+  right: 90px; /* 오른쪽에서 20px 안쪽으로 */
+  background-color: transparent;
+  border: none;
+  font-size: 12px;
+  color: #a9a9a9;
   cursor: pointer;
-  text-align: right; /* 오른쪽 정렬 */
-  display: inline-block; /* 버튼이 텍스트 크기만큼만 차지 */
-  margin-top: 5px; 
-  padding-left: 150px; /* 불필요한 패딩 제거 */
+  display: inline-block; /* 텍스트 크기만큼만 버튼이 차지하게 함 */
 }
 
 
