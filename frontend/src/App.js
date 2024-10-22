@@ -73,6 +73,8 @@ function DefaultHeader() {
       setPageTitle("회원정보수정");
     } else if (location.pathname === "/liked") {
       setPageTitle("찜페이지");
+    } else if (location.pathname === "/chatbot") {
+      setPageTitle("상담페이지");
     }
     // 한글과 숫자를 포함한 동적 경로 매칭
     else if (/^\/findpet\/petdetail\/[^/]+$/.test(location.pathname)) {
