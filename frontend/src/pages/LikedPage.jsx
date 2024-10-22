@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
 import "../css/Liked.css";
 
 const LikedPage = () => {
@@ -36,6 +38,13 @@ const LikedPage = () => {
   const noneImg = "./static/Likednone.png";
   return (
     <div className="likedPageBG">
+      {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
+      <div className="chatbot-button-container">
+        <Link to="/chatbot">
+          <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
+        </Link>
+      </div>
+
       <div className="likedGallery">
         {images.length > 0 ? (
           images.map((img, index) => (
