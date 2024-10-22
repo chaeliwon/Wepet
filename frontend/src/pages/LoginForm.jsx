@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; // Link 추가
 import "../css/LoginForm.css";
+import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
 import googleIcon from "../assets/google.png";
 import kakaoIcon from "../assets/kakaotalk.png";
 import WePetLoginLogo from "../assets/WePetLoginLogo.png";
@@ -28,17 +29,44 @@ const LoginForm = () => {
     e.preventDefault();
     let valid = true;
 
+    // 이메일 검증
     if (!email.includes("@")) {
       setEmailError(true);
       valid = false;
     }
+    // 비밀번호 검증
     if (password.length < 8) {
       setPasswordError(true);
       valid = false;
     }
 
+    // 검증이 모두 통과하면 서버로 데이터를 전송
     if (valid) {
-      console.log("Form submitted successfully!");
+      // 서버에 로그인 요청을 보내는 부분
+      fetch("http://yourserver.com/api/login", {  // 실제 서버 URL로 수정
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            // 로그인 성공 처리
+            console.log("로그인 성공:", data);
+            // 로그인 성공 후 리다이렉트 또는 다른 작업 수행
+          } else {
+            // 로그인 실패 시 처리
+            console.log("로그인 실패:", data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("로그인 중 오류 발생:", error);
+        });
     }
   };
 
@@ -83,7 +111,7 @@ const LoginForm = () => {
           로그인
           <img src={jelly} alt="paw" className="jelleyicon" />
         </button>
-        
+
         <div className="social-login">
           <button className="kakao-login">
             <img src={kakaoIcon} alt="Kakao" />
@@ -92,12 +120,19 @@ const LoginForm = () => {
             <img src={googleIcon} alt="Google" />
           </button>
         </div>
-       
-        <Link to="/signup" className="signup-link" >
+
+        <Link to="/signup" className="signup-link">
           <p className="not-member" style={{ textDecoration: "none" }}>
             아직 회원이 아니신가요?
           </p>
         </Link>
+        
+        {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
+        <div className="chatbot-button-container">
+          <Link to="/chatbot">
+            <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
+          </Link>
+        </div>
       </form>
     </div>
   );
