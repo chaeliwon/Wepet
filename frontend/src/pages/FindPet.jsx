@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "../css/findPetPage.css";
+import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
 
 const FindPet = () => {
   const [images, setImages] = useState([]);
@@ -57,61 +59,70 @@ const FindPet = () => {
   };
 
   return (
-    <div className="findPageBG">
-      <input type="button" className="filter-button" onClick={toggleFilter} />
+    <div className="mobile-container"> {/* mobile-container 추가 */}
+      <div className="findPageBG">
+        <input type="button" className="filter-button" onClick={toggleFilter} />
 
-      <div className="petGallery">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className="imageWrapper"
-            onClick={() => toggleLike(image.pet_num)}
-          >
-            <img src={image.pet_img} alt="사진" className="petImage" />
+        <div className="petGallery">
+          {images.map((image, index) => (
             <div
-              className={`heartIcon ${
-                likedImages.has(image.pet_num) ? "filledHeart animateHeart" : ""
-              }`}
-            ></div>
+              key={index}
+              className="imageWrapper"
+              onClick={() => toggleLike(image.pet_num)}
+            >
+              <img src={image.pet_img} alt="사진" className="petImage" />
+              <div
+                className={`heartIcon ${
+                  likedImages.has(image.pet_num) ? "filledHeart animateHeart" : ""
+                }`}
+              ></div>
+            </div>
+          ))}
+        </div>
+
+        <div className={`filter-section ${filterVisible ? "visible" : "hidden"}`}>
+          <div className="filter-options">
+            <div>
+              <label className="filterCheckBox">
+                <input
+                  type="radio"
+                  name="animalSelect"
+                  value="dog"
+                  onChange={handleFilterChange}
+                />{" "}
+                멍멍이
+              </label>
+              <label className="filterCheckBox">
+                <input
+                  type="radio"
+                  name="animalSelect"
+                  value="cat"
+                  onChange={handleFilterChange}
+                />{" "}
+                야옹이
+              </label>
+              <label className="filterCheckBox">
+                <input
+                  type="radio"
+                  name="animalSelect"
+                  value="other"
+                  onChange={handleFilterChange}
+                />{" "}
+                기타 외
+              </label>
+            </div>
+            <button className="viewAnimalBtn" onClick={handleSearch}>
+              검색
+            </button>
           </div>
-        ))}
+        </div>
       </div>
 
-      <div className={`filter-section ${filterVisible ? "visible" : "hidden"}`}>
-        <div className="filter-options">
-          <div>
-            <label className="filterCheckBox">
-              <input
-                type="radio"
-                name="animalSelect"
-                value="dog"
-                onChange={handleFilterChange}
-              />{" "}
-              멍멍이
-            </label>
-            <label className="filterCheckBox">
-              <input
-                type="radio"
-                name="animalSelect"
-                value="cat"
-                onChange={handleFilterChange}
-              />{" "}
-              야옹이
-            </label>
-            <label className="filterCheckBox">
-              <input
-                type="radio"
-                name="animalSelect"
-                value="other"
-                onChange={handleFilterChange}
-              />{" "}
-              기타 외
-            </label>
-          </div>
-          <button className="viewAnimalBtn" onClick={handleSearch}>
-            검색
-          </button>
-        </div>
+      {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
+      <div className="chatbot-button-container">
+        <Link to="/chatbot">
+          <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
+        </Link>
       </div>
     </div>
   );
