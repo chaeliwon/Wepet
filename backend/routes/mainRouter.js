@@ -7,7 +7,7 @@ router.get("/", (req, res) => {
   console.log("메인 페이지 데이터 요청!");
 
   let mainPetsql = `
-    SELECT pet_img 
+    SELECT pet_img, pet_num
     FROM pet_info 
     WHERE pet_num IN (?, ?, ?, ?, ?)`;
 
