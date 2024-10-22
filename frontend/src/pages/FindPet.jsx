@@ -59,7 +59,9 @@ const FindPet = () => {
   };
 
   return (
-    <div className="mobile-container"> {/* mobile-container 추가 */}
+    <div className="mobile-container">
+      {" "}
+      {/* mobile-container 추가 */}
       <div className="findPageBG">
         <input type="button" className="filter-button" onClick={toggleFilter} />
 
@@ -73,14 +75,18 @@ const FindPet = () => {
               <img src={image.pet_img} alt="사진" className="petImage" />
               <div
                 className={`heartIcon ${
-                  likedImages.has(image.pet_num) ? "filledHeart animateHeart" : ""
+                  likedImages.has(image.pet_num)
+                    ? "filledHeart animateHeart"
+                    : ""
                 }`}
               ></div>
             </div>
           ))}
         </div>
 
-        <div className={`filter-section ${filterVisible ? "visible" : "hidden"}`}>
+        <div
+          className={`filter-section ${filterVisible ? "visible" : "hidden"}`}
+        >
           <div className="filter-options">
             <div>
               <label className="filterCheckBox">
@@ -117,7 +123,6 @@ const FindPet = () => {
           </div>
         </div>
       </div>
-
       {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
       <div className="chatbot-button-container">
         <Link to="/chatbot">
