@@ -1,16 +1,35 @@
-import React, { useRef, useState } from "react";
+import "../css/petDetail.css";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
+import { useParams } from "react-router-dom";
+import api from "../api";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "../css/petDetail.css";
 
 const PetDetail = () => {
+  const { petNum } = useParams();
   const [swiperRef, setSwiperRef] = useState(null);
+  const [petDetail, setPetDetail] = useState(null);
+
+  useEffect(() => {
+    const fetchPetDetail = async () => {
+      try {
+        const response = await api.get(`/findfet/${petNum}`);
+        setPetDetail(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("펫 상세 정보 가져오기 실패:", error);
+      }
+    };
+    fetchPetDetail();
+  }, [petNum]);
 
   let appendNumber = 4;
   let prependNumber = 1;
+
+  let petInfo = petDetail?.pet || {};
 
   return (
     <div className="petDetail">
@@ -19,27 +38,38 @@ const PetDetail = () => {
         <div className="detailBox">
           <div className="detailProfilBox">
             <div className="detailProfilIcon">
-              <img src="./static/detailIcon.png" alt="프로필" />
+              <img
+                src="/static/DetailIcon.png"
+                alt="프로필"
+                className="detailProfilIcon"
+              />
             </div>
-            <div className="detailProfilTxt">
-              <img src="./static/detailLogoBlack.png" alt="" />
+            <div className="detailProfilTxtbox">
+              <img
+                src="/static/detailLogoBlack.png"
+                alt="프로필 이름"
+                className="detailProfilTxt"
+              />
             </div>
           </div>
           <div className="detailPhotoBox">
-            <img className="detailPhoto" src="./static/pet/14.jpg" alt="사진" />
+            <img className="detailPhoto" src={petInfo.pet_img} alt="사진" />
           </div>
           <div className="detailInsideBox">
             <div className="detailIconBox">
-              <img className="detailIcon" src="./static/heart.png" alt="" />
-              <img className="detailIcon" src="./static/chat.png" alt="" />
-              <img className="detailIcon" src="./static/share.png" alt="" />
+              <img className="detailIcon" src="/static/heart.png" alt="" />
+              <img className="detailIcon" src="/static/chat.png" alt="" />
+              <img className="detailIcon" src="/static/share.png" alt="" />
             </div>
             <div className="detailHashTag">
               <span>
-                #강아지 #2살 #접종, 중성화 완료 #입양가능 #광주광역시 보호소
+                #{petInfo.pet_breed} #{petInfo.pet_color} #{petInfo.pet_age} #
+                {petInfo.pet_gender} #{petInfo.pet_weight}kg #중성화 여부 :{" "}
+                {petInfo.pet_neutered} #{petInfo.pet_shelter} #
+                {petInfo.pet_shelter_phone}
               </span>
             </div>
-            <div className="detailInfo">사람을 좋아하고 순함 배변가림</div>
+            <div className="detailInfo">{petInfo.pet_info}</div>
           </div>
         </div>
       </div>
