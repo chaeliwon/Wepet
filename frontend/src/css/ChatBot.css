@@ -3,22 +3,28 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%; /* mobile-container에 맞추기 위해 height 100% 설정 */
-    background-color: #f8f6e9; /* 밝은 배경 */
+    height: 100%;
+    background-color: #f8f6e9;
+    padding-bottom: 30px;
+    box-sizing: border-box;
+    overflow-x: hidden; /* 가로 스크롤바 제거 */
+    background-image: url("../assets/background.png"); /* 전체 컨테이너 배경 이미지 */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
   
 .chat-window {
     width: 100%;
     max-width: 390px;
-    height: calc(100vh - 60px); /* BottomNaviBar를 고려한 높이 설정 */
+    height: calc(100vh - 20px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: hidden; /* 세로 스크롤은 필요할 때만 */
+    overflow-x: hidden; /* 가로 스크롤 방지 */
 }
-  
+
 .chat-header {
     height: 40px;
     display: flex;
@@ -26,11 +32,12 @@
     justify-content: center;
     background-color: #FFE254;
     padding: 0 10px;
-    position: sticky; /* sticky로 고정 */
-    top: 0; /* 화면 최상단에 고정 */
-    z-index: 100; /* 다른 요소들보다 위에 있도록 설정 */
-    width: 100%; /* 헤더의 너비를 윈도우와 일치시키기 */
-    max-width: 390px; /* chat-window와 맞추기 */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    max-width: 390px;
+    border-radius: 0px; /* header에서 border-radius 제거 */
 }
 
 .chat-icon {
@@ -50,61 +57,78 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 160px); /* 적절한 높이 설정 */
-    background-image: url("../assets/background.png"); /* background.png 적용 */
-    background-size: cover; /* 이미지 크기를 영역에 맞게 조정 */
-    background-position: center; /* 중앙 정렬 */
-    background-repeat: no-repeat; /* 반복 방지 */
+    max-height: 90vh;
+    background-color: transparent; /* 배경을 투명하게 설정 */
+    overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+  
+.user-wrapper {
+    align-items: flex-end;
+}
 
 .message {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     padding: 10px;
     border-radius: 10px;
     max-width: 80%;
     display: inline-block;
-}  
+}
 
 .bot {
-    background-color: #ffffff; /* 배경을 화이트로 설정 */
-    border: 1px solid #B8CE86; /* 1px 실선과 지정된 색상 추가 */
-    align-self: flex-start; /* 왼쪽 정렬 */
-    border-radius: 10px; /* 메시지 모서리를 둥글게 유지 */
+    background-color: #ffffff; 
+    border: 2px solid #B8CE86; 
+    align-self: flex-start; 
+    border-radius: 15px 15px 15px 0px;
 }
 
 .user {
     background-color: #FFE254;
-    align-self: flex-end; /* 오른쪽 정렬 */
+    align-self: flex-end;
+    text-align: right;
+    border-radius: 15px 15px 0px 15px;
+}
+
+.message-time {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+    padding-top: 0;
     text-align: right;
 }
 
 .chat-input {
     display: flex;
-    padding: 5px; /* 패딩을 줄여서 높이를 조정 */
-    background-color: rgba(255, 255, 255, 0.7); /* 반투명 배경 */
-    border-radius: 30px; /* 둥근 모서리 */
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 30px;
     position: fixed;
-    bottom: 80px; /* BottomNaviBar 위에 위치 */
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%; /* 가로 폭을 80%로 설정해서 줄임 */
-    max-width: 350px; /* 최대 너비 제한 */
-    height: 30px; /* 높이 수정 */
-    border: 1px solid #B8CE86; /* 연한 테두리 */
+    width: 80%;
+    max-width: 350px;
+    height: 30px;
+    border: 1px solid #B8CE86;
     z-index: 100;
 }
   
 textarea {
     flex-grow: 1;
-    padding: 5px; /* 패딩을 줄여서 높이를 맞춤 */
+    padding: 5px;
     border-radius: 20px;
     border: none;
     resize: none;
     outline: none;
     font-size: 14px;
-    background-color: transparent; /* 투명 배경 */
-    height: 100%; /* 높이 조정 */
+    background-color: transparent;
+    height: 100%;
 }
 
 button {
@@ -114,6 +138,6 @@ button {
 }
 
 .send-icon {
-    width: 25px; /* 버튼 아이콘 크기를 살짝 줄임 */
+    width: 25px;
     height: 25px;
 }
