@@ -23,20 +23,26 @@ prompt = PromptTemplate.from_template(
     "말끝에 멍! 을 붙일거에요. 이전 대화: {history} 새로운 질문: {input}"
 )
 
-# 메모리 기능 추가
-memory = ConversationBufferMemory(return_messages=True)
-
-# 체인 설정
-chain = ConversationChain(llm=llm_model, memory=memory, prompt=prompt)
+# 사용자별 메모리 저장 딕셔너리
+user_memories = {}
 
 # 요청 모델 정의
 class QuestionRequest(BaseModel):
+    user_id: str
     input: str
 
 # API 엔드포인트 정의
 @app.post("/openai/chat")
 async def chat_with_openai(request: QuestionRequest):
     try:
+        # 사용자별로 메모리를 관리
+        if request.user_id not in user_memories:
+            user_memories[request.user_id] = ConversationBufferMemory(return_messages=True)
+        
+        # 해당 사용자의 메모리를 사용해 체인 생성
+        user_memory = user_memories[request.user_id]
+        chain = ConversationChain(llm=llm_model, memory=user_memory, prompt=prompt)
+        
         # Langchain을 이용해 사용자 질문 처리
         result = chain.invoke({"input": request.input})
         return {"response": result['response']}
