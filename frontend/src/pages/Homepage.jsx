@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../css/Homepage.css";
 import logo from "../assets/WePetLogo.png";
 import jelly from "../assets/jelly.png";
+import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
 import slidedog1 from "../assets/slidedog1.jpg";
 import slidedog2 from "../assets/slidedog2.jpg";
 import slidedog3 from "../assets/slidedog3.jpg";
@@ -58,6 +59,13 @@ const Homepage = () => {
           </Link>
         </SwiperSlide>
       </Swiper>
+
+      {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
+      <div className="chatbot-button-container">
+        <Link to="/chatbot">
+          <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
+        </Link>
+      </div>
 
       {/* 로그인 및 찜 목록 버튼 */}
       <div className="bottom-buttons">
