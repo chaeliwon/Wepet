@@ -45,6 +45,8 @@ function App() {
               {/* 회원정보 수정 경로 */}
               <Route path="liked" element={<LikedPage />} />
               {/* 찜페이지 경로 */}
+              <Route path="chatbot" element={<ChatBot />} />
+              {/* 챗봇페이지 경로 */}
             </Route>
           </Routes>
         </div>

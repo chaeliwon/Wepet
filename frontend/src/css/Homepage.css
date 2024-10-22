@@ -132,11 +132,12 @@ a {
   font-size: 12px; 
   color: #a9a9a9; 
   cursor: pointer;
-  text-align: center;
-  display: inline; /* inline으로 설정해서 텍스트만 눌리도록 */
-  margin-top: 5px;
-  padding: 0; /* 추가된 공간 없이 텍스트에만 클릭 가능 */
+  text-align: right; /* 오른쪽 정렬 */
+  display: inline-block; /* 버튼이 텍스트 크기만큼만 차지 */
+  margin-top: 5px; 
+  padding-left: 150px; /* 불필요한 패딩 제거 */
 }
+
 
 /* 챗봇 페이지로 가는 버튼 */
 .chatbot-button-container {
@@ -144,6 +145,7 @@ a {
   right: 20px; /* 오른쪽에서 20px 떨어진 위치 */
   bottom: 10px; /* 아래쪽에서 20px 떨어진 위치 */
   z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
+  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
 }
 
 .chatbot-button {

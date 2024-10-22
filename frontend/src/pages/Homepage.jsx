@@ -85,9 +85,9 @@ const Homepage = () => {
 
         {/* 회원가입 버튼 */}
         <Link to="/signup">
-          <button className="signup-small-btn"> 
-            회원가입 하기
-          </button>
+        <button className="signup-small-btn"> 
+          회원가입 하기
+        </button>
         </Link>
       </div>
   );
