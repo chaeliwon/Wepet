@@ -30,7 +30,7 @@
 .detailBox {
   background-color: white;
   width: 345px;
-  height: 430px;
+
   border: 0.5px solid lightgray;
   flex-direction: column;
   justify-items: flex-start;
@@ -55,11 +55,15 @@
   overflow: hidden;
   display: flex;
 }
-.detailProfilTxt {
+.detailProfilTxtbox {
   width: 100%;
   height: 50%;
   overflow: hidden;
   display: flex;
+}
+.detailProfilTxt {
+  width: 60px;
+  margin-left: 10px;
 }
 
 .detailPhotoBox {
