@@ -9,7 +9,7 @@ const TopHeader = ({ title }) => {
           <Link to="/">
             <img
               className="headerBackBtn"
-              src="./static/BackBtnIcon2.png"
+              src="/static/BackBtnIcon2.png"
               alt="Back"
             />
           </Link>
