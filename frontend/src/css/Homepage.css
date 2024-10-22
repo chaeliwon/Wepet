@@ -133,9 +133,9 @@ a {
   color: #a9a9a9; 
   cursor: pointer;
   text-align: center;
-  display: block;
-  margin-top: 5px; 
-  margin-left: 130px;
+  display: inline; /* inline으로 설정해서 텍스트만 눌리도록 */
+  margin-top: 5px;
+  padding: 0; /* 추가된 공간 없이 텍스트에만 클릭 가능 */
 }
 
 /* 챗봇 페이지로 가는 버튼 */

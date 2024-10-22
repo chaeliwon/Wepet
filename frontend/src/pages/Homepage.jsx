@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../css/Homepage.css";
-import logo from "../assets/WePetLogo.png";
+import logo from "../assets/movelogo.png";
 import jelly from "../assets/jelly.png";
 import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
 import slidedog1 from "../assets/slidedog1.jpg";
@@ -67,29 +67,29 @@ const Homepage = () => {
         </Link>
       </div>
 
-      {/* 로그인 및 찜 목록 버튼 */}
-      <div className="bottom-buttons">
-        <Link to="/findpet">
-          <button className="bottom-btn">
-            둘러보기
-            <img src={jelly} alt="paw" className="jelleyicon" />
-          </button>
-        </Link>
-        <Link to="/login">
-          <button className="bottom-btn">
-            로그인
-            <img src={jelly} alt="paw" className="jelleyicon" />
+        {/* 로그인 및 찜 목록 버튼 */}
+        <div className="bottom-buttons">
+          <Link to="/findpet">
+            <button className="bottom-btn">
+              둘러보기
+              <img src={jelly} alt="paw" className="jelleyicon" />
+            </button>
+          </Link>
+          <Link to="/login">
+            <button className="bottom-btn">
+              로그인
+              <img src={jelly} alt="paw" className="jelleyicon" />
+            </button>
+          </Link>
+        </div>
+
+        {/* 회원가입 버튼 */}
+        <Link to="/signup">
+          <button className="signup-small-btn"> 
+            회원가입 하기
           </button>
         </Link>
       </div>
-
-      {/* 회원가입 버튼 */}
-      <Link to="/signup">
-        <button className="signup-small-btn"> 
-          회원가입 하기
-        </button>
-      </Link>
-    </div>
   );
 };
 
