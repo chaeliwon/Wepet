@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2"; // SweetAlert2 라이브러리 추가
 import "../css/MyPage.css";
+import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
 import userprofile from "../assets/userprofile.png";
 import logout from "../assets/mylogout.png";
 import mydelete from "../assets/mydelete.png";
@@ -44,6 +45,14 @@ const MyPage = () => {
           <p className="email">maru0102@gmail.com</p>
         </div>
       </div>
+
+    {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
+    <div className="chatbot-button-container">
+        <Link to="/chatbot">
+          <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
+        </Link>
+      </div>
+
 
       <div className="menu-list">
         <div className="menu-item">

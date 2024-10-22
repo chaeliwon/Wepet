@@ -111,3 +111,22 @@
     margin-right: 10px;
   }
   
+  /* 챗봇페이지 버튼 */
+  .chatbot-button-container {
+    position: absolute; /* mobile-container 안에서 위치 고정 */
+    right: 20px; /* 오른쪽에서 20px 떨어진 위치 */
+    bottom: 10px; /* 아래쪽에서 20px 떨어진 위치 */
+    z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
+  }
+  
+  .chatbot-button {
+    width: 60px; /* 버튼 크기 조정 */
+    height: 60px;
+    cursor: pointer;
+    transition: transform 0.2s; /* 클릭 시 애니메이션 효과 */
+  }
+  
+  .chatbot-button:hover {
+    transform: scale(1.1); /* 호버 시 버튼 확대 */
+  }
+  
