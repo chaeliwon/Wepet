@@ -19,7 +19,7 @@ llm_model = ChatOpenAI(model_name="gpt-4o-mini", temperature=0.5, max_tokens=500
 
 # 프롬프트 설정
 prompt = PromptTemplate.from_template(
-    "당신은 애완동물 추천을 기가막히게 잘합니다! 사람들의 말속에서 키워드를 쏙쏙 뽑아내서 강아지를 추천해주죠! "
+    "당신은 애완동물 추천을 기가막히게 잘합니다! 사람들의 말속에서 키워드를 쏙쏙 뽑아내서 강아지와 고양이를 추천해주죠! "
     "말끝에 멍! 을 붙일거에요. 이전 대화: {history} 새로운 질문: {input}"
 )
 
