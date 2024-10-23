@@ -26,6 +26,7 @@ app.use("/main", mainRouter);
 app.use("/auth", authRouter);
 app.use("/findfet", findfetRouter);
 app.use("/chatbot", chatbotRouter);
+app.use("/like", likeRouter);
 
 // 정적 파일 제공 (React 빌드 폴더)
 app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
