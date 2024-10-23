@@ -7,7 +7,7 @@ router.get("/", (req, res) => {
   console.log("메인 페이지 데이터 요청!");
 
   let mainPetsql = `
-    SELECT pet_img 
+    SELECT pet_img, pet_num
     FROM pet_info 
     WHERE pet_num IN (?, ?, ?, ?, ?)`;
 
@@ -31,7 +31,9 @@ router.get("/", (req, res) => {
 
         res.json({
           result: "이미지 검색 성공",
-          images: rows.map((row) => row.pet_img),
+          images: rows.map((row) => {
+            row.pet_img, row.pet_num;
+          }),
         });
       } else {
         console.log("이미지 검색 실패");

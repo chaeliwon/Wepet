@@ -90,6 +90,7 @@
 .detailIconBox {
   width: 80%;
   text-align: left;
+  display: flex;
 }
 
 .detailIcon {
@@ -97,6 +98,21 @@
   height: 20px;
   margin-top: 20px;
   margin-right: 12px;
+}
+.detailHeartIcon {
+  margin-top: 20px;
+  margin-right: 12px;
+  width: 21px;
+  height: 20px;
+  background-image: url("../assets/heart-outline.png");
+  background-size: cover;
+  transition: transform 0.2s ease-in-out; /* 애니메이션 효과 */
+}
+.detailFilledHeart {
+  background-image: url("../assets/heart-filled.png");
+}
+.detailAnimateHeart {
+  animation: pulse 0.3s ease-in-out;
 }
 
 .detailHashTag {
@@ -114,9 +130,9 @@
   width: 80%;
   display: flex;
   margin-left: 26px;
-  margin-top: 40px;
+  margin-top: 30px;
   color: #b38c6e;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 #app {
   height: 100%;
