@@ -31,9 +31,8 @@ router.get("/", (req, res) => {
 
         res.json({
           result: "이미지 검색 성공",
-          images: rows.map((row) => {
-            row.pet_img, row.pet_num;
-          }),
+          images: rows.map((row) => row.pet_img),
+          nums: rows.map((row) => row.pet_num),
         });
       } else {
         console.log("이미지 검색 실패");
