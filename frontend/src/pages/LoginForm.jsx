@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Link 추가
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; 
 import "../css/LoginForm.css";
-import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
+import chatbotIcon from "../assets/chatbot.png"; 
 import googleIcon from "../assets/google.png";
 import kakaoIcon from "../assets/kakaotalk.png";
 import WePetLoginLogo from "../assets/WePetLoginLogo.png";
@@ -12,12 +12,18 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [showDomain, setShowDomain] = useState(true); // @gmail.com 표시 여부 상태 추가
+  const [showDomain, setShowDomain] = useState(true);
+
+  useEffect(() => {
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init("fc6d928ab060378dd9a406c719e3273b"); // 실제 카카오 JavaScript 키
+    }
+  }, []);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     setEmailError(false);
-    setShowDomain(e.target.value === ""); // 입력값이 없으면 @gmail.com 표시
+    setShowDomain(e.target.value === "");
   };
 
   const handlePasswordChange = (e) => {
@@ -29,21 +35,18 @@ const LoginForm = () => {
     e.preventDefault();
     let valid = true;
 
-    // 이메일 검증
     if (!email.includes("@")) {
       setEmailError(true);
       valid = false;
     }
-    // 비밀번호 검증
+
     if (password.length < 8) {
       setPasswordError(true);
       valid = false;
     }
 
-    // 검증이 모두 통과하면 서버로 데이터를 전송
     if (valid) {
-      // 서버에 로그인 요청을 보내는 부분
-      fetch("http://yourserver.com/api/login", {  // 실제 서버 URL로 수정
+      fetch("http://yourserver.com/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,11 +59,8 @@ const LoginForm = () => {
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {
-            // 로그인 성공 처리
             console.log("로그인 성공:", data);
-            // 로그인 성공 후 리다이렉트 또는 다른 작업 수행
           } else {
-            // 로그인 실패 시 처리
             console.log("로그인 실패:", data.message);
           }
         })
@@ -70,10 +70,15 @@ const LoginForm = () => {
     }
   };
 
+  const handleKakaoLogin = () => {
+    window.Kakao.Auth.authorize({
+      redirectUri: "http://localhost:3000/login", // 실제 리다이렉트 URI로 변경
+    });
+  };
+
   return (
     <div className="login-container">
       <img src={WePetLoginLogo} alt="We Pet Login Logo" className="login-logo" />
-      {/* <h1 className="login-title">로그인</h1> */}
       <form onSubmit={handleSubmit}>
         <label htmlFor="useremail">이메일</label>
         <div className="input-container">
@@ -84,15 +89,13 @@ const LoginForm = () => {
             value={email}
             onChange={handleEmailChange}
             placeholder="이메일을 입력하세요"
-            onFocus={() => setShowDomain(false)} // 포커스 시 @gmail.com 숨김
-            onBlur={() => setShowDomain(email === "")} // 블러 시 입력값 없으면 @gmail.com 표시
+            onFocus={() => setShowDomain(false)}
+            onBlur={() => setShowDomain(email === "")}
             required
           />
           {showDomain && <span className="email-domain">@gmail.com</span>}
         </div>
-        {emailError && (
-          <p className="validation-error">이메일 주소를 정확하게 입력해주세요.</p>
-        )}
+        {emailError && <p className="validation-error">이메일 주소를 정확하게 입력해주세요.</p>}
         <label htmlFor="password" className="password-label">비밀번호</label>
         <input
           type="password"
@@ -103,9 +106,7 @@ const LoginForm = () => {
           placeholder="비밀번호를 입력하세요"
           required
         />
-        {passwordError && (
-          <p className="validation-error">비밀번호를 정확하게 입력해주세요.</p>
-        )}
+        {passwordError && <p className="validation-error">비밀번호를 정확하게 입력해주세요.</p>}
         <span className="find-link" style={{ textDecoration: "none" }}>아이디/비밀번호 찾기</span>
         <button type="submit" className="login-btn">
           로그인
@@ -113,7 +114,7 @@ const LoginForm = () => {
         </button>
 
         <div className="social-login">
-          <button className="kakao-login">
+          <button className="kakao-login" onClick={handleKakaoLogin}>
             <img src={kakaoIcon} alt="Kakao" />
           </button>
           <button className="google-login">
@@ -126,13 +127,6 @@ const LoginForm = () => {
             아직 회원이 아니신가요?
           </p>
         </Link>
-        
-        {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
-        <div className="chatbot-button-container">
-          <Link to="/chatbot">
-            <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
-          </Link>
-        </div>
       </form>
     </div>
   );

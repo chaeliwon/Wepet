@@ -21,6 +21,14 @@ import ChatBot from "./pages/ChatBot";
 import "./App.css";
 
 function App() {
+  useEffect(() => {
+    // Kakao SDK 초기화
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init('YOUR_KAKAO_JS_KEY'); // 실제 카카오 JavaScript 키로 대체하세요
+      console.log(window.Kakao.isInitialized()); // Kakao 초기화 여부 확인
+    }
+  }, []); // 컴포넌트가 처음 렌더링될 때 한 번만 실행
+
   return (
     <Router>
       <div className="App">
@@ -55,6 +63,7 @@ function App() {
     </Router>
   );
 }
+
 function DefaultHeader() {
   const location = useLocation(); // 현재 경로를 가져옴
   const [pageTitle, setPageTitle] = useState("");
@@ -83,6 +92,7 @@ function DefaultHeader() {
       setPageTitle("Page Not Found");
     }
   }, [location]);
+
   return (
     <>
       <TopHeader title={pageTitle} />
