@@ -8,9 +8,7 @@ exports.getLikedPets = (req, res) => {
     SELECT pet_info.pet_breed, pet_info.pet_gender, pet_info.pet_age, pet_info.pet_img, pet_info.pet_num, pet_info.pet_shelter
     FROM favorite_info 
     JOIN pet_info ON favorite_info.pet_num = pet_info.pet_num
-    WHERE favorite_info.user_id = ?
-  `;
-
+    WHERE favorite_info.user_id = ?`;
   conn.query(sql, [user_id], (err, results) => {
     if (err) {
       console.error("찜한 동물 목록 가져오기 실패:", err);
