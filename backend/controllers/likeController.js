@@ -2,9 +2,8 @@ const conn = require("../config/db");
 
 // 찜한 동물 목록 가져오기
 exports.getLikedPets = (req, res) => {
-  const { user_id } = req.query;
+  const { user_id } = req.body; // POST 요청이므로 req.body에서 user_id를 받음
 
-  // 찜한 동물 목록을 가져오는 SQL 쿼리
   const sql = `
     SELECT pet_info.pet_breed, pet_info.pet_gender, pet_info.pet_age, pet_info.pet_img, pet_info.pet_num
     FROM favorite_info 
