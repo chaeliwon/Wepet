@@ -5,7 +5,7 @@ exports.getLikedPets = (req, res) => {
   const { user_id } = req.body; // POST 요청이므로 req.body에서 user_id를 받음
 
   const sql = `
-    SELECT pet_info.pet_breed, pet_info.pet_gender, pet_info.pet_age, pet_info.pet_img, pet_info.pet_num
+    SELECT pet_info.pet_breed, pet_info.pet_gender, pet_info.pet_age, pet_info.pet_img, pet_info.pet_num, pet_info.pet_shelter
     FROM favorite_info 
     JOIN pet_info ON favorite_info.pet_num = pet_info.pet_num
     WHERE favorite_info.user_id = ?
