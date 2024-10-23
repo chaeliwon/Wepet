@@ -2,49 +2,55 @@ const conn = require("../config/db");
 
 // 유기동물 전체 이미지 또는 필터 조건에 따른 이미지 가져오기
 exports.getFilteredPets = (req, res) => {
-  const { type, user_id } = req.query; // user_id도 쿼리로 받음
+  const { type, user_id } = req.body;
 
-  // 유저의 찜한 동물 목록 가져오기
-  const favoriteSql = "SELECT pet_num FROM favorite_info WHERE user_id = ?";
-  conn.query(favoriteSql, [user_id], (err, favoriteResults) => {
-    if (err) {
-      console.error("찜 목록 가져오기 실패:", err);
-      res.status(500).json({ result: "에러 발생" });
-      return;
-    }
+  // 모든 동물들의 이미지와 번호를 가져오는 기본 쿼리
+  let sql = "SELECT pet_img, pet_num FROM pet_info";
 
-    const favoritePetNums = favoriteResults.map((fav) => fav.pet_num); // 유저가 찜한 pet_num 목록
+  // 필터링 조건 추가
+  if (type === "dog") {
+    sql += " WHERE pet_breed LIKE '%개%'";
+  } else if (type === "cat") {
+    sql += " WHERE pet_breed LIKE '%고양이%'";
+  } else if (type === "other") {
+    sql += " WHERE pet_breed NOT LIKE '%개%' AND pet_breed NOT LIKE '%고양이%'";
+  }
 
-    let sql = "SELECT pet_img, pet_num FROM pet_info";
-    if (type === "dog") {
-      sql += " WHERE pet_breed LIKE '%개%'";
-    } else if (type === "cat") {
-      sql += " WHERE pet_breed LIKE '%고양이%'";
-    } else if (type === "other") {
-      sql +=
-        " WHERE pet_breed NOT LIKE '%개%' AND pet_breed NOT LIKE '%고양이%'";
-    }
-
-    // 필터 조건에 맞는 유기동물 가져오기
-    conn.query(sql, (err, petResults) => {
+  // 모든 동물 데이터와 사용자의 찜 목록을 병렬로 가져오기
+  const getAllPets = new Promise((resolve, reject) => {
+    conn.query(sql, (err, pets) => {
       if (err) {
-        console.error("유기동물 정보 가져오기 실패:", err);
-        res.status(500).json({ result: "에러 발생" });
-        return;
+        return reject("유기동물 정보 가져오기 실패:", err);
       }
-
-      // 각 유기동물에 대해 찜 여부(isFavorite) 추가
-      const petsWithFavoriteStatus = petResults.map((pet) => ({
-        ...pet,
-        isFavorite: favoritePetNums.includes(pet.pet_num), // 찜한 동물인지 확인
-      }));
-
-      res.json({
-        result: "유기동물 정보 가져오기 성공",
-        pets: petsWithFavoriteStatus,
-      });
+      resolve(pets);
     });
   });
+
+  const getUserFavorites = new Promise((resolve, reject) => {
+    const favSql = "SELECT pet_num FROM favorite_info WHERE user_id = ?";
+    conn.query(favSql, [user_id], (err, favPets) => {
+      if (err) {
+        return reject("찜 목록 가져오기 실패:", err);
+      }
+      resolve(favPets.map((fav) => fav.pet_num));
+    });
+  });
+
+  Promise.all([getAllPets, getUserFavorites])
+    .then(([pets, userFavorites]) => {
+      // 동물 목록을 순회하면서 찜한 동물 여부를 확인
+      const resultPets = pets.map((pet) => ({
+        pet_img: pet.pet_img,
+        pet_num: pet.pet_num,
+        isFavorite: userFavorites.includes(pet.pet_num), // 찜 목록에 있는지 확인
+      }));
+
+      res.json({ result: "유기동물 정보 가져오기 성공", pets: resultPets });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ result: "에러 발생" });
+    });
 };
 
 // 유기동물 상세 정보 가져오기
