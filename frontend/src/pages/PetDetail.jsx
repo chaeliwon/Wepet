@@ -23,7 +23,7 @@ const PetDetail = () => {
       try {
         const response = await api.get(`/findfet/${petNum}`);
         setPetDetail(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("펫 상세 정보 가져오기 실패:", error);
       }
@@ -150,9 +150,8 @@ const PetDetail = () => {
           className="detailSwiper"
         >
           {images.map((image, index) => (
-            <SwiperSlide>
+            <SwiperSlide key={image.pet_num || index}>
               <img
-                key={index}
                 src={image.pet_img}
                 alt=""
                 onClick={() => moveDetail(image)}

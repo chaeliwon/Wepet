@@ -21,24 +21,22 @@
   overflow: hidden;
 }
 .likedGallery {
-  display: grid;
+  display: inline-block;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 40px;
   width: 90%;
   max-height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 20px;
 }
 .likedImg {
-  width: 160px;
-  height: 160px; /* 이미지를 조금 더 크게 */
+  width: 120px;
+  height: 120px; /* 이미지를 조금 더 크게 */
   object-fit: cover; /* 이미지가 영역을 넘지 않도록 크기 조정 */
   border-radius: 8px;
-  transition: transform 0.2s ease-in-out; /* 호버 애니메이션 추가 */
+  margin-left: 20px;
 }
-.likedImg:hover {
-  transform: scale(1.05); /* 이미지에 호버 시 확대 효과 */
-}
+
 .likedGallery::-webkit-scrollbar {
   width: 8px;
 }
@@ -57,6 +55,35 @@
   display: inline-block;
 }
 
+.likedCard {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  align-content: center;
+  width: 100%;
+  border: 2px solid #b8ce86;
+  border-radius: 8px;
+  box-shadow: 0 0 0 12px rgba(245, 245, 245, 0.518);
+  height: 27%;
+  margin-bottom: 34px;
+  background-color: rgba(245, 245, 245, 0.518);
+  transition: transform 0.2s ease-in-out; /* 호버 애니메이션 추가 */
+}
+.likedCard:hover {
+  transform: scale(1.05); /* 이미지에 호버 시 확대 효과 */
+}
+.likedTxt {
+  display: grid;
+  margin-left: 25px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  text-align: left;
+  align-content: center;
+  font-size: 12px;
+}
+.likedName {
+  font-size: 16px;
+}
 .noneImg {
   position: absolute; /* 부모 요소 기준으로 절대 위치 */
   top: 50%;
