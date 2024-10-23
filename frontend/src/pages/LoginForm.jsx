@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; 
 import "../css/LoginForm.css";
-import chatbotIcon from "../assets/chatbot.png"; 
 import googleIcon from "../assets/google.png";
 import kakaoIcon from "../assets/kakaotalk.png";
 import WePetLoginLogo from "../assets/WePetLoginLogo.png";
