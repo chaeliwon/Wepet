@@ -73,7 +73,7 @@ const LoginForm = () => {
   return (
     <div className="login-container">
       <img src={WePetLoginLogo} alt="We Pet Login Logo" className="login-logo" />
-      <h1 className="login-title">로그인</h1>
+      {/* <h1 className="login-title">로그인</h1> */}
       <form onSubmit={handleSubmit}>
         <label htmlFor="useremail">이메일</label>
         <div className="input-container">

@@ -29,15 +29,16 @@ body, * {
 .login-logo {
   width: 200px;
   height: auto;
+  margin-bottom: 50px;
 }
 
-h1 {
-  font-family: 'KCC-Ganpan', sans-serif; /* h1에만 KCC-Ganpan 폰트를 적용 */
+/* h1 {
+  font-family: 'KCC-Ganpan', sans-serif; 
   font-size: 35px;
   color: #c7d2ad;
   margin-bottom: 20px;
   -webkit-text-stroke: 0.3px #855b3b;
-}
+} */
 
 form {
   display: flex;
