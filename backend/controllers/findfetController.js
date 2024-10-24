@@ -3,6 +3,7 @@ const conn = require("../config/db");
 // 유기동물 전체 이미지 또는 필터 조건에 따른 이미지 가져오기
 exports.getFilteredPets = (req, res) => {
   const { type, user_id } = req.body;
+  console.log(user_id, type);
 
   // 모든 동물들의 이미지와 번호를 가져오는 기본 쿼리
   let sql = "SELECT pet_img, pet_num FROM pet_info";
