@@ -87,8 +87,10 @@ function DefaultHeader() {
       setPageTitle("찜페이지");
     } else if (location.pathname === "/chatbot") {
       setPageTitle("상담페이지");
+    } else if (location.pathname === "/find-id-password") {
+      setPageTitle("아이디/비밀번호찾기페이지");
     }
-    // 한글과 숫자를 포함한 동적 경로 매칭
+      // 한글과 숫자를 포함한 동적 경로 매칭
     else if (/^\/findpet\/petdetail\/[^/]+$/.test(location.pathname)) {
       setPageTitle("상세페이지");
     } else {
