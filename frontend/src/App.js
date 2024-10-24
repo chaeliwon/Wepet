@@ -17,6 +17,7 @@ import EditProfileForm from "./pages/EditProfileForm";
 import PetDetail from "./pages/PetDetail";
 import LikedPage from "./pages/LikedPage";
 import ChatBot from "./pages/ChatBot";
+import FindIdPassword from "./pages/FindIdPassword";
 
 import "./App.css";
 
@@ -55,6 +56,8 @@ function App() {
               {/* 찜페이지 경로 */}
               <Route path="chatbot" element={<ChatBot />} />
               {/* 챗봇페이지 경로 */}
+              <Route path="find-id-password" element={<FindIdPassword />} />
+              {/* 아이디/비밀번호 찾기 경로 추가 */}
             </Route>
           </Routes>
         </div>

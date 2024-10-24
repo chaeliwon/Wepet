@@ -105,7 +105,10 @@ input {
 }
 
 .login-btn {
-  padding: 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
   background-color: #fffff0;
   border: 2px solid #c7d2ad;
   border-radius: 10px;
@@ -113,20 +116,20 @@ input {
   color: #855b3b;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
-  width: 130px;
+  width: 130px; /* 버튼의 적절한 너비 설정 */
+  height: 50px; /* 버튼의 높이 설정 */
   margin-top: 15px;
+}
+
+.login-btn img.jellyicon {
+  width: 20px;  /* 이미지 크기 조정 */
+  height: 20px;
+  margin-left: 10px; /* 이미지와 텍스트 사이 간격 설정 */
 }
 
 .login-btn:hover {
   background-color: #e0e8c0;
   transform: translateY(-2px);
-}
-
-
-.jelleyicon {
-  padding-left: 10px;
-  width: 16px;
-  height: 16px;
 }
 
 .validation-error {

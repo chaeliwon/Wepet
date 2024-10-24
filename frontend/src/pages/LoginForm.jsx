@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";  // Link 추가
 import "../css/LoginForm.css";
 import googleIcon from "../assets/google.png";
 import kakaoIcon from "../assets/kakaotalk.png";
@@ -15,7 +15,8 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
-      window.Kakao.init("fc6d928ab060378dd9a406c719e3273b"); // 실제 카카오 JavaScript 키
+      window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY); // .env에 저장된 값 사용
+      console.log(window.Kakao.isInitialized());
     }
   }, []);
 
@@ -106,10 +107,15 @@ const LoginForm = () => {
           required
         />
         {passwordError && <p className="validation-error">비밀번호를 정확하게 입력해주세요.</p>}
-        <span className="find-link" style={{ textDecoration: "none" }}>아이디/비밀번호 찾기</span>
+        
+        {/* '아이디/비밀번호 찾기'를 FindPassword로 연결 */}
+        <Link to="/find-id-password" className="find-link" style={{ textDecoration: "none" }}>
+          아이디/비밀번호 찾기
+        </Link>
+        
         <button type="submit" className="login-btn">
           로그인
-          <img src={jelly} alt="paw" className="jelleyicon" />
+          <img src={jelly} alt="paw" className="jellyicon" />
         </button>
 
         <div className="social-login">
