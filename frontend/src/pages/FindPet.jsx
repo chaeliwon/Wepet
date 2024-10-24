@@ -20,7 +20,10 @@ const FindPet = () => {
   // 유기동물 이미지 불러오기 함수
   const fetchPets = async (type = "") => {
     try {
-      const response = await api.get("/findfet", { params: { type } });
+      const response = await api.get("/findfet", {
+        params: { type },
+        user_id: userId,
+      });
 
       // 배열을 무작위로 섞는 함수 (Fisher-Yates Shuffle)
       const shuffleArray = (array) => {
