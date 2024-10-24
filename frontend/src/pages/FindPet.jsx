@@ -20,11 +20,21 @@ const FindPet = () => {
   // 유기동물 이미지 불러오기 함수
   const fetchPets = async (type = "") => {
     try {
-      const response = await api.get("/findfet", {
+      const response = await api.post("/findfet", {
         params: { type },
         user_id: userId,
       });
 
+      const petsData = response.data.pets;
+      console.log("받은 데이터:", petsData);
+
+      // 좋아요 상태를 초기화합니다.
+      const likedSet = new Set(
+        petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
+      );
+
+      setImages(petsData); // 이미지 데이터 설정
+      setLikedImages(likedSet); // 좋아요 상태 설정
       // 배열을 무작위로 섞는 함수 (Fisher-Yates Shuffle)
       const shuffleArray = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
@@ -35,7 +45,8 @@ const FindPet = () => {
       };
 
       // 데이터를 무작위로 섞고 150장으로 제한
-      const shuffledPets = shuffleArray(response.data.pets).slice(0, 150);
+      // const shuffledPets = shuffleArray(response.data.pets).slice(0, 150);
+      const shuffledPets = response.data.pets.slice(0, 150);
 
       setImages(shuffledPets);
       // console.log("Fetched Pets:", shuffledPets);
@@ -47,23 +58,28 @@ const FindPet = () => {
   // 찜하기/찜 해제 함수
   const toggleLike = async (petNum) => {
     try {
-      await api.post("/findfet/favorite", {
+      // 서버에 찜 상태 변경 요청
+      const response = await api.post("/findfet/favorite", {
         pet_num: petNum,
         user_id: userId,
       });
 
-      const newLikedImages = new Set(likedImages);
-      if (newLikedImages.has(petNum)) {
-        newLikedImages.delete(petNum);
-        console.log(petNum, "목록에 삭제됨");
-      } else {
-        newLikedImages.add(petNum);
+      console.log("찜 상태 변경 응답:", response);
+
+      const resultMessage = response.data.result;
+      const updatedLikedImages = new Set(likedImages);
+
+      if (resultMessage === "찜하기 성공") {
+        updatedLikedImages.add(petNum); // 찜 목록에 추가
         console.log(petNum, "목록에 추가됨");
+      } else if (resultMessage === "찜 해제 성공") {
+        updatedLikedImages.delete(petNum); // 찜 목록에서 삭제
+        console.log(petNum, "목록에 삭제됨");
       }
-      setLikedImages(newLikedImages);
+
+      setLikedImages(updatedLikedImages); // 상태 업데이트
     } catch (error) {
       console.error("찜하기 실패:", error);
-      // console.log(petNum);
     }
   };
 
@@ -91,7 +107,7 @@ const FindPet = () => {
 
       <div className="petGallery">
         {images.map((image, index) => (
-          <div key={index} className="imageWrapper">
+          <div key={image.pet_num} className="imageWrapper">
             <img
               src={image.pet_img}
               alt="사진"

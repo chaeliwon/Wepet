@@ -7,7 +7,7 @@ const {
 const router = express.Router();
 
 // 유기동물 전체 이미지 또는 필터링된 이미지 가져오기
-router.get("/", getFilteredPets);
+router.post("/", getFilteredPets);
 
 // 특정 유기동물 상세 정보 가져오기
 router.get("/:pet_num", getPetDetails);
