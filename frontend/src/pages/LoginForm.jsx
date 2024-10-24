@@ -110,7 +110,7 @@ const LoginForm = () => {
         
         {/* '아이디/비밀번호 찾기'를 FindPassword로 연결 */}
         <Link to="/find-id-password" className="find-link" style={{ textDecoration: "none" }}>
-          아이디/비밀번호 찾기
+        비밀번호 찾기
         </Link>
         
         <button type="submit" className="login-btn">
