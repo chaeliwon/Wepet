@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/", getFilteredPets);
 
 // 특정 유기동물 상세 정보 가져오기
-router.get("/:pet_num", getPetDetails);
+router.post("/petdetails", getPetDetails);
 
 // 찜하기/찜 해제
 router.post("/favorite", addFavorite);

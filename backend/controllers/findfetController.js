@@ -54,24 +54,53 @@ exports.getFilteredPets = (req, res) => {
     });
 };
 
-// 유기동물 상세 정보 가져오기
+// 유기동물 상세 정보 가져오기 (POST 방식)
 exports.getPetDetails = (req, res) => {
-  const { pet_num } = req.params; // pet_num을 URL 파라미터에서 가져옴
+  const { pet_num, user_id } = req.body; // user_id와 pet_num을 body에서 가져옴
 
   const sql = "SELECT * FROM pet_info WHERE pet_num = ?";
-  conn.query(sql, [pet_num], (err, results) => {
-    if (err) {
-      console.error("유기동물 상세 정보 가져오기 실패:", err);
-      res.status(500).json({ result: "에러 발생" });
-      return;
-    }
 
-    if (results.length > 0) {
-      res.json({ result: "유기동물 상세 정보 가져오기 성공", pet: results[0] });
-    } else {
-      res.status(404).json({ result: "유기동물 정보를 찾을 수 없습니다" });
-    }
+  // 유기동물 상세 정보 가져오기 쿼리
+  const getPetDetails = new Promise((resolve, reject) => {
+    conn.query(sql, [pet_num], (err, results) => {
+      if (err) {
+        console.error("유기동물 상세 정보 가져오기 실패:", err);
+        return reject("유기동물 상세 정보 가져오기 실패");
+      }
+
+      if (results.length > 0) {
+        resolve(results[0]); // 동물 정보 반환
+      } else {
+        reject("유기동물 정보를 찾을 수 없습니다");
+      }
+    });
   });
+
+  // 해당 동물이 찜 목록에 있는지 확인하는 쿼리
+  const checkFavorite = new Promise((resolve, reject) => {
+    const favSql =
+      "SELECT * FROM favorite_info WHERE pet_num = ? AND user_id = ?";
+    conn.query(favSql, [pet_num, user_id], (err, results) => {
+      if (err) {
+        console.error("찜 목록 조회 실패:", err);
+        return reject("찜 목록 조회 실패");
+      }
+      resolve(results.length > 0); // 찜 여부를 반환 (true 또는 false)
+    });
+  });
+
+  // Promise.all로 두 쿼리 병렬 실행
+  Promise.all([getPetDetails, checkFavorite])
+    .then(([petDetails, isFavorite]) => {
+      res.json({
+        result: "유기동물 상세 정보 가져오기 성공",
+        pet: { ...petDetails, isFavorite }, // 찜 여부 추가
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ result: "에러 발생", error });
+    });
 };
 
 // 찜하기 (favorite_info에 추가)
