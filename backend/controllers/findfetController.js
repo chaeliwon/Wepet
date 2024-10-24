@@ -77,6 +77,7 @@ exports.getPetDetails = (req, res) => {
 // 찜하기 (favorite_info에 추가)
 exports.addFavorite = (req, res) => {
   const { pet_num, user_id } = req.body;
+  console.log("찜하기 확인", user_id);
 
   const checkSql =
     "SELECT * FROM favorite_info WHERE pet_num = ? AND user_id = ?";
