@@ -20,7 +20,7 @@ const FindPet = () => {
   // 유기동물 이미지 불러오기 함수
   const fetchPets = async (type = "") => {
     try {
-      const response = await api.get("/findfet", {
+      const response = await api.post("/findfet", {
         params: { type },
         user_id: userId,
       });
