@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";  // useNavigate 추가
-import { useGoogleLogin } from '@react-oauth/google';  // Google Login Hook 추가
+import { useGoogleLogin } from '@react-oauth/google';  
 import "../css/LoginForm.css";
 import googleIcon from "../assets/google.png";
 import kakaoIcon from "../assets/kakaotalk.png";
@@ -14,14 +14,40 @@ const LoginForm = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [showDomain, setShowDomain] = useState(true);
 
-  const navigate = useNavigate(); // useNavigate 훅 추가
+  const navigate = useNavigate(); 
 
+  // Kakao SDK 초기화 로직
   useEffect(() => {
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY); 
+    const kakaoAppKey = process.env.REACT_APP_KAKAO_JS_KEY;
+    if (!window.Kakao) {
+      console.error("Kakao SDK가 로드되지 않았습니다. 스크립트를 확인하세요.");
+      return;
+    }
+
+    if (kakaoAppKey && !window.Kakao.isInitialized()) {
+      window.Kakao.init(kakaoAppKey); 
       console.log(window.Kakao.isInitialized());
     }
   }, []);
+
+  // URL에서 JWT 토큰 추출 및 저장
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    
+    if (token) {
+      localStorage.setItem('jwtToken', token);
+      navigate('/'); // 메인 페이지로 리디렉션
+    }
+  }, [navigate]);
+
+  // 로그인된 사용자가 있으면 자동으로 메인 페이지로 이동
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      navigate('/');  // 로그인된 사용자는 메인 페이지로 리디렉션
+    }
+  }, [navigate]);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -49,7 +75,7 @@ const LoginForm = () => {
     }
 
     if (valid) {
-      fetch("http://yourserver.com/api/login", {
+      fetch("http://localhost:3001/api/login", {  
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,10 +87,10 @@ const LoginForm = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (data.success) {
+          if (data.success && data.token) {
             console.log("로그인 성공:", data);
-            // 로그인 성공 시 메인 페이지로 리디렉션
-            navigate("/");
+            localStorage.setItem('jwtToken', data.token);  // JWT 저장
+            navigate("/");  // 메인 페이지로 리디렉션
           } else {
             console.log("로그인 실패:", data.message);
           }
@@ -75,13 +101,14 @@ const LoginForm = () => {
     }
   };
 
+  // Kakao 로그인
   const handleKakaoLogin = () => {
     window.Kakao.Auth.authorize({
-      redirectUri: "http://localhost:3000/login", 
+      redirectUri: "http://localhost:3000/login",  
     });
   };
 
-  // 구글 로그인 버튼 클릭 시 호출되는 함수
+  // 구글 로그인
   const googleLogin = useGoogleLogin({
     onSuccess: (response) => {
       console.log("Google 로그인 성공:", response);
@@ -92,14 +119,36 @@ const LoginForm = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Google User Data:", data);
-          // Google 로그인 성공 시 메인 페이지로 리디렉션
-          navigate("/");
+          console.log("Google 사용자 정보:", data);
+          // Google 사용자 정보를 백엔드로 전송하여 JWT 발급
+          fetch("http://localhost:3001/api/google-login", {  
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              googleId: data.sub,
+              email: data.email,
+            }),
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.token) {
+              localStorage.setItem('jwtToken', data.token);  // JWT 저장
+              navigate("/");  // 메인 페이지로 리디렉션
+            } else {
+              alert("로그인 실패. 다시 시도해주세요.");
+            }
+          })
+          .catch((error) => {
+            console.error("Google 로그인 처리 중 오류 발생:", error);
+          });
         })
-        .catch((error) => console.error("Google User Data Fetch Error:", error));
+        .catch((error) => console.error("Google 사용자 정보 가져오기 실패:", error));
     },
     onError: (error) => {
       console.error("Google 로그인 실패:", error);
+      alert("Google 로그인 실패. 다시 시도해주세요.");
     },
   });
 
