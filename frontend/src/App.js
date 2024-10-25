@@ -6,6 +6,7 @@ import {
   Outlet,
   useLocation,
 } from "react-router-dom";
+import { GoogleOAuthProvider } from '@react-oauth/google';  // GoogleOAuthProvider 추가
 import Homepage from "./pages/Homepage";
 import SignUpForm from "./pages/SignUpForm";
 import LoginForm from "./pages/LoginForm";
@@ -22,48 +23,42 @@ import FindIdPassword from "./pages/FindIdPassword";
 import "./App.css";
 
 function App() {
-  useEffect(() => {
-    // Kakao SDK 초기화
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init('YOUR_KAKAO_JS_KEY'); // 실제 카카오 JavaScript 키로 대체하세요
-      console.log(window.Kakao.isInitialized()); // Kakao 초기화 여부 확인
-    }
-  }, []); // 컴포넌트가 처음 렌더링될 때 한 번만 실행
-
   return (
-    <Router>
-      <div className="App">
-        <div className="mobile-container">
-          <Routes>
-            {/* Homepage는 Header 없이 */}
-            <Route path="/" element={<Homepage />} />
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <Router>
+        <div className="App">
+          <div className="mobile-container">
+            <Routes>
+              {/* Homepage는 Header 없이 */}
+              <Route path="/" element={<Homepage />} />
 
-            {/* Header가 포함된 페이지들 */}
-            <Route element={<DefaultHeader />}>
-              <Route path="login" element={<LoginForm />} />
-              {/* 로그인 경로 */}
-              <Route path="signup" element={<SignUpForm />} />
-              {/* 회원가입 경로 */}
-              <Route path="findpet" element={<FindPet />} />
-              {/* 둘러보기 경로 */}
-              <Route path="findpet/petdetail/:petNum" element={<PetDetail />} />
-              {/* 상세페이지 경로 */}
-              <Route path="mypage" element={<MyPage />} />
-              {/* 마이페이지 경로 */}
-              <Route path="edit-profile" element={<EditProfileForm />} />
-              {/* 회원정보 수정 경로 */}
-              <Route path="liked" element={<LikedPage />} />
-              {/* 찜페이지 경로 */}
-              <Route path="chatbot" element={<ChatBot />} />
-              {/* 챗봇페이지 경로 */}
-              <Route path="find-id-password" element={<FindIdPassword />} />
-              {/* 아이디/비밀번호 찾기 경로 추가 */}
-            </Route>
-          </Routes>
+              {/* Header가 포함된 페이지들 */}
+              <Route element={<DefaultHeader />}>
+                <Route path="login" element={<LoginForm />} />
+                {/* 로그인 경로 */}
+                <Route path="signup" element={<SignUpForm />} />
+                {/* 회원가입 경로 */}
+                <Route path="findpet" element={<FindPet />} />
+                {/* 둘러보기 경로 */}
+                <Route path="findpet/petdetail/:petNum" element={<PetDetail />} />
+                {/* 상세페이지 경로 */}
+                <Route path="mypage" element={<MyPage />} />
+                {/* 마이페이지 경로 */}
+                <Route path="edit-profile" element={<EditProfileForm />} />
+                {/* 회원정보 수정 경로 */}
+                <Route path="liked" element={<LikedPage />} />
+                {/* 찜페이지 경로 */}
+                <Route path="chatbot" element={<ChatBot />} />
+                {/* 챗봇페이지 경로 */}
+                <Route path="find-id-password" element={<FindIdPassword />} />
+                {/* 아이디/비밀번호 찾기 경로 추가 */}
+              </Route>
+            </Routes>
+          </div>
+          <BottomNaviBar />
         </div>
-        <BottomNaviBar />
-      </div>
-    </Router>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 

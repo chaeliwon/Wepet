@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";  // Link 추가
+import { Link } from "react-router-dom";
+import { useGoogleLogin } from '@react-oauth/google';  // Google Login Hook 추가
 import "../css/LoginForm.css";
 import googleIcon from "../assets/google.png";
 import kakaoIcon from "../assets/kakaotalk.png";
@@ -15,7 +16,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY); // .env에 저장된 값 사용
+      window.Kakao.init(process.env.REACT_APP_KAKAO_JS_KEY); 
       console.log(window.Kakao.isInitialized());
     }
   }, []);
@@ -72,9 +73,30 @@ const LoginForm = () => {
 
   const handleKakaoLogin = () => {
     window.Kakao.Auth.authorize({
-      redirectUri: "http://localhost:3000/login", // 실제 리다이렉트 URI로 변경
+      redirectUri: "http://localhost:3000/login", 
     });
   };
+
+  // 구글 로그인 버튼 클릭 시 호출되는 함수
+  const googleLogin = useGoogleLogin({
+    onSuccess: (response) => {
+      console.log("Google 로그인 성공:", response);
+      fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: {
+          Authorization: `Bearer ${response.access_token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Google User Data:", data);
+          // 여기서 data를 가지고 로그인 처리
+        })
+        .catch((error) => console.error("Google User Data Fetch Error:", error));
+    },
+    onError: (error) => {
+      console.error("Google 로그인 실패:", error);
+    },
+  });
 
   return (
     <div className="login-container">
@@ -108,7 +130,6 @@ const LoginForm = () => {
         />
         {passwordError && <p className="validation-error">비밀번호를 정확하게 입력해주세요.</p>}
         
-        {/* '아이디/비밀번호 찾기'를 FindPassword로 연결 */}
         <Link to="/find-id-password" className="find-link" style={{ textDecoration: "none" }}>
         비밀번호 찾기
         </Link>
@@ -122,7 +143,7 @@ const LoginForm = () => {
           <button className="kakao-login" onClick={handleKakaoLogin}>
             <img src={kakaoIcon} alt="Kakao" />
           </button>
-          <button className="google-login">
+          <button className="google-login" onClick={() => googleLogin()}>
             <img src={googleIcon} alt="Google" />
           </button>
         </div>
