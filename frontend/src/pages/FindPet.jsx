@@ -21,10 +21,11 @@ const FindPet = () => {
   const fetchPets = async (type = "") => {
     try {
       const response = await api.post("/findfet", {
-        params: { type },
+        type: type,
         user_id: userId,
       });
 
+      // console.log("확인:", response);
       const petsData = response.data.pets;
       console.log("받은 데이터:", petsData);
 
