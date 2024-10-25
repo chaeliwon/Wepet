@@ -6,17 +6,39 @@ exports.getLikedPets = (req, res) => {
 
   const sql = `
     SELECT pet_info.pet_breed, pet_info.pet_gender, pet_info.pet_age, pet_info.pet_img, pet_info.pet_num, pet_info.pet_shelter
-    FROM favorite_info 
-    JOIN pet_info ON favorite_info.pet_num = pet_info.pet_num
-    WHERE favorite_info.user_id = ?`;
-  conn.query(sql, [user_id], (err, results) => {
+    FROM pet_info`;
+
+  conn.query(sql, (err, pets) => {
     if (err) {
-      console.error("찜한 동물 목록 가져오기 실패:", err);
+      console.error("유기동물 목록 가져오기 실패:", err);
       res.status(500).json({ result: "에러 발생" });
       return;
     }
 
-    res.json({ result: "찜한 동물 목록 가져오기 성공", pets: results });
+    // 유저의 찜 목록 가져오기
+    const favSql = `SELECT pet_num FROM favorite_info WHERE user_id = ?`;
+    conn.query(favSql, [user_id], (err, favoritePets) => {
+      if (err) {
+        console.error("찜 목록 가져오기 실패:", err);
+        res.status(500).json({ result: "에러 발생" });
+        return;
+      }
+
+      const favoritePetNums = favoritePets.map((fav) => fav.pet_num);
+
+      // 각 동물에 대해 isFavorite 값 추가
+      const resultPets = pets.map((pet) => ({
+        pet_breed: pet.pet_breed,
+        pet_gender: pet.pet_gender,
+        pet_age: pet.pet_age,
+        pet_img: pet.pet_img,
+        pet_num: pet.pet_num,
+        pet_shelter: pet.pet_shelter,
+        isFavorite: favoritePetNums.includes(pet.pet_num), // 찜 목록에 있으면 true, 아니면 false
+      }));
+
+      res.json({ result: "찜한 동물 목록 가져오기 성공", pets: resultPets });
+    });
   });
 };
 
