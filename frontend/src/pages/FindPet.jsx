@@ -99,10 +99,15 @@ const FindPet = () => {
 
   const handleSearch = () => {
     fetchPets(selectedType);
+    setFilterVisible(false);
+  };
+  const closeFilter = () => {
+    setFilterVisible(false);
   };
 
   return (
     <div className="findPageBG">
+      {filterVisible && <div className="overlay" onClick={closeFilter}></div>}
       <input type="button" className="filter-button" onClick={toggleFilter} />
 
       <div className="petGallery">
@@ -127,6 +132,15 @@ const FindPet = () => {
       <div className={`filter-section ${filterVisible ? "visible" : "hidden"}`}>
         <div className="filter-options">
           <div>
+            <label className="filterCheckBox">
+              <input
+                type="radio"
+                name="animalSelect"
+                value=""
+                onChange={handleFilterChange}
+              />{" "}
+              전체 보기
+            </label>
             <label className="filterCheckBox">
               <input
                 type="radio"
