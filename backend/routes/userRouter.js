@@ -5,6 +5,9 @@ const userController = require("../controllers/userController");
 // 회원가입
 router.post("/join", userController.join);
 
+// 이메일 중복 확인 API
+router.post("/check-email", userController.checkEmail);
+
 // 로그인
 router.post("/login", userController.login);
 

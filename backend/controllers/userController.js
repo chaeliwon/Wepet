@@ -9,9 +9,25 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 exports.join = (req, res) => {
   let { id, pw, nick } = req.body;
 
+  // 회원가입을 진행하는 로직 (이메일 중복 확인은 이미 다른 API에서 처리)
+  let insertSql = `INSERT INTO user_info (user_id, user_pw, user_nick) VALUES (?, SHA2(?, 256), ?)`;
+  conn.query(insertSql, [id, pw, nick], (err, rows) => {
+    if (err) {
+      console.error("가입 실패", err);
+      res.json({ result: "가입 실패" });
+      return;
+    }
+    console.log("가입 성공", rows);
+    res.json({ result: "가입 성공" });
+  });
+};
+
+// 이메일 중복 확인 API
+exports.checkEmail = (req, res) => {
+  let { id } = req.body; // 중복 확인할 이메일
+
   // 이메일 중복 확인 SQL
   let checkEmailSql = `SELECT * FROM user_info WHERE user_id = ?`;
-
   conn.query(checkEmailSql, [id], (err, result) => {
     if (err) {
       console.error("이메일 중복 검사 오류", err);
@@ -20,21 +36,11 @@ exports.join = (req, res) => {
     }
 
     if (result.length > 0) {
-      // 이메일 중복 시
+      // 이메일이 이미 존재하는 경우
       res.json({ result: "이메일 중복" });
     } else {
-      // 중복되지 않으면 회원가입 진행
-      let insertSql = `INSERT INTO user_info (user_id, user_pw, user_nick) VALUES (?, SHA2(?, 256), ?)`;
-      conn.query(insertSql, [id, pw, nick], (err, rows) => {
-        if (err) {
-          console.error("가입 실패", err);
-          res.json({ result: "가입 실패" });
-        }
-        if (rows) {
-          console.log("가입 성공", rows);
-          res.json({ result: "가입 성공" });
-        }
-      });
+      // 사용 가능한 이메일
+      res.json({ result: "사용 가능" });
     }
   });
 };
