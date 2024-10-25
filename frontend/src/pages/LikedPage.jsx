@@ -5,6 +5,7 @@ import api from "../api";
 
 const LikedPage = () => {
   const [likedPetInfo, setLikedPetInfo] = useState([]);
+  const [likedImages, setLikedImages] = useState(new Set());
   const noneImg = "./static/Likednone.png";
   const userId = "user123";
   const nav = useNavigate();
@@ -13,16 +14,58 @@ const LikedPage = () => {
   }, []);
   const likedPets = async () => {
     const response = await api.post("/like", { user_id: userId });
-    const petsData = response.data.pets.map((image, index) => ({
-      pet_img: image,
-      num: response.data.pets[index],
-    }));
-    console.log(response.data.pets);
+    // const petsData = response.data.pets.map((image, index) => ({
+    //   pet_img: image,
+    //   num: response.data.pets[index],
+    // }));           // 무슨 코드?
+
+    // 좋아요 상태 받아옴
+    const likeState = await api.post("/findfet", {
+      user_id: userId,
+    });
+
+    // console.log(" 연결 확인:", likeState);
+    const petsData = likeState.data.pets;
+    // console.log("둘러보기 페이지 데이터:", petsData);
+    const likedSet = new Set(
+      petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
+    );
+
+    // console.log("확인용", response.data.pets);
     setLikedPetInfo(response.data.pets);
+    setLikedImages(likedSet);
   };
   const moveDetail = (pet) => {
     // console.log("선택", pet);
     nav(`/findpet/petdetail/${pet.pet_num}`);
+
+    // 찜하기/찜 해제 함수
+    const toggleLike = async (petNum) => {
+      try {
+        // 서버에 찜 상태 변경 요청
+        const response = await api.post("/findfet/favorite", {
+          pet_num: petNum,
+          user_id: userId,
+        });
+
+        console.log("찜 상태 변경 응답:", response);
+
+        const resultMessage = response.data.result;
+        const updatedLikedImages = new Set(likedImages);
+
+        if (resultMessage === "찜하기 성공") {
+          updatedLikedImages.add(petNum); // 찜 목록에 추가
+          console.log(petNum, "목록에 추가됨");
+        } else if (resultMessage === "찜 해제 성공") {
+          updatedLikedImages.delete(petNum); // 찜 목록에서 삭제
+          console.log(petNum, "목록에 삭제됨");
+        }
+
+        setLikedImages(updatedLikedImages); // 상태 업데이트
+      } catch (error) {
+        console.error("찜하기 실패:", error);
+      }
+    };
   };
   return (
     <div className="likedPageBG">

@@ -45,8 +45,8 @@ const FindPet = () => {
       };
 
       // 데이터를 무작위로 섞고 150장으로 제한
-      // const shuffledPets = shuffleArray(response.data.pets).slice(0, 150);
-      const shuffledPets = response.data.pets.slice(0, 150);
+      const shuffledPets = shuffleArray(response.data.pets).slice(0, 150);
+      // const shuffledPets = response.data.pets.slice(0, 150); // 찜하기 기능 확인용
 
       setImages(shuffledPets);
       // console.log("Fetched Pets:", shuffledPets);

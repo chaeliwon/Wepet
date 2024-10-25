@@ -21,9 +21,18 @@ const PetDetail = () => {
   useEffect(() => {
     const fetchPetDetail = async () => {
       try {
-        const response = await api.get(`/findfet/${petNum}`);
+        const response = await api.post(`/findfet/petdetails`, {
+          pet_num: petNum,
+          user_id: userId,
+        });
         setPetDetail(response.data);
-        // console.log(response.data);
+        console.log(response.data);
+
+        // isFavorite 값에 따라 likedImages 초기화
+        const isFavorite = response.data.pet.isFavorite;
+        if (isFavorite) {
+          setLikedImages((prev) => new Set(prev).add(petNum));
+        }
       } catch (error) {
         console.error("펫 상세 정보 가져오기 실패:", error);
       }
@@ -34,7 +43,7 @@ const PetDetail = () => {
 
   const fetchPets = async (type = "") => {
     try {
-      const response = await api.get("/findfet", { params: { type } });
+      const response = await api.post("/findfet", { params: { type } });
 
       // 배열을 무작위로 섞는 함수 (Fisher-Yates Shuffle)
       const shuffleArray = (array) => {
@@ -57,18 +66,22 @@ const PetDetail = () => {
   // 찜하기/찜 해제 함수
   const toggleLike = async (petNum) => {
     try {
-      await api.post("/findfet/favorite", {
+      const response = await api.post("/findfet/favorite", {
         pet_num: petNum,
         user_id: userId,
       });
 
+      console.log(response);
+
+      const resultMessage = response.data.result;
+
       const newLikedImages = new Set(likedImages);
-      if (newLikedImages.has(petNum)) {
-        newLikedImages.delete(petNum);
-        console.log(petNum, "목록에 삭제됨");
-      } else {
+      if (resultMessage === "찜하기 성공") {
         newLikedImages.add(petNum);
         console.log(petNum, "목록에 추가됨");
+      } else {
+        newLikedImages.delete(petNum);
+        console.log(petNum, "목록에 삭제됨");
       }
       setLikedImages(newLikedImages);
     } catch (error) {
