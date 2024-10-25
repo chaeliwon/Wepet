@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../css/Homepage.css";
 import logo from "../assets/movelogo.png";
 import jelly from "../assets/jelly.png";
-import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
+import chatbotIcon from "../assets/chatbot.png";
 import slidecat2 from "../assets/slidecat2.jpg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
