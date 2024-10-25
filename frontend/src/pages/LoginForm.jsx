@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";  // useNavigate 추가
 import { useGoogleLogin } from '@react-oauth/google';  // Google Login Hook 추가
 import "../css/LoginForm.css";
 import googleIcon from "../assets/google.png";
@@ -13,6 +13,8 @@ const LoginForm = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [showDomain, setShowDomain] = useState(true);
+
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
@@ -61,6 +63,8 @@ const LoginForm = () => {
         .then((data) => {
           if (data.success) {
             console.log("로그인 성공:", data);
+            // 로그인 성공 시 메인 페이지로 리디렉션
+            navigate("/");
           } else {
             console.log("로그인 실패:", data.message);
           }
@@ -89,7 +93,8 @@ const LoginForm = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log("Google User Data:", data);
-          // 여기서 data를 가지고 로그인 처리
+          // Google 로그인 성공 시 메인 페이지로 리디렉션
+          navigate("/");
         })
         .catch((error) => console.error("Google User Data Fetch Error:", error));
     },

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // useNavigate 추가
 import Swal from "sweetalert2"; // SweetAlert2 라이브러리 추가
 import "../css/MyPage.css";
 import chatbotIcon from "../assets/chatbot.png"; // 챗봇 이미지 import
@@ -10,6 +10,28 @@ import myuseredit from "../assets/myuseredit.png";
 import mydonation from "../assets/mydonation.png";
 
 const MyPage = () => {
+  const navigate = useNavigate(); 
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "로그아웃 하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "로그아웃",
+      cancelButtonText: "취소",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 로컬 스토리지에서 토큰 삭제 또는 로그아웃 처리
+        localStorage.removeItem("authToken"); // 예: JWT 토큰이 로컬 스토리지에 저장된 경우
+        // 로그아웃 완료 메시지
+        Swal.fire("로그아웃 완료", "성공적으로 로그아웃 되었습니다.", "success");
+        // 로그아웃 후 홈 페이지로 이동
+        navigate("/login");
+      }
+    });
+  };
 
   const handleDeleteAccount = () => {
     // SweetAlert2로 모달 띄우기
@@ -46,16 +68,15 @@ const MyPage = () => {
         </div>
       </div>
 
-    {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
-    <div className="chatbot-button-container">
+      {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
+      <div className="chatbot-button-container">
         <Link to="/chatbot">
           <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
         </Link>
       </div>
 
-
       <div className="menu-list">
-        <div className="menu-item">
+        <div className="menu-item" onClick={handleLogout}> {/* 로그아웃 버튼 클릭 시 로그아웃 처리 */}
           <img src={logout} alt="로그아웃 아이콘" className="menu-icon" />
           <span>로그아웃</span>
           <span className="arrow">></span>

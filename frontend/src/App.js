@@ -22,7 +22,18 @@ import FindIdPassword from "./pages/FindIdPassword";
 
 import "./App.css";
 
+
+
 function App() {
+
+  useEffect(() => {
+    const kakaoAppKey = process.env.REACT_APP_KAKAO_JS_KEY; // 환경 변수에서 Kakao 앱 키 가져오기
+    if (kakaoAppKey && !window.Kakao.isInitialized()) {
+      window.Kakao.init(kakaoAppKey); // 앱 키를 사용하여 Kakao SDK 초기화
+      console.log(window.Kakao.isInitialized()); // Kakao 초기화 여부 확인
+    }
+  }, []);
+  
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <Router>
