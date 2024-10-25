@@ -146,6 +146,8 @@ textarea {
     font-size: 14px;
     background-color: transparent;
     height: 100%;
+    overflow-x: hidden; 
+    overflow-y: hidden; 
 }
 
 button {
