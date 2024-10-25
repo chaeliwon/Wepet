@@ -1,131 +1,158 @@
 /* Pretendard 폰트 설정 */
 @font-face {
-    font-family: "Pretendard-Regular";
-    src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-      format("woff");
-    font-weight: 400;
-    font-style: normal;
-  }
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
 
-  body {
-    font-family: "Pretendard-Regular", sans-serif;
-    color: #855b3b;
-  } 
-  .homepage-background {
-    width: 100%;
-    height: 100%;
-    background-image: url("../assets/background.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+body {
+  font-family: "Pretendard-Regular", sans-serif;
+  color: #855b3b;
+} 
 
+.homepage-background {
+  width: 100%;
+  height: 100%;
+  background-image: url("../assets/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .profile-card {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: #ffffff;
-    border-radius: 0 0 50px 50px;
-    width: 100%;
-    height: 90px;
-    padding: 15px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  .profile-icon {
-    margin-left: 50px;
-    width: 60px;
-    height: 60px;
-    margin-right: 10px;
-  }
-  
-  .profile-info {
-    flex-grow: 1;
-    margin-left: 5px;
-    flex-direction: column; /* 유저 이름과 이메일을 수직으로 정렬 */
-    justify-content: center; /* 세로로 중앙 정렬 */
-    margin-left: 15px; /* 프로필 이미지와 간격 */
-    width: 100%;
-  }
-  
-  .username {
-    font-size: 20px;
-    color: #855b3b;
-    text-align: left;
-    margin: 0; /* 닉네임과 이메일 사이의 간격을 완전히 없앰 */
-    padding: 0; /* padding도 없앰 */
-  }
-  
-  .username-main {
-    font-size: 20px; /* 유저 이름 폰트 크기 */
-    font-weight: bold; /* 유저 이름 굵게 */
-  }
+/* 로그인하지 않은 상태일 때 중앙에 표시되는 로그인 유도 문구와 버튼 */
+.login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh; /* 중앙 배치 */
+}
 
-  .username-sub {
-    font-size: 14px; /* '님, 안녕하세요!' 폰트 크기 */
-    font-weight: normal;
-    margin-left: 5px; /* 유저 이름과 간격 */
-    color: #a8a8a8; /* 색상 */
-  }
+.login-prompt p {
+  font-size: 18px;
+  color: #855b3b;
+  margin-bottom: 15px;
+}
 
-  .email {
-    font-size: 14px;
-    color: #a8a8a8;
-    text-align: left; 
-    margin: 0; /* 간격 완전히 없앰 */
-    padding: 0; /* padding도 없앰 */  
-    
-  }
-  
-  .menu-list {
-    width: 90%;
-    margin-top: 30px;
-  }
-  
-  .menu-item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 15px 0;
-    /* border-bottom: 1px solid #e0e0e0; */
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .arrow {
-    font-size: 18px;
-    color: #a8a8a8;
-    margin-left: auto;
-  }
-  
-  .menu-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 10px;
-  }
-  
-  /* 챗봇페이지 버튼 */
-  .chatbot-button-container {
-    position: absolute; /* mobile-container 안에서 위치 고정 */
-    right: 20px; /* 오른쪽에서 20px 떨어진 위치 */
-    bottom: 10px; /* 아래쪽에서 20px 떨어진 위치 */
-    z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
-  }
-  
-  .chatbot-button {
-    width: 60px; /* 버튼 크기 조정 */
-    height: 60px;
-    cursor: pointer;
-    transition: transform 0.2s; /* 클릭 시 애니메이션 효과 */
-  }
-  
-  .chatbot-button:hover {
-    transform: scale(1.1); /* 호버 시 버튼 확대 */
-  }
-  
+.login-btn {
+  padding: 10px 20px;
+  background-color: #f0e5d7;
+  border: 1px solid #c2a68e;
+  border-radius: 10px;
+  color: #855b3b;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #e5d1bb;
+}
+
+/* 로그인 상태일 때 보여지는 프로필 카드 */
+.profile-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #ffffff;
+  border-radius: 0 0 50px 50px;
+  width: 100%;
+  height: 90px;
+  padding: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.profile-icon {
+  margin-left: 50px;
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+}
+
+.profile-info {
+  flex-grow: 1;
+  margin-left: 5px;
+  flex-direction: column; /* 유저 이름과 이메일을 수직으로 정렬 */
+  justify-content: center; /* 세로로 중앙 정렬 */
+  margin-left: 15px; /* 프로필 이미지와 간격 */
+  width: 100%;
+}
+
+.username {
+  font-size: 20px;
+  color: #855b3b;
+  text-align: left;
+  margin: 0; /* 닉네임과 이메일 사이의 간격을 완전히 없앰 */
+  padding: 0; /* padding도 없앰 */
+}
+
+.username-main {
+  font-size: 20px; /* 유저 이름 폰트 크기 */
+  font-weight: bold; /* 유저 이름 굵게 */
+}
+
+.username-sub {
+  font-size: 14px; /* '님, 안녕하세요!' 폰트 크기 */
+  font-weight: normal;
+  margin-left: 5px; /* 유저 이름과 간격 */
+  color: #a8a8a8; /* 색상 */
+}
+
+.email {
+  font-size: 14px;
+  color: #a8a8a8;
+  text-align: left; 
+  margin: 0; /* 간격 완전히 없앰 */
+  padding: 0; /* padding도 없앰 */  
+}
+
+.menu-list {
+  width: 90%;
+  margin-top: 30px;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px 0;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.arrow {
+  font-size: 18px;
+  color: #a8a8a8;
+  margin-left: auto;
+}
+
+.menu-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+}
+
+/* 챗봇 페이지 버튼 */
+.chatbot-button-container {
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  z-index: 100;
+}
+
+.chatbot-button {
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.chatbot-button:hover {
+  transform: scale(1.1);
+}
