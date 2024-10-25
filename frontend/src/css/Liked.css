@@ -72,6 +72,13 @@
 .likedCard:hover {
   transform: scale(1.05); /* 이미지에 호버 시 확대 효과 */
 }
+.likedCardBox {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  align-content: center;
+  width: 100%;
+}
 .likedTxt {
   display: grid;
   margin-left: 25px;
@@ -84,6 +91,28 @@
 .likedName {
   font-size: 16px;
 }
+
+.likedHeartIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 17px;
+  height: 15px;
+  background-image: url("../assets/heart-outline.png");
+  background-size: cover;
+  transition: transform 0.2s ease-in-out; /* 애니메이션 효과 */
+}
+
+/* 채워진 하트 스타일 */
+.likedFilledHeart {
+  background-image: url("../assets/heart-filled.png");
+}
+
+/* 클릭 시 커지는 애니메이션 */
+.likedAnimateHeart {
+  animation: pulse 0.3s ease-in-out;
+}
+
 .noneImg {
   position: absolute; /* 부모 요소 기준으로 절대 위치 */
   top: 50%;

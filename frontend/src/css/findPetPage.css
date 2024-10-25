@@ -138,16 +138,17 @@ body {
   bottom: -400px;
   left: 0;
   right: 0;
-  height: 200px;
+  height: 220px;
   background-color: white;
   border: 1px solid #ccc;
   transition: bottom 0.5s ease;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  z-index: 100;
 }
 
 .filter-section.visible {
-  bottom: -10px; /* 원하는 위치로 필터가 올라오게 설정 */
+  bottom: -5px; /* 원하는 위치로 필터가 올라오게 설정 */
 }
 
 .filter-section.hidden {
@@ -179,6 +180,16 @@ body {
   font-size: 12px;
   align-items: center;
   padding-bottom: 10px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 393px;
+  height: 812px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99;
 }
 
 input {

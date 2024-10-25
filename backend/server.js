@@ -7,7 +7,6 @@ const mainRouter = require("./routes/mainRouter");
 const authRouter = require("./routes/authRouter");
 const likeRouter = require("./routes/likeRouter");
 const findfetRouter = require("./routes/findfetRouter");
-const chatbotRouter = require("./routes/chatbotRouter");
 
 require("./config/passport"); // passport 설정 불러오기
 
@@ -25,7 +24,6 @@ app.use("/user", userRouter);
 app.use("/main", mainRouter);
 app.use("/auth", authRouter);
 app.use("/findfet", findfetRouter);
-app.use("/chatbot", chatbotRouter);
 app.use("/like", likeRouter);
 
 // 정적 파일 제공 (React 빌드 폴더)
