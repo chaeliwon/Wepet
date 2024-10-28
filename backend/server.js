@@ -21,7 +21,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }, // HTTPS 사용 시 true로 설정
+    cookie: {
+      secure: false, // 로컬 환경에서는 false로 설정
+      sameSite: "lax", // SameSite 설정
+      maxAge: 3600000, // 1시간 유지
+    },
   })
 );
 
