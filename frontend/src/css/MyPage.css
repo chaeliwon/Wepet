@@ -26,7 +26,7 @@ body {
 }
 
 /* 로그인하지 않은 상태일 때 중앙에 표시되는 로그인 유도 문구와 버튼 */
-.login-prompt {
+.mylogin-prompt {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,24 +34,25 @@ body {
   height: 80vh; /* 중앙 배치 */
 }
 
-.login-prompt p {
+.mylogin-prompt p {
   font-size: 18px;
   color: #855b3b;
   margin-bottom: 15px;
 }
 
-.login-btn {
+.mylogin-btn {
   padding: 10px 20px;
-  background-color: #f0e5d7;
-  border: 1px solid #c2a68e;
+  background-color: #fffff0;
+  border: 1px solid #c7d2ad;
   border-radius: 10px;
   color: #855b3b;
   font-size: 16px;
   cursor: pointer;
 }
 
-.login-btn:hover {
-  background-color: #e5d1bb;
+.mylogin-btn:hover {
+  background-color: #e0e8c0;
+  transform: translateY(-2px);
 }
 
 /* 로그인 상태일 때 보여지는 프로필 카드 */

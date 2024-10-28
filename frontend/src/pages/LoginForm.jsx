@@ -169,7 +169,7 @@ const LoginForm = () => {
             onBlur={() => setShowDomain(email === "")}
             required
           />
-          {showDomain && <span className="email-domain">@gmail.com</span>}
+          {showDomain && <span className="email-domain">@email.com</span>}
         </div>
         {emailError && <p className="validation-error">이메일 주소를 정확하게 입력해주세요.</p>}
         <label htmlFor="password" className="password-label">비밀번호</label>

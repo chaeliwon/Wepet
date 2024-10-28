@@ -121,10 +121,10 @@ const MyPage = () => {
           </div>
         </>
       ) : (
-        <div className="login-prompt">
+        <div className="mylogin-prompt">
           <p>로그인 회원만 이용 가능합니다.</p>
           <Link to="/login">
-            <button className="login-btn">로그인 하러 가기</button>
+            <button className="mylogin-btn">로그인 하러 가기</button>
           </Link>
         </div>
       )}
