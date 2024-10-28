@@ -76,7 +76,7 @@ body {
 /* 로그인 및 찜 목록 버튼 */
 .bottom-buttons {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   gap: 15px; /* 버튼 사이 여백 */
   margin-top: 5px;
 }
@@ -86,8 +86,8 @@ a {
 }
 
 .bottom-btn {
-  width: 120px; 
-  height: 55px; 
+  width: 120px;
+  height: 55px;
   background-color: #fffff0;
   border: 3px solid #c7d2ad;
   border-radius: 10px;
@@ -137,9 +137,8 @@ a {
   display: inline-block; /* 텍스트 크기만큼만 버튼이 차지하게 함 */
 }
 
-
 /* 챗봇 페이지로 가는 버튼 */
-.chatbot-button-container {
+.home-chatbot-button-container {
   position: absolute; /* mobile-container 안에서 위치 고정 */
   right: 20px; /* 오른쪽에서 20px 떨어진 위치 */
   bottom: 10px; /* 아래쪽에서 20px 떨어진 위치 */
@@ -147,13 +146,13 @@ a {
   filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
 }
 
-.chatbot-button {
+.home-chatbot-button {
   width: 60px; /* 버튼 크기 조정 */
   height: 60px;
   cursor: pointer;
   transition: transform 0.2s; /* 클릭 시 애니메이션 효과 */
 }
 
-.chatbot-button:hover {
+.home-chatbot-button:hover {
   transform: scale(1.1); /* 호버 시 버튼 확대 */
 }
