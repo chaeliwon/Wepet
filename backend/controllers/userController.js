@@ -45,15 +45,15 @@ exports.checkEmail = (req, res) => {
   });
 };
 
-// 로그인 로직 (JWT 발급 및 쿠키에 저장)
+// 로그인 로직 (JWT 발급 및 쿠키에 저장, 세션에 user_id 저장)
 exports.login = (req, res) => {
   let { id, pw } = req.body;
 
-  let loginsql = `SELECT * FROM user_info WHERE user_id = ? AND user_pw = SHA2(?, 256)`;
+  const loginsql = `SELECT * FROM user_info WHERE user_id = ? AND user_pw = SHA2(?, 256)`;
   conn.query(loginsql, [id, pw], (err, rows) => {
     if (err) {
-      console.log("로그인 오류 발생", err);
-      res.json({ result: "에러발생" });
+      console.error("로그인 오류 발생:", err);
+      res.status(500).json({ result: "에러 발생" });
       return;
     }
 
@@ -65,24 +65,36 @@ exports.login = (req, res) => {
 
       // JWT를 쿠키에 저장
       res.cookie("jwtToken", token, {
-        httpOnly: true, // JavaScript로 접근할 수 없게 설정 (XSS 공격 방지)
-        secure: false, // HTTPS 환경에서는 true로 설정
+        httpOnly: true,
+        secure: false,
         maxAge: 3600000, // 쿠키 유효 시간 (1시간)
       });
 
+      // 세션에 user_id 저장
+      req.session.user_id = id;
       console.log("JWT 토큰 발급:", token); // JWT 토큰 콘솔에 출력
       res.json({ result: "로그인 성공" });
     } else {
       console.log("로그인 실패!");
-      res.json({ result: "로그인 실패" });
+      res.status(401).json({ result: "로그인 실패" });
     }
   });
 };
 
-// 로그아웃 로직 (쿠키에서 JWT 삭제)
+// 로그아웃 로직 (세션과 쿠키에서 정보 삭제)
 exports.logout = (req, res) => {
-  res.clearCookie("jwtToken"); // 쿠키에서 jwtToken 삭제
-  res.json({ result: "로그아웃 성공" });
+  // 세션에서 user_id 삭제
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("세션 삭제 오류:", err);
+      res.status(500).json({ result: "로그아웃 실패" });
+      return;
+    }
+
+    // 쿠키에서 jwtToken 삭제
+    res.clearCookie("jwtToken");
+    res.json({ result: "로그아웃 성공" });
+  });
 };
 
 // 회원정보 수정 로직
