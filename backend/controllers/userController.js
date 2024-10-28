@@ -81,6 +81,22 @@ exports.login = (req, res) => {
   });
 };
 
+// 로그인 상태 확인 API
+exports.checkLoginStatus = (req, res) => {
+  const token = req.cookies?.jwtToken; // 쿠키가 없을 경우 대비
+
+  if (!token) {
+    return res.json({ isLoggedIn: false });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ isLoggedIn: true, userId: decoded.userId });
+  } catch (error) {
+    res.json({ isLoggedIn: false });
+  }
+};
+
 // 로그아웃 로직 (세션과 쿠키에서 정보 삭제)
 exports.logout = (req, res) => {
   // 세션에서 user_id 삭제

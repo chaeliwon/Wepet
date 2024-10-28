@@ -11,6 +11,9 @@ router.post("/check-email", userController.checkEmail);
 // 로그인
 router.post("/login", userController.login);
 
+// 로그인 상태 확인
+router.get("/checkLoginStatus", userController.checkLoginStatus);
+
 // 로그아웃
 router.post("/logout", userController.logout);
 

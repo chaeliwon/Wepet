@@ -1,13 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 const userRouter = require("./routes/userRouter");
 const mainRouter = require("./routes/mainRouter");
 const authRouter = require("./routes/authRouter");
 const likeRouter = require("./routes/likeRouter");
 const findfetRouter = require("./routes/findfetRouter");
-const session = require("express-session");
 
 require("./config/passport"); // passport 설정 불러오기
 
@@ -23,6 +24,8 @@ app.use(
     cookie: { secure: false }, // HTTPS 사용 시 true로 설정
   })
 );
+
+app.use(cookieParser()); // 쿠키 파서 설정
 
 // 미들웨어 설정
 app.use(cors());
