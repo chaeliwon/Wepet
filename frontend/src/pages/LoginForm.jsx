@@ -24,16 +24,19 @@ const LoginForm = () => {
   // Kakao SDK 초기화 로직
   useEffect(() => {
     const kakaoAppKey = process.env.REACT_APP_KAKAO_JS_KEY;
-    if (!window.Kakao) {
-      console.error("Kakao SDK가 로드되지 않았습니다. 스크립트를 확인하세요.");
-      return;
+    
+    if (window.Kakao) { // Kakao 객체가 존재하는지 확인
+        if (kakaoAppKey && !window.Kakao.isInitialized()) {
+            window.Kakao.init(kakaoAppKey);
+            console.log("Kakao SDK initialized:", window.Kakao.isInitialized());
+        } else if (!kakaoAppKey) {
+            console.error("Kakao 앱 키가 제공되지 않았습니다. .env 파일을 확인하세요.");
+        }
+    } else {
+        console.error("Kakao SDK가 로드되지 않았습니다.");
     }
+}, []);
 
-    if (kakaoAppKey && !window.Kakao.isInitialized()) {
-      window.Kakao.init(kakaoAppKey);
-      console.log(window.Kakao.isInitialized());
-    }
-  }, []);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -85,9 +88,10 @@ const LoginForm = () => {
   // Kakao 로그인
   const handleKakaoLogin = () => {
     window.Kakao.Auth.authorize({
-      redirectUri: "http://localhost:3000/login",
+        redirectUri: "http://localhost:3000/api/auth/kakao/callback", // 백엔드의 콜백 URL과 일치
     });
-  };
+};
+
 
   return (
     <div className="login-container">
