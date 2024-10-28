@@ -25,6 +25,13 @@ app.use(
   })
 );
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // 프론트엔드 주소
+    credentials: true, // 쿠키를 허용
+  })
+);
+
 app.use(cookieParser()); // 쿠키 파서 설정
 
 // 미들웨어 설정

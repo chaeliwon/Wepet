@@ -66,13 +66,16 @@ exports.login = (req, res) => {
       // JWT를 쿠키에 저장
       res.cookie("jwtToken", token, {
         httpOnly: true,
-        secure: false,
-        maxAge: 3600000, // 쿠키 유효 시간 (1시간)
+        secure: process.env.NODE_ENV === "production", // 배포 환경에서만 true
+        sameSite: "lax", // 쿠키의 전달 보안 정책
+        maxAge: 3600000,
       });
 
       // 세션에 user_id 저장
       req.session.user_id = id;
       console.log("JWT 토큰 발급:", token); // JWT 토큰 콘솔에 출력
+      console.log("세션 저장:", req.session.user_id);
+
       res.json({ result: "로그인 성공" });
     } else {
       console.log("로그인 실패!");
