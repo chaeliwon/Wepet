@@ -102,26 +102,34 @@ def search_similar_embeddings(query_embedding, top_n=5):
             cursor.execute(sql)
             results = cursor.fetchall()
 
-            # 유사도 계산을 위한 리스트
-            similarities = []
-
+            # 임베딩 벡터와 이미지 URL을 추출
+            pet_nums = []
+            embeddings = []
+            pet_imgs = []
             for pet_num, embedding_data, pet_img in results:
-                # 데이터베이스에서 가져온 임베딩을 NumPy 배열로 변환
-                db_embedding = np.array(json.loads(embedding_data)).flatten()
+                pet_nums.append(pet_num)
+                embeddings.append(json.loads(embedding_data))
+                pet_imgs.append(pet_img)
 
-                # 코사인 유사도 계산
-                cosine_similarity = np.dot(query_embedding, db_embedding) / (
-                        np.linalg.norm(query_embedding) * np.linalg.norm(db_embedding)
-                )
-                # 딕셔너리로 결과 저장
-                similarities.append({
-                    "pet_num": pet_num,
-                    "pet_img": pet_img,
-                    "cosine_similarity": float(cosine_similarity)  # NumPy 데이터형을 float으로 변환
-                })
+            # 임베딩을 NumPy 배열로 변환
+            embeddings = np.array(embeddings)
+
+            # 코사인 유사도 계산 (벡터화 적용)
+            dot_product = np.dot(embeddings, query_embedding)
+            norms = np.linalg.norm(embeddings, axis=1) * np.linalg.norm(query_embedding)
+            cosine_similarities = dot_product / norms
 
             # 유사도 기준으로 상위 n개 선택
-            similarities = sorted(similarities, key=lambda x: x["cosine_similarity"], reverse=True)[:top_n]
+            sorted_indices = np.argsort(-cosine_similarities)[:top_n]
+            similarities = [
+                {
+                    "pet_num": pet_nums[idx],
+                    "pet_img": pet_imgs[idx],
+                    "cosine_similarity": float(cosine_similarities[idx])
+                }
+                for idx in sorted_indices
+            ]
+
             return similarities
 
     finally:
