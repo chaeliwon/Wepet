@@ -21,19 +21,6 @@ const LoginForm = () => {
   // 이메일 형식 구성
   const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 
-  const getCookie = (name) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-  };
-
-  useEffect(() => {
-    const token = sessionStorage.getItem("jwtToken");
-    if (token) {
-      navigate("/"); // 로그인된 사용자는 메인 페이지로 리디렉션
-    }
-  }, [navigate]);
-
   // Kakao SDK 초기화 로직
   useEffect(() => {
     const kakaoAppKey = process.env.REACT_APP_KAKAO_JS_KEY;
@@ -86,8 +73,6 @@ const LoginForm = () => {
 
       if (response.data.result === "로그인 성공") {
         console.log("로그인 성공:", response.data);
-
-        // 쿠키에 JWT가 저장되었으므로, 바로 메인 페이지로 이동
         navigate("/");
       } else {
         console.error("로그인 실패:", response.data.message);

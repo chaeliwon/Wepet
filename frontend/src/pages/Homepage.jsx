@@ -14,11 +14,49 @@ import api from "../api";
 
 const Homepage = () => {
   const [pets, setPets] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const nav = useNavigate();
+
   // 메인 동물 이미지 불러오기
   useEffect(() => {
     fetchPets();
   }, []);
+
+  useEffect(() => {
+    logInState();
+  }, []);
+  // 로그인 상태 확인
+  const logInState = async () => {
+    try {
+      const response = await api.get("/user/checkLoginStatus", {
+        withCredentials: true, // 쿠키 포함 설정
+      });
+      console.log(response.data); // 로그인 상태 확인
+
+      if (response.data.isLoggedIn) {
+        setIsLoggedIn(true); // 로그인 상태로 설정
+      } else {
+        setIsLoggedIn(false); // 비로그인 상태로 설정
+      }
+    } catch (error) {
+      console.error("로그인 상태 확인 중 오류 발생:", error);
+      setIsLoggedIn(false); // 오류 시 비로그인 상태로 처리
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const response = await api.get("/user/logout");
+      if (response.data.result === "로그아웃 성공") {
+        setIsLoggedIn(false); // 로그인 상태 해제
+        nav("/"); // 홈으로 리디렉션
+      } else {
+        console.error("로그아웃 실패", response.data);
+      }
+    } catch (error) {
+      console.error("로그아웃 중 오류 발생", error);
+    }
+  };
   const fetchPets = async (type = "") => {
     try {
       const response = await api.get("/main");
@@ -85,9 +123,13 @@ const Homepage = () => {
       </Swiper>
 
       {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
-      <div className="chatbot-button-container">
+      <div className="home-chatbot-button-container">
         <Link to="/chatbot">
-          <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
+          <img
+            src={chatbotIcon}
+            alt="챗봇 버튼"
+            className="home-chatbot-button"
+          />
         </Link>
       </div>
 
@@ -99,18 +141,30 @@ const Homepage = () => {
             <img src={jelly} alt="paw" className="jelleyicon" />
           </button>
         </Link>
-        <Link to="/login">
-          <button className="bottom-btn">
-            로그인
+        {/* {!isLoggedIn && ()} */}
+        {isLoggedIn ? (
+          <button className="bottom-btn" onClick={logout}>
+            로그아웃
             <img src={jelly} alt="paw" className="jelleyicon" />
           </button>
-        </Link>
+        ) : (
+          <Link to="/login">
+            <button className="bottom-btn">
+              로그인
+              <img src={jelly} alt="paw" className="jelleyicon" />
+            </button>
+          </Link>
+        )}
       </div>
 
-      {/* 회원가입 버튼 */}
-      <Link to="/signup">
-        <button className="signup-small-btn">회원가입 하기</button>
-      </Link>
+      {!isLoggedIn && (
+        <Link to="/signup">
+          <button className="signup-small-btn">회원가입 하기</button>
+        </Link>
+      )}
+      {/* <div>
+        <p className="moveChat">채팅하기! ~></p>
+      </div> */}
     </div>
   );
 };
