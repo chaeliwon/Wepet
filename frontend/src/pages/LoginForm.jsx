@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";  // useNavigate 추가
-import { useGoogleLogin } from '@react-oauth/google';  
+ 
 import "../css/LoginForm.css";
-import googleIcon from "../assets/google.png";
+
 import kakaoIcon from "../assets/kakaotalk.png";
 import WePetLoginLogo from "../assets/WePetLoginLogo.png";
 import jelly from "../assets/jelly.png";
@@ -108,49 +108,7 @@ const LoginForm = () => {
     });
   };
 
-  // 구글 로그인
-  const googleLogin = useGoogleLogin({
-    onSuccess: (response) => {
-      console.log("Google 로그인 성공:", response);
-      fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-        headers: {
-          Authorization: `Bearer ${response.access_token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Google 사용자 정보:", data);
-          // Google 사용자 정보를 백엔드로 전송하여 JWT 발급
-          fetch("http://localhost:3001/api/google-login", {  
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              googleId: data.sub,
-              email: data.email,
-            }),
-          })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.token) {
-              localStorage.setItem('jwtToken', data.token);  // JWT 저장
-              navigate("/");  // 메인 페이지로 리디렉션
-            } else {
-              alert("로그인 실패. 다시 시도해주세요.");
-            }
-          })
-          .catch((error) => {
-            console.error("Google 로그인 처리 중 오류 발생:", error);
-          });
-        })
-        .catch((error) => console.error("Google 사용자 정보 가져오기 실패:", error));
-    },
-    onError: (error) => {
-      console.error("Google 로그인 실패:", error);
-      alert("Google 로그인 실패. 다시 시도해주세요.");
-    },
-  });
+ 
 
   return (
     <div className="login-container">
@@ -197,9 +155,7 @@ const LoginForm = () => {
           <button className="kakao-login" onClick={handleKakaoLogin}>
             <img src={kakaoIcon} alt="Kakao" />
           </button>
-          <button className="google-login" onClick={() => googleLogin()}>
-            <img src={googleIcon} alt="Google" />
-          </button>
+          
         </div>
 
         <Link to="/signup" className="signup-link">
