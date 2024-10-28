@@ -1,9 +1,3 @@
-import cv2
-import numpy as np
-from PIL import Image
-import os
-import traceback
-from rembg import remove
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
@@ -11,11 +5,16 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, File, UploadFile
+import os
 import torch
 from transformers import CLIPProcessor, CLIPModel
 import io
+from PIL import Image
+import numpy as np
 import json
 from db import get_database_connection  # 데이터베이스 연결 함수 import
+import traceback
+from rembg import remove
 
 load_dotenv()  # .env 파일에서 환경 변수 불러오기
 
@@ -40,40 +39,53 @@ prompt = PromptTemplate.from_template(
 # 사용자별 메모리 저장 딕셔너리
 user_memories = {}
 
+
 # 요청 모델 정의
 class QuestionRequest(BaseModel):
     user_id: str
     input: str
 
+
 class TextEmbeddingRequest(BaseModel):
     text: str
 
+
 # 1. LangChain 관련 함수들
 # 사용자별 메모리 생성 및 체인 생성 함수
-def get_conversation_chain(user_id): # user_id는 사용자를 식별하는 고유값
-    if user_id not in user_memories: # 유저메모리에 유저아이디가 없다면! 새로운 대화메모리를 생성한다
-        user_memories[user_id] = ConversationBufferMemory(return_messages=True) # ConversationBufferMemory는 대화를 저장하고 유지한다, return_messages=True 대화내용을 메세지형태로 반환
-    user_memory = user_memories[user_id] # 현재 사용자의 대화메모리 할당
-    return ConversationChain(llm=llm_model, memory=user_memory, prompt=prompt) # ConversationChain은 대화관리 체인! 언어모델, 메모리, 프롬프트 템플릿을 지정
+def get_conversation_chain(user_id):  # user_id는 사용자를 식별하는 고유값
+    if user_id not in user_memories:  # 유저메모리에 유저아이디가 없다면! 새로운 대화메모리를 생성한다
+        user_memories[user_id] = ConversationBufferMemory(
+            return_messages=True)  # ConversationBufferMemory는 대화를 저장하고 유지한다, return_messages=True 대화내용을 메세지형태로 반환
+    user_memory = user_memories[user_id]  # 현재 사용자의 대화메모리 할당
+    return ConversationChain(llm=llm_model, memory=user_memory,
+                             prompt=prompt)  # ConversationChain은 대화관리 체인! 언어모델, 메모리, 프롬프트 템플릿을 지정
+
 
 # 2. CLIP 관련 함수들
 # CLIP을 이용한 텍스트 임베딩 생성 함수
-def generate_text_embedding(text): # 텍스트 임베딩 함수를 정의합니다
-    inputs = clip_processor(text=[text], return_tensors="pt")  # 새로 배운점 ! : **input은 변수가 딕셔너리 형태일때 키-값 쌍을 각각의 키워드 인자로 분해하여 전달하는코드
+def generate_text_embedding(text):  # 텍스트 임베딩 함수를 정의합니다
+    inputs = clip_processor(text=[text],
+                            return_tensors="pt")  # 새로 배운점 ! : **input은 변수가 딕셔너리 형태일때 키-값 쌍을 각각의 키워드 인자로 분해하여 전달하는코드
     # 여기서 이미 전처리로 딕셔너리로 만들기 때문에 하단에서 **input을 사용하는 것이다!
     # clip_processor 는 클립의 기능으로 입력된 텍스트를 모델이 이해할수 있는 상태로 전처리 해줍니다. 상단에 정의한 부분에서 불러오고 있습니다.
     # 함수안의 text=[text] 는 입력 텍스트를 리스트 형태로 전달합니다. 왜 리스트 형식으로 보내냐면 클립은 텍스트나 이미지 입력을 배치형태로 처리하기 때문
     # return_tensors="pt" 이부분은 출력형식을 텐서로 지정하는 것입니다. 이것은 모델에 입력하기 위한 데이터 구조입니다
     with torch.no_grad():
-        text_embedding = clip_model.get_text_features(**inputs).cpu().numpy().tolist() # 텍스트를 임베딩 벡터로 변환하는 코드, cpu메모리로 이동, 넘파이배열로 변환, 리스트형태로 변환
-    return text_embedding # 이코드에서 최종적으로 text_embedding은 리스트로 반환합니다. 이값을 가지고 이미지랑 유사도를 비교할거에요!
+        text_embedding = clip_model.get_text_features(**inputs).cpu().numpy()
+    # 임베딩 벡터 정규화
+    text_embedding = text_embedding / np.linalg.norm(text_embedding)
+    return text_embedding.tolist()  # 이코드에서 최종적으로 text_embedding은 리스트로 반환합니다. 이값을 가지고 이미지랑 유사도를 비교할거에요!
+
 
 # CLIP을 이용한 이미지 임베딩 생성 함수
 def generate_image_embedding(image):
-    inputs = clip_processor(images=image, return_tensors="pt") # images=image 는 입력이미지 데이터를 알려주는것입니다
+    inputs = clip_processor(images=image, return_tensors="pt")  # images=image 는 입력이미지 데이터를 알려주는것입니다
     with torch.no_grad():
-        image_embedding = clip_model.get_image_features(**inputs).cpu().numpy().tolist() # 여기서 image 를 벡터로 임베딩한후 리스트에 담습니다.
-    return image_embedding # 임베딩된 결과를 반환합니다
+        image_embedding = clip_model.get_image_features(**inputs).cpu().numpy()
+    # 임베딩 벡터 정규화
+    image_embedding = image_embedding / np.linalg.norm(image_embedding)
+    return image_embedding.tolist()  # 임베딩된 결과를 반환합니다
+
 
 # 이미지 전처리 함수 (rembg 사용)
 def preprocess_image(image):
@@ -90,6 +102,7 @@ def preprocess_image(image):
         traceback.print_exc()
         raise e
 
+
 # 데이터베이스에서 임베딩 데이터 검색 함수
 def search_similar_embeddings(query_embedding, top_n=5):
     # 데이터베이스 연결
@@ -102,38 +115,36 @@ def search_similar_embeddings(query_embedding, top_n=5):
             cursor.execute(sql)
             results = cursor.fetchall()
 
-            # 임베딩 벡터와 이미지 URL을 추출
-            pet_nums = []
-            embeddings = []
-            pet_imgs = []
+            # 유사도 계산을 위한 리스트
+            similarities = []
+
             for pet_num, embedding_data, pet_img in results:
-                pet_nums.append(pet_num)
-                embeddings.append(json.loads(embedding_data))
-                pet_imgs.append(pet_img)
+                # 데이터베이스에서 가져온 임베딩을 NumPy 배열로 변환
+                db_embedding = np.array(json.loads(embedding_data)).flatten()
 
-            # 임베딩을 NumPy 배열로 변환
-            embeddings = np.array(embeddings)
+                # 임베딩 벡터 정규화
+                db_embedding = db_embedding / np.linalg.norm(db_embedding)
 
-            # 코사인 유사도 계산 (벡터화 적용)
-            dot_product = np.dot(embeddings, query_embedding)
-            norms = np.linalg.norm(embeddings, axis=1) * np.linalg.norm(query_embedding)
-            cosine_similarities = dot_product / norms
+                # 코사인 유사도 계산
+                cosine_similarity = np.dot(query_embedding, db_embedding) / (
+                        np.linalg.norm(query_embedding) * np.linalg.norm(db_embedding)
+                )
+                similarities.append({"pet_num": pet_num, "pet_img": pet_img, "cosine_similarity": cosine_similarity})
 
             # 유사도 기준으로 상위 n개 선택
-            sorted_indices = np.argsort(-cosine_similarities)[:top_n]
-            similarities = [
+            similarities = sorted(similarities, key=lambda x: x["cosine_similarity"], reverse=True)[:top_n]
+            return [
                 {
-                    "pet_num": pet_nums[idx],
-                    "pet_img": pet_imgs[idx],
-                    "cosine_similarity": float(cosine_similarities[idx])
+                    "pet_num": similarity["pet_num"],
+                    "pet_img": similarity["pet_img"],
+                    "cosine_similarity": float(similarity["cosine_similarity"])
                 }
-                for idx in sorted_indices
+                for similarity in similarities
             ]
-
-            return similarities
 
     finally:
         connection.close()
+
 
 # 3. API 엔드포인트 정의
 # LangChain을 사용하여 대화를 처리하는 엔드포인트
@@ -146,6 +157,7 @@ async def chat_with_openai(request: QuestionRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # 텍스트 임베딩 생성 후 유사한 이미지 검색 API 엔드포인트 추가
 @app.post("/search_by_text")
 async def search_by_text(request: TextEmbeddingRequest):
@@ -153,29 +165,47 @@ async def search_by_text(request: TextEmbeddingRequest):
         # 텍스트 임베딩 생성
         text_embedding = generate_text_embedding(request.text)
         # 유사한 이미지 검색
-        similar_pets = search_similar_embeddings(text_embedding)
+        similar_pets = search_similar_embeddings(text_embedding, top_n=5)
         return {"similar_pets": similar_pets}
     except Exception as e:
+        print("search_by_text 함수에서 오류 발생:")
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # 이미지 임베딩 생성 후 유사한 이미지 검색 API 엔드포인트 추가
 @app.post("/search_by_image")
 async def search_by_image(file: UploadFile = File(...)):
     try:
-        # 이미지 파일을 PIL 이미지로 변환 (한글 파일명도 지원)
+        # 이미지 파일을 PIL 이미지로 변환
+        print("이미지 파일 읽는 중...")
         image = Image.open(io.BytesIO(await file.read()))
+        print("이미지 파일 읽기 완료")
 
-        # 이미지 전처리
-        processed_image = preprocess_image(image)
+        # 이미지 전처리 (배경 제거)
+        print("이미지 전처리 중...")
+        preprocessed_image = preprocess_image(image)
+        print("이미지 전처리 완료")
+
         # 이미지 임베딩 생성
-        image_embedding = generate_image_embedding(processed_image)
+        print("이미지 임베딩 생성 중...")
+        image_embedding = generate_image_embedding(preprocessed_image)
+        print("이미지 임베딩 생성 완료")
+
         # 유사한 이미지 검색
-        similar_pets = search_similar_embeddings(image_embedding)
+        print("유사한 이미지 검색 중...")
+        similar_pets = search_similar_embeddings(image_embedding, top_n=5)
+        print("유사한 이미지 검색 완료")
+
         return {"similar_pets": similar_pets}
     except Exception as e:
+        print("search_by_image 함수에서 오류 발생:")
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # FastAPI 실행 설정
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
