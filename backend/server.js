@@ -25,6 +25,7 @@ app.use(
   })
 );
 
+// CORS 설정 - 중복 제거
 app.use(
   cors({
     origin: "http://localhost:3000", // 프론트엔드 주소
@@ -35,7 +36,6 @@ app.use(
 app.use(cookieParser()); // 쿠키 파서 설정
 
 // 미들웨어 설정
-app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize()); // 세션 제거, 초기화만 유지
