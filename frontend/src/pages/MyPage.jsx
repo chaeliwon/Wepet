@@ -17,8 +17,11 @@ const MyPage = () => {
 
   useEffect(() => {
     // checkLoginStatus API를 통해 로그인 상태 확인
-    axios.get("http://localhost:3001/user/checkLoginStatus", { withCredentials: true })
-      .then(response => {
+    axios
+      .get("http://localhost:3001/user/checkLoginStatus", {
+        withCredentials: true,
+      })
+      .then((response) => {
         if (response.data.isLoggedIn) {
           setIsLoggedIn(true);
           setUserData({ userId: response.data.userId });
@@ -27,12 +30,11 @@ const MyPage = () => {
           setIsLoggedIn(false);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("로그인 상태 확인 오류:", error);
         setIsLoggedIn(false);
       });
   }, []);
-  
 
   const handleLogout = () => {
     Swal.fire({
@@ -45,9 +47,14 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post("/user/logout", {}, { withCredentials: true })
+        axios
+          .post("/user/logout", {}, { withCredentials: true })
           .then(() => {
-            Swal.fire("로그아웃 완료", "성공적으로 로그아웃 되었습니다.", "success");
+            Swal.fire(
+              "로그아웃 완료",
+              "성공적으로 로그아웃 되었습니다.",
+              "success"
+            );
             navigate("/login");
           })
           .catch((error) => {
@@ -60,15 +67,16 @@ const MyPage = () => {
   const handleDeleteAccount = () => {
     Swal.fire({
       title: "정말로 회원 탈퇴 하시겠습니까?",
-      icon: "warning",  
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "탈퇴", 
-      cancelButtonText: "취소",  
+      confirmButtonText: "탈퇴",
+      cancelButtonText: "취소",
       confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6"
+      cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post("/user/delete", {}, { withCredentials: true })
+        axios
+          .post("/user/delete", {}, { withCredentials: true })
           .then(() => {
             Swal.fire("탈퇴 완료", "회원 탈퇴가 완료되었습니다.", "success");
             navigate("/login");
@@ -78,15 +86,18 @@ const MyPage = () => {
           });
       }
     });
-};
-
+  };
 
   return (
     <div className="homepage-background">
-      {isLoggedIn ? (  
+      {isLoggedIn ? (
         <>
           <div className="profile-card">
-            <img src={userprofile} alt="프로필 아이콘" className="profile-icon" />
+            <img
+              src={userprofile}
+              alt="프로필 아이콘"
+              className="profile-icon"
+            />
             <div className="profile-info">
               <p className="username">
                 <span className="username-main">{userData?.userId}</span>
@@ -97,7 +108,11 @@ const MyPage = () => {
 
           <div className="chatbot-button-container">
             <Link to="/chatbot">
-              <img src={chatbotIcon} alt="챗봇 버튼" className="chatbot-button" />
+              <img
+                src={chatbotIcon}
+                alt="챗봇 버튼"
+                className="chatbot-button"
+              />
             </Link>
           </div>
 
@@ -113,12 +128,20 @@ const MyPage = () => {
               <span className="arrow">></span>
             </div>
             <Link to="/edit-profile" className="menu-item">
-              <img src={myuseredit} alt="회원정보 수정 아이콘" className="menu-icon" />
+              <img
+                src={myuseredit}
+                alt="회원정보 수정 아이콘"
+                className="menu-icon"
+              />
               <span>회원정보 수정</span>
               <span className="arrow">></span>
             </Link>
             <div className="menu-item">
-              <img src={mydonation} alt="후원하기 아이콘" className="menu-icon" />
+              <img
+                src={mydonation}
+                alt="후원하기 아이콘"
+                className="menu-icon"
+              />
               <span>후원하기</span>
               <span className="arrow">></span>
             </div>
