@@ -46,15 +46,17 @@ const Homepage = () => {
 
   const logout = async () => {
     try {
-      const response = await api.get("/user/logout");
+      const response = await api.post("/user/logout");
+      console.log(response);
       if (response.data.result === "로그아웃 성공") {
+        console.log("로그아웃 성공");
         setIsLoggedIn(false); // 로그인 상태 해제
-        nav("/"); // 홈으로 리디렉션
+        nav("/"); // 홈 화면으로 리디렉션
       } else {
         console.error("로그아웃 실패", response.data);
       }
     } catch (error) {
-      console.error("로그아웃 중 오류 발생", error);
+      console.error("로그아웃 중 오류 발생:", error);
     }
   };
   const fetchPets = async (type = "") => {
