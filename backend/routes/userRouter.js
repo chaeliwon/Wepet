@@ -26,6 +26,9 @@ router.post("/delete", userController.deleteUser);
 // 비밀번호 찾기 - 인증 코드 전송
 router.post("/send-reset-code", userController.sendResetCode);
 
+// **비밀번호 찾기 - 인증 코드 검증 (추가된 부분)**
+router.post("/verify-reset-code", userController.verifyResetCode); // 이 줄 추가
+
 // 비밀번호 재설정
 router.post("/reset-password", userController.resetPassword);
 
