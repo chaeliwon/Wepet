@@ -30,11 +30,19 @@ router.get(
       expiresIn: "1h",
     });
 
-    // JWT 토큰 콘솔에 출력
-    console.log(`JWT 토큰 발급: ${token}`);
+    // JWT 토큰을 HttpOnly 쿠키에 저장
+    res.cookie("jwtToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // 배포 환경에서는 true로 설정
+      sameSite: "lax", // 쿠키의 전달 보안 정책 설정
+      maxAge: 3600000, // 쿠키 유효 기간 설정 (1시간)
+    });
 
-    // 클라이언트에 JWT 반환 (예: URL 쿼리로 전달하거나 리다이렉트)
-    res.redirect(`http://localhost:3000/?token=${token}`);
+    // 세션에 user_id 저장
+    req.session.user_id = req.user.user_id;
+
+    // 홈으로 리다이렉트
+    res.redirect("http://localhost:3000");
   }
 );
 
