@@ -69,9 +69,9 @@ body {
 }
 
 .profile-icon {
-  margin-left: 50px;
-  width: 60px;
-  height: 60px;
+  margin-left: 40px;
+  width: 50px;
+  height: 50px;
   margin-right: 10px;
 }
 
@@ -80,12 +80,12 @@ body {
   margin-left: 5px;
   flex-direction: column; /* 유저 이름과 이메일을 수직으로 정렬 */
   justify-content: center; /* 세로로 중앙 정렬 */
-  margin-left: 15px; /* 프로필 이미지와 간격 */
+  margin-left: 10px; /* 프로필 이미지와 간격 */
   width: 100%;
 }
 
 .username {
-  font-size: 20px;
+  font-size: 16px;
   color: #855b3b;
   text-align: left;
   margin: 0; /* 닉네임과 이메일 사이의 간격을 완전히 없앰 */
@@ -93,7 +93,7 @@ body {
 }
 
 .username-main {
-  font-size: 20px; /* 유저 이름 폰트 크기 */
+  font-size: 16px; /* 유저 이름 폰트 크기 */
   font-weight: bold; /* 유저 이름 굵게 */
 }
 
