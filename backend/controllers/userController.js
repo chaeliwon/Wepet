@@ -1,6 +1,19 @@
 require("dotenv").config();
 const conn = require("../config/db");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+
+// nodemailer 설정
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.EMAIL_USER, // .env에 설정한 이메일 계정
+    pass: process.env.EMAIL_PASS, // .env에 설정한 이메일 비밀번호
+  },
+});
+
+// 이메일 인증 코드 저장 객체 (단순히 메모리에 저장, 실제로는 Redis 등의 스토리지가 권장됨)
+const verificationCodes = {};
 
 // JWT Secret Key
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
@@ -149,5 +162,70 @@ exports.deleteUser = (req, res) => {
 
     console.log("회원 탈퇴 성공:", result);
     return res.json({ result: "회원 탈퇴 성공" });
+  });
+};
+
+// 비밀번호 찾기 - 인증 코드 전송
+exports.sendResetCode = (req, res) => {
+  const { email } = req.body;
+
+  // 해당 이메일로 가입된 사용자가 있는지 확인
+  const sql = `SELECT * FROM user_info WHERE user_id = ?`;
+  conn.query(sql, [email], (err, result) => {
+    if (err) {
+      console.error("사용자 조회 실패:", err);
+      return res.status(500).json({ result: "에러 발생" });
+    }
+
+    if (result.length === 0) {
+      // 이메일이 존재하지 않을 경우
+      return res.status(404).json({ result: "존재하지 않는 이메일" });
+    }
+
+    // 인증 코드 생성 및 저장
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
+    verificationCodes[email] = verificationCode; // 단순히 메모리에 저장
+
+    // 이메일 전송
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "비밀번호 재설정 인증 코드",
+      text: `비밀번호 재설정 인증 코드: ${verificationCode}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("이메일 전송 실패:", error);
+        return res.status(500).json({ result: "이메일 전송 실패" });
+      }
+      console.log("이메일 전송 성공:", info.response);
+      res.json({ result: "인증 코드 전송 성공" });
+    });
+  });
+};
+
+// 비밀번호 재설정
+exports.resetPassword = (req, res) => {
+  const { email, code, newPassword } = req.body;
+
+  // 인증 코드 확인
+  if (verificationCodes[email] !== code) {
+    return res.status(400).json({ result: "인증 코드 불일치" });
+  }
+
+  // 인증 코드가 일치할 경우 비밀번호 재설정 진행
+  const updateSql = `UPDATE user_info SET user_pw = SHA2(?, 256) WHERE user_id = ?`;
+  conn.query(updateSql, [newPassword, email], (err, result) => {
+    if (err) {
+      console.error("비밀번호 재설정 실패:", err);
+      return res.status(500).json({ result: "비밀번호 재설정 실패" });
+    }
+
+    // 인증 코드 삭제
+    delete verificationCodes[email];
+    res.json({ result: "비밀번호 재설정 성공" });
   });
 };

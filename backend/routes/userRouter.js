@@ -23,4 +23,10 @@ router.post("/update", userController.updateUser);
 // 회원 탈퇴
 router.post("/delete", userController.deleteUser);
 
+// 비밀번호 찾기 - 인증 코드 전송
+router.post("/send-reset-code", userController.sendResetCode);
+
+// 비밀번호 재설정
+router.post("/reset-password", userController.resetPassword);
+
 module.exports = router;
