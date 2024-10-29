@@ -64,7 +64,7 @@
   border: 2px solid #b8ce86;
   border-radius: 8px;
   box-shadow: 0 0 0 12px rgba(245, 245, 245, 0.518);
-  height: 27%;
+  height: 180px;
   margin-bottom: 34px;
   background-color: rgba(245, 245, 245, 0.518);
   transition: transform 0.2s ease-in-out; /* 호버 애니메이션 추가 */

@@ -14,7 +14,7 @@ const PetDetail = () => {
   const [petDetail, setPetDetail] = useState(null);
   const [images, setImages] = useState([]);
   const [likedImages, setLikedImages] = useState(new Set());
-  const userId = "user123";
+
   const loc = useLocation();
   const nav = useNavigate();
 
@@ -23,7 +23,6 @@ const PetDetail = () => {
       try {
         const response = await api.post(`/findfet/petdetails`, {
           pet_num: petNum,
-          user_id: userId,
         });
         setPetDetail(response.data);
         console.log(response.data);
@@ -68,7 +67,6 @@ const PetDetail = () => {
     try {
       const response = await api.post("/findfet/favorite", {
         pet_num: petNum,
-        user_id: userId,
       });
 
       console.log(response);

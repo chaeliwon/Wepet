@@ -7,22 +7,19 @@ const LikedPage = () => {
   const [likedPetInfo, setLikedPetInfo] = useState([]);
   const [likedImages, setLikedImages] = useState(new Set());
   const noneImg = "./static/Likednone.png";
-  const userId = "user123";
+  // const userId = "test1@test.com";
   const nav = useNavigate();
   useEffect(() => {
     likedPets();
   }, []);
   const likedPets = async () => {
-    const response = await api.post("/like", { user_id: userId });
-    // const petsData = response.data.pets.map((image, index) => ({
-    //   pet_img: image,
-    //   num: response.data.pets[index],
-    // }));           // 무슨 코드?
+    const response = await api.post("/like");
+
     const petsData = response.data.pets;
     const likedSet = new Set(
       petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
     );
-    // console.log("확인용", response.data.pets[0].isFavorite);
+
     setLikedPetInfo(response.data.pets);
     setLikedImages(likedSet);
   };
@@ -37,7 +34,6 @@ const LikedPage = () => {
       // 서버에 찜 상태 변경 요청
       const response = await api.post("/findfet/favorite", {
         pet_num: petNum,
-        user_id: userId,
       });
 
       console.log("찜 상태 변경 응답:", response);

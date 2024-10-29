@@ -9,7 +9,7 @@ const FindPet = () => {
   const [likedImages, setLikedImages] = useState(new Set());
   const [filterVisible, setFilterVisible] = useState(false);
   const [selectedType, setSelectedType] = useState("");
-  const userId = "user123"; // 예시 사용자 ID (로그인 구현 시 변경)
+  const userId = "test1@test.com"; // 예시 사용자 ID (로그인 구현 시 변경)
   const nav = useNavigate();
 
   // 페이지가 로드될 때 유기동물 목록 가져오기
@@ -22,7 +22,6 @@ const FindPet = () => {
     try {
       const response = await api.post("/findfet", {
         type: type,
-        user_id: userId,
       });
 
       // console.log("확인:", response);
@@ -62,7 +61,6 @@ const FindPet = () => {
       // 서버에 찜 상태 변경 요청
       const response = await api.post("/findfet/favorite", {
         pet_num: petNum,
-        user_id: userId,
       });
 
       console.log("찜 상태 변경 응답:", response);
