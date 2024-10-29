@@ -47,19 +47,14 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post("/user/logout", {}, { withCredentials: true })
-          .then(() => {
-            Swal.fire(
-              "로그아웃 완료",
-              "성공적으로 로그아웃 되었습니다.",
-              "success"
-            );
-            navigate("/login");
-          })
-          .catch((error) => {
-            console.error("로그아웃 중 오류:", error);
-          });
+        axios.post("http://localhost:3001/user/logout", {}, { withCredentials: true }) // 여기에서 URL 수정
+        .then(() => {
+          Swal.fire("로그아웃 완료", "성공적으로 로그아웃 되었습니다.", "success");
+          navigate("/login");
+        })
+        .catch((error) => {
+          console.error("로그아웃 중 오류:", error);
+        });
       }
     });
   };
