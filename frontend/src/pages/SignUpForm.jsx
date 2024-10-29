@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/SignUpForm.css";
 import api from "../api";
 
@@ -24,6 +25,8 @@ const SignupForm = () => {
   const emailRef = useRef();
   const nickRef = useRef();
   const pwdRef = useRef();
+
+  const nav = useNavigate();
 
   useEffect(() => {});
 
@@ -142,6 +145,9 @@ const SignupForm = () => {
   const closeModal = () => {
     setShowModal(false);
     setModalMessage("");
+    if (modalMessage === "가입이 완료되었습니다.") {
+      nav("/login");
+    }
   };
 
   const joinMember = async () => {
