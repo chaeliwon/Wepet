@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom"; // useNavigate 추가
 import "../css/LoginForm.css";
 import kakaoIcon from "../assets/kakaotalk.png";
+import googleIcon from "../assets/google.png";
 import WePetLoginLogo from "../assets/WePetLoginLogo.png";
 import jelly from "../assets/jelly.png";
 import api from "../api";
@@ -12,6 +13,7 @@ const LoginForm = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [showDomain, setShowDomain] = useState(true);
+  const [loginFail, setLoginFail] = useState(false);
 
   // const emailRef = useRef();
   // const pwdRef = useRef();
@@ -39,6 +41,26 @@ const LoginForm = () => {
       console.error("Kakao SDK가 로드되지 않았습니다.");
     }
   }, []);
+  // URL에서 JWT 토큰 추출 및 저장
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+
+    if (token) {
+      console.log("JWT 토큰:", token); // JWT 토큰을 콘솔에 출력
+
+      // JWT 토큰을 세션 스토리지에 저장
+      sessionStorage.setItem("jwtToken", token);
+
+      // 메인 페이지로 리디렉션
+      navigate("/");
+    }
+  }, [navigate]);
+
+  // Google 로그인 시작 함수
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:3001/auth/google"; // 서버의 Google 로그인 경로로 이동
+  };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -84,7 +106,7 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.error("로그인 중 오류 발생:", error);
-      setPasswordError(true);
+      setLoginFail(true);
     }
   };
 
@@ -153,11 +175,20 @@ const LoginForm = () => {
           로그인
           <img src={jelly} alt="paw" className="jellyicon" />
         </button>
-
-        <div className="social-login">
-          <button className="kakao-login" onClick={handleKakaoLogin}>
-            <img src={kakaoIcon} alt="Kakao" />
-          </button>
+        {loginFail && (
+          <p className="validation-error-login">입력 정보를 확인해주세요.</p>
+        )}
+        <div className="social-login-box">
+          <div className="social-login">
+            <button className="kakao-login" onClick={handleKakaoLogin}>
+              <img src={kakaoIcon} alt="Kakao" />
+            </button>
+          </div>
+          <div className="social-login">
+            <button className="google-login" onClick={handleGoogleLogin}>
+              <img src={googleIcon} alt="Google" />
+            </button>
+          </div>
         </div>
 
         <Link to="/signup" className="signup-link">
