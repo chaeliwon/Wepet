@@ -1,0 +1,12 @@
+fastapi
+pydantic
+langchain
+Pillow
+python-dotenv
+pymysql
+torch
+transformers
+rembg
+uvicorn
+langchain_openai
+python-multipart
