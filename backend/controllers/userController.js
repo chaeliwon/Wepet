@@ -186,7 +186,7 @@ exports.sendResetCode = (req, res) => {
     const verificationCode = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
-    verificationCodes[email] = verificationCode; // 단순히 메모리에 저장
+    verificationCodes[email] = verificationCode; // 메모리에 저장
 
     // 이메일 전송
     const mailOptions = {
@@ -207,16 +207,24 @@ exports.sendResetCode = (req, res) => {
   });
 };
 
-// 비밀번호 재설정
-exports.resetPassword = (req, res) => {
-  const { email, code, newPassword } = req.body;
+// 인증 코드 검증
+exports.verifyResetCode = (req, res) => {
+  const { email, code } = req.body;
 
   // 인증 코드 확인
   if (verificationCodes[email] !== code) {
     return res.status(400).json({ result: "인증 코드 불일치" });
   }
 
-  // 인증 코드가 일치할 경우 비밀번호 재설정 진행
+  // 인증 코드가 일치하는 경우
+  res.json({ result: "인증 코드 일치" });
+};
+
+// 비밀번호 재설정
+exports.resetPassword = (req, res) => {
+  const { email, newPassword } = req.body;
+
+  // 비밀번호 재설정 진행
   const updateSql = `UPDATE user_info SET user_pw = SHA2(?, 256) WHERE user_id = ?`;
   conn.query(updateSql, [newPassword, email], (err, result) => {
     if (err) {
