@@ -36,14 +36,17 @@ const FindIdPassword = () => {
   // 인증 코드 검증
   const verifyCode = () => {
     axios
-      .post("http://localhost:3001/user/verify-reset-code", { email, code: verificationCode })
+      .post("http://localhost:3001/user/verify-reset-code", {
+        email,
+        code: verificationCode,
+      })
       .then(() => {
         Swal.fire({
           title: "인증 성공!",
           text: "인증번호가 일치합니다.",
           icon: "success",
         });
-        navigate("/edit-profile"); // 인증 성공 시 EditProfileForm 페이지로 이동
+        navigate("/edit-password"); // 로그인페이지로
       })
       .catch(() => {
         Swal.fire({
@@ -74,7 +77,9 @@ const FindIdPassword = () => {
               disabled={isCodeSent}
               className="send-code-btn"
             >
-              인증메일<br />전송
+              인증메일
+              <br />
+              전송
             </button>
           </div>
         </div>
