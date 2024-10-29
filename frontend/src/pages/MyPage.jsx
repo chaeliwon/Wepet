@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { jwtDecode } from "jwt-decode"; // 정확한 named import 사용
+import axios from "axios"; // Axios 임포트 필요
 import "../css/MyPage.css";
 import chatbotIcon from "../assets/chatbot.png";
 import userprofile from "../assets/userprofile.png";
@@ -13,31 +13,26 @@ import mydonation from "../assets/mydonation.png";
 const MyPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-
-    if (token) {
-      // 로그인된 상태로 설정
-      setIsLoggedIn(true);
-
-      // 토큰에서 사용자 정보 추출
-      try {
-        const decoded = jwtDecode(token); // 정확한 함수 사용
-        setUserData({
-          username: decoded.user_nick || "닉네임 없음",
-          email: decoded.email || "이메일 없음"
-        });
-      } catch (error) {
-        console.error("토큰 디코딩 실패:", error);
+    // checkLoginStatus API를 통해 로그인 상태 확인
+    axios.get("http://localhost:3001/user/checkLoginStatus", { withCredentials: true })
+      .then(response => {
+        if (response.data.isLoggedIn) {
+          setIsLoggedIn(true);
+          setUserData({ userId: response.data.userId });
+          console.log("로그인 상태 확인:", response.data);
+        } else {
+          setIsLoggedIn(false);
+        }
+      })
+      .catch(error => {
+        console.error("로그인 상태 확인 오류:", error);
         setIsLoggedIn(false);
-        localStorage.removeItem("jwtToken");
-      }
-    } else {
-      setIsLoggedIn(false);
-    }
+      });
   }, []);
+  
 
   const handleLogout = () => {
     Swal.fire({
@@ -50,9 +45,14 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("jwtToken"); 
-        Swal.fire("로그아웃 완료", "성공적으로 로그아웃 되었습니다.", "success");
-        navigate("/login");
+        axios.post("/user/logout", {}, { withCredentials: true })
+          .then(() => {
+            Swal.fire("로그아웃 완료", "성공적으로 로그아웃 되었습니다.", "success");
+            navigate("/login");
+          })
+          .catch((error) => {
+            console.error("로그아웃 중 오류:", error);
+          });
       }
     });
   };
@@ -68,13 +68,18 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6"
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("탈퇴 완료", "회원 탈퇴가 완료되었습니다.", "success");
-        // 실제 회원탈퇴 API 호출
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire("취소됨", "회원 탈퇴가 취소되었습니다.", "info");
+        axios.post("/user/delete", {}, { withCredentials: true })
+          .then(() => {
+            Swal.fire("탈퇴 완료", "회원 탈퇴가 완료되었습니다.", "success");
+            navigate("/login");
+          })
+          .catch((error) => {
+            console.error("회원 탈퇴 중 오류:", error);
+          });
       }
     });
-  };
+};
+
 
   return (
     <div className="homepage-background">
@@ -84,10 +89,9 @@ const MyPage = () => {
             <img src={userprofile} alt="프로필 아이콘" className="profile-icon" />
             <div className="profile-info">
               <p className="username">
-                <span className="username-main">{userData?.username}</span>
+                <span className="username-main">{userData?.userId}</span>
                 <span className="username-sub">님, 안녕하세요!</span>
               </p>
-              <p className="email">{userData?.email}</p>
             </div>
           </div>
 
