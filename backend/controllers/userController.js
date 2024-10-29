@@ -110,8 +110,11 @@ exports.logout = (req, res) => {
       return;
     }
 
-    // 쿠키에서 jwtToken 삭제
+    // 쿠키에서 jwtToken 및 connect.sid 삭제
     res.clearCookie("jwtToken");
+    res.clearCookie("connect.sid"); // 세션 쿠키 삭제
+    console.log("세션 삭제 확인:", req.session);
+
     res.json({ result: "로그아웃 성공" });
   });
 };
