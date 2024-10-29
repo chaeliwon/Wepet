@@ -2,7 +2,7 @@ const conn = require("../config/db");
 
 // 찜한 동물 목록 가져오기
 exports.getLikedPets = (req, res) => {
-  const { user_id } = req.body; // POST 요청이므로 req.body에서 user_id를 받음
+  const user_id = req.session.user_id;
 
   // 찜한 동물 목록을 가져오는 쿼리
   const sql = `
@@ -35,7 +35,8 @@ exports.getLikedPets = (req, res) => {
 
 // 찜하기/찜 해제 토글
 exports.toggleFavorite = (req, res) => {
-  const { pet_num, user_id } = req.body;
+  const { pet_num } = req.body;
+  const user_id = req.session.user_id;
 
   // 찜한 상태인지 확인하는 SQL 쿼리
   const checkSql =
