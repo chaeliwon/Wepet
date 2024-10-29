@@ -34,7 +34,7 @@ router.get(
     console.log(`JWT 토큰 발급: ${token}`);
 
     // 클라이언트에 JWT 반환 (예: URL 쿼리로 전달하거나 리다이렉트)
-    res.redirect(`/?token=${token}`);
+    res.redirect(`http://localhost:3000/?token=${token}`);
   }
 );
 
