@@ -23,24 +23,11 @@ const LoginForm = () => {
   // 이메일 형식 구성
   const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 
-  // Kakao SDK 초기화 로직
-  useEffect(() => {
-    const kakaoAppKey = process.env.REACT_APP_KAKAO_JS_KEY;
+  // Kakao 로그인
+  const handleKakaoLogin = () => {
+    window.location.href = "http://localhost:3001/auth/kakao"; // 서버의 카카오 로그인 경로로 이동
+  };
 
-    if (window.Kakao) {
-      // Kakao 객체가 존재하는지 확인
-      if (kakaoAppKey && !window.Kakao.isInitialized()) {
-        window.Kakao.init(kakaoAppKey);
-        console.log("Kakao SDK initialized:", window.Kakao.isInitialized());
-      } else if (!kakaoAppKey) {
-        console.error(
-          "Kakao 앱 키가 제공되지 않았습니다. .env 파일을 확인하세요."
-        );
-      }
-    } else {
-      console.error("Kakao SDK가 로드되지 않았습니다.");
-    }
-  }, []);
   // URL에서 JWT 토큰 추출 및 저장
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -108,13 +95,6 @@ const LoginForm = () => {
       console.error("로그인 중 오류 발생:", error);
       setLoginFail(true);
     }
-  };
-
-  // Kakao 로그인
-  const handleKakaoLogin = () => {
-    window.Kakao.Auth.authorize({
-      redirectUri: "http://localhost:3000/api/auth/kakao/callback", // 백엔드의 콜백 URL과 일치
-    });
   };
 
   return (
