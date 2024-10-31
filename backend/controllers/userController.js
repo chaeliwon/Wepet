@@ -132,9 +132,24 @@ exports.logout = (req, res) => {
   });
 };
 
+exports.sendNickMypage = (req, res) => {
+  const userId = req.session.user_id;
+
+  const sendSql = `SELECT user_nick FROM user_info WHERE user_id = ?`;
+  conn.query(sendSql, [userId], (err, rows) => {
+    if (err) {
+      console.log("닉네임 가져오기 실패:", err);
+      return res.status(500).json({ result: "닉네임 가져오기 실패" });
+    }
+
+    console.log("닉네임 가져오기 성공", rows);
+    return res.json({ result: "닉네임 가져오기 성공", rows });
+  });
+};
+
 // 회원정보 수정 로직
 exports.updateUser = (req, res) => {
-  const userId = req.user.user_id; // JWT 토큰에서 사용자 ID 추출
+  const userId = req.session.user_id; // JWT 토큰에서 사용자 ID 추출
   const { nick, pw } = req.body; // 클라이언트에서 새로운 정보 입력
 
   const updateSql = `UPDATE user_info SET user_nick = ?, user_pw = SHA2(?, 256) WHERE user_id = ?`;
@@ -151,7 +166,7 @@ exports.updateUser = (req, res) => {
 
 // 회원탈퇴 로직
 exports.deleteUser = (req, res) => {
-  const userId = req.user.user_id; // JWT 토큰에서 사용자 ID 추출
+  const userId = req.session.user_id; // JWT 토큰에서 사용자 ID 추출
 
   const deleteSql = `DELETE FROM user_info WHERE user_id = ?`;
   conn.query(deleteSql, [userId], (err, result) => {

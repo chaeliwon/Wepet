@@ -17,6 +17,9 @@ router.get("/checkLoginStatus", userController.checkLoginStatus);
 // 로그아웃
 router.post("/logout", userController.logout);
 
+// 마이페이지 닉네임 전달
+router.get("/send-nick-mypage", userController.sendNickMypage);
+
 // 회원 정보 수정
 router.post("/update", userController.updateUser);
 
