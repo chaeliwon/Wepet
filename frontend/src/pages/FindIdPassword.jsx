@@ -46,7 +46,7 @@ const FindIdPassword = () => {
           text: "인증번호가 일치합니다.",
           icon: "success",
         });
-        navigate("/edit-password"); // 비밀번호 찾기 페이지로(로그인하지않고 수정)
+        navigate("/edit-password", { state: { email } });// 비밀번호 찾기 페이지로(로그인하지않고 수정)
       })
       .catch(() => {
         Swal.fire({
