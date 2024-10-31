@@ -70,7 +70,9 @@ input {
 }
 
 .check-nickname-btn {
-    font-size: 12px;
+    width: 100px;
+    height: 37px;
+    font-size: 13px;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -78,7 +80,7 @@ input {
     padding: 5px 15px;
     cursor: pointer;
     margin-left: 10px;
-    height: auto;
+
 }
 
 .edit-btn {
