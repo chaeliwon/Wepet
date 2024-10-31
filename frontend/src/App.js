@@ -19,6 +19,7 @@ import PetDetail from "./pages/PetDetail";
 import LikedPage from "./pages/LikedPage";
 import ChatBot from "./pages/ChatBot";
 import FindIdPassword from "./pages/FindIdPassword";
+import EditPassword from "./pages/EditPassword";
 
 import "./App.css";
 
@@ -68,6 +69,8 @@ function App() {
                 {/* 챗봇페이지 경로 */}
                 <Route path="find-id-password" element={<FindIdPassword />} />
                 {/* 아이디/비밀번호 찾기 경로 추가 */}
+                <Route path="edit-password" element={<EditPassword/>} />
+                {/* 아이디/비밀번호 찾기 경로 추가 */}
               </Route>
             </Routes>
           </div>
@@ -100,6 +103,8 @@ function DefaultHeader() {
       setPageTitle("상담페이지");
     } else if (location.pathname === "/find-id-password") {
       setPageTitle("비밀번호찾기페이지");
+    } else if (location.pathname === "/edit-password") {
+      setPageTitle("비밀번호 수정하기");
     }
       // 한글과 숫자를 포함한 동적 경로 매칭
     else if (/^\/findpet\/petdetail\/[^/]+$/.test(location.pathname)) {
