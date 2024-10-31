@@ -1,37 +1,53 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/Liked.css";
+import Swal from "sweetalert2";
 import api from "../api";
+import "../css/Liked.css";
 
 const LikedPage = () => {
   const [likedPetInfo, setLikedPetInfo] = useState([]);
   const [likedImages, setLikedImages] = useState(new Set());
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 추가
   const noneImg = "./static/Likednone.png";
-  // const userId = "test1@test.com";
   const nav = useNavigate();
+
   useEffect(() => {
-    likedPets();
+    checkLoginStatus();
   }, []);
+
+  const checkLoginStatus = async () => {
+    try {
+      const response = await api.get("/user/checkLoginStatus", {
+        withCredentials: true,
+      });
+      if (response.data.isLoggedIn) {
+        setIsLoggedIn(true);
+        likedPets(); // 로그인 상태에서 찜 목록 불러오기
+      } else {
+        setIsLoggedIn(false);
+      }
+    } catch (error) {
+      console.error("로그인 상태 확인 오류:", error);
+      setIsLoggedIn(false);
+    }
+  };
+
   const likedPets = async () => {
     const response = await api.post("/like");
-
     const petsData = response.data.pets;
     const likedSet = new Set(
       petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
     );
-
     setLikedPetInfo(response.data.pets);
     setLikedImages(likedSet);
   };
-  const moveDetail = (pet) => {
-    // console.log("선택", pet);
-    nav(`/findpet/petdetail/${pet.pet_num}`);
 
-    // 찜하기/찜 해제 함수
+  const moveDetail = (pet) => {
+    nav(`/findpet/petdetail/${pet.pet_num}`);
   };
+
   const toggleLike = async (petNum) => {
     try {
-      // 서버에 찜 상태 변경 요청
       const response = await api.post("/findfet/favorite", {
         pet_num: petNum,
       });
@@ -42,54 +58,64 @@ const LikedPage = () => {
       const updatedLikedImages = new Set(likedImages);
 
       if (resultMessage === "찜하기 성공") {
-        updatedLikedImages.add(petNum); // 찜 목록에 추가
+        updatedLikedImages.add(petNum);
         console.log(petNum, "목록에 추가됨");
       } else if (resultMessage === "찜 해제 성공") {
-        updatedLikedImages.delete(petNum); // 찜 목록에서 삭제
+        updatedLikedImages.delete(petNum);
         console.log(petNum, "목록에 삭제됨");
       }
 
-      setLikedImages(updatedLikedImages); // 상태 업데이트
+      setLikedImages(updatedLikedImages);
     } catch (error) {
       console.error("찜하기 실패:", error);
     }
   };
+
   return (
     <div className="likedPageBG">
-      <div className="likedGallery">
-        {likedPetInfo.length > 0 ? (
-          likedPetInfo.map((data, index) => (
-            <div key={data.pet_img || index} className="likedCard">
-              <div className="likedCardBox" onClick={() => moveDetail(data)}>
-                <div className="likedImgWrapper">
-                  <img src={data.pet_img} alt="사진" className="likedImg" />
+      {isLoggedIn ? (
+        <div className="likedGallery">
+          {likedPetInfo.length > 0 ? (
+            likedPetInfo.map((data, index) => (
+              <div key={data.pet_img || index} className="likedCard">
+                <div className="likedCardBox" onClick={() => moveDetail(data)}>
+                  <div className="likedImgWrapper">
+                    <img src={data.pet_img} alt="사진" className="likedImg" />
+                  </div>
+                  <div className="likedTxt">
+                    <span className="likedName">{data.pet_breed}</span>
+                    <br />
+                    <span>성별 : {data.pet_gender}</span>
+                    <br />
+                    <span>나이 : {data.pet_age}</span>
+                    <br />
+                    <span>보호소 위치 : {data.pet_shelter}</span>
+                  </div>
                 </div>
-                <div className="likedTxt">
-                  <span className="likedName">{data.pet_breed}</span>
-                  <br />
-                  <span>성별 : {data.pet_gender}</span>
-                  <br />
-                  <span>나이 : {data.pet_age}</span>
-                  <br />
-                  <span>보호소 위치 : {data.pet_shelter}</span>
-                </div>
+                <div
+                  className={`likedHeartIcon ${
+                    likedImages.has(data.pet_num)
+                      ? "likedFilledHeart likedAnimateHeart"
+                      : ""
+                  }`}
+                  onClick={() => toggleLike(data.pet_num)}
+                ></div>
               </div>
-              <div
-                className={`likedHeartIcon ${
-                  likedImages.has(data.pet_num)
-                    ? "likedFilledHeart likedAnimateHeart"
-                    : ""
-                }`}
-                onClick={() => toggleLike(data.pet_num)}
-              ></div>
+            ))
+          ) : (
+            <div className="likedImgWrapper">
+              <img src={noneImg} alt="추가해주세요" className="noneImg" />
             </div>
-          ))
-        ) : (
-          <div className="likedImgWrapper">
-            <img src={noneImg} alt="추가해주세요" className="noneImg" />
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div className="mylogin-prompt">
+          <p>로그인 회원만 이용 가능합니다.</p>
+          <button className="mylogin-btn" onClick={() => nav("/login")}>
+            로그인 하러 가기
+          </button>
+        </div>
+      )}
     </div>
   );
 };
