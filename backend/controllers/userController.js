@@ -180,9 +180,9 @@ exports.deleteUser = (req, res) => {
   });
 };
 
-// 비밀번호 찾기 - 인증 코드 전송
+// 비밀번호 찾기 및 회원가입 - 인증 코드 전송
 exports.sendResetCode = (req, res) => {
-  const { email } = req.body;
+  const { email, type } = req.body; // 'type' 추가 ('signup' 또는 'reset')
 
   // 해당 이메일로 가입된 사용자가 있는지 확인
   const sql = `SELECT * FROM user_info WHERE user_id = ?`;
@@ -192,8 +192,13 @@ exports.sendResetCode = (req, res) => {
       return res.status(500).json({ result: "에러 발생" });
     }
 
-    if (result.length === 0) {
-      // 이메일이 존재하지 않을 경우
+    if (type === "signup" && result.length > 0) {
+      // 회원가입 시 이미 이메일이 존재하는 경우
+      return res.status(400).json({ result: "이미 가입된 이메일" });
+    }
+
+    if (type === "reset" && result.length === 0) {
+      // 비밀번호 찾기 시 이메일이 존재하지 않는 경우
       return res.status(404).json({ result: "존재하지 않는 이메일" });
     }
 
@@ -201,14 +206,17 @@ exports.sendResetCode = (req, res) => {
     const verificationCode = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
-    verificationCodes[email] = verificationCode; // 메모리에 저장
+    verificationCodes[email] = verificationCode;
 
-    // 이메일 전송
+    // 이메일 전송 설정
+    const subject =
+      type === "signup" ? "회원가입 인증 코드" : "비밀번호 재설정 인증 코드";
+    const text = `${subject}: ${verificationCode}`;
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "비밀번호 재설정 인증 코드",
-      text: `비밀번호 재설정 인증 코드: ${verificationCode}`,
+      subject: subject,
+      text: text,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
