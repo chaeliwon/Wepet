@@ -159,7 +159,7 @@ button {
 .send-icon {
     width: 25px;
     height: 25px;
-    margin-right: 10px;
+    /* margin-right: 10px; */
 }
 
 .image-preview {
@@ -173,8 +173,25 @@ button {
 }
 
 .preview-image {
-    width: 80px; /* 미리보기 이미지 크기 */
+    width: 80px;
     height: auto;
     border-radius: 5px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cancel-preview {
+    position: absolute;
+    top: 5px;
+    left: 5px; /* 상단 왼쪽으로 이동 */
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 19px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
