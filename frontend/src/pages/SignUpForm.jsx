@@ -16,6 +16,9 @@ const SignupForm = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [checkEmailDup, setCheckEmailDup] = useState(false);
+  const [codeSentMessage, setCodeSentMessage] = useState(false);
+  const [matchCode, setMatchCode] = useState(false);
 
   // 이메일 형식 구성
   const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
@@ -25,6 +28,7 @@ const SignupForm = () => {
   const emailRef = useRef();
   const nickRef = useRef();
   const pwdRef = useRef();
+  const codeRef = useRef();
 
   const nav = useNavigate();
 
@@ -123,6 +127,8 @@ const SignupForm = () => {
       if (response.data.result === "사용 가능") {
         setModalMessage("이 이메일은 사용 가능합니다.");
         setIsEmailChecked(true);
+        setCheckEmailDup(true);
+        console.log("중복 확인 완료");
       } else {
         setModalMessage("이 이메일은 사용 불가능합니다.");
         setIsEmailChecked(false);
@@ -166,6 +172,43 @@ const SignupForm = () => {
     } else {
       setModalMessage("가입에 실패했습니다.");
       setShowModal(true);
+    }
+  };
+  // 인증코드 발송
+  const sendCode = async () => {
+    let email = emailRef.current.value;
+    let signup = "signup";
+
+    try {
+      const response = await api.post("/user/send-reset-code", {
+        email: email,
+        type: signup,
+      });
+      console.log(response);
+      setCodeSentMessage(true);
+    } catch (error) {
+      console.error("인증 코드 발송 중 오류:", error);
+    }
+  };
+
+  // 인증코드 확인
+  const checkCode = async () => {
+    let code = codeRef.current.value;
+    let email = emailRef.current.value;
+    try {
+      const response = await api.post("/user/verify-reset-code", {
+        email: email,
+        code: code,
+      });
+      console.log(response);
+      if (response.data.result === "인증 코드 일치") {
+        setMatchCode("코드가 확인됐습니다.");
+      } else {
+        setMatchCode("코드를 다시 확인해주세요");
+      }
+    } catch (error) {
+      console.error("코드 확인 중 오류 발생:", error);
+      setMatchCode("코드를 다시 확인해주세요");
     }
   };
 
@@ -214,15 +257,53 @@ const SignupForm = () => {
           {showDomain}
           <input
             type="button"
-            className="check-signup-btn"
+            className="check-email"
             onClick={emailCheck}
             value="중복확인"
           ></input>
         </div>
+        {checkEmailDup ? (
+          <div className="check-code-box">
+            <div className="check-code-label">
+              <label htmlFor="email" className="signup-label">
+                이메일 인증코드
+              </label>
+            </div>
+            <div className="input-container">
+              <input
+                type="number"
+                placeholder="인증코드를 입력하세요"
+                ref={codeRef}
+              />
+              {showDomain}
+
+              <div className="check-code-btn-box">
+                <input
+                  type="button"
+                  className="send-signup-code-btn"
+                  value="인증코드 발송"
+                  onClick={() => sendCode()}
+                ></input>
+                <input
+                  type="button"
+                  className="submit-code-btn"
+                  value="입력"
+                  onClick={() => checkCode()}
+                ></input>
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
         {emailError && (
           <p className="validation-error">이메일을 정확하게 입력해주세요.</p>
         )}
         {showModal && <Modal message={modalMessage} onClose={closeModal} />}
+        {codeSentMessage && (
+          <p className="validation-error">인증코드가 발송되었습니다.</p>
+        )}
+        {matchCode && <p className="validation-error">{matchCode}</p>}
         <label htmlFor="password" className="signup-label">
           비밀번호
         </label>
