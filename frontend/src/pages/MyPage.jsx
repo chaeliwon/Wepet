@@ -47,7 +47,7 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post("http://localhost:3001/user/logout", {}, { withCredentials: true }) // 여기에서 URL 수정
+        axios.post("http://localhost:3001/user/logout", {}, { withCredentials: true })
         .then(() => {
           Swal.fire("로그아웃 완료", "성공적으로 로그아웃 되었습니다.", "success");
           navigate("/login");
@@ -131,7 +131,7 @@ const MyPage = () => {
               <span>회원정보 수정</span>
               <span className="arrow">></span>
             </Link>
-            <div className="menu-item">
+            <Link to="/sponsor" className="menu-item"> {/* 후원 페이지로 이동 */}
               <img
                 src={mydonation}
                 alt="후원하기 아이콘"
@@ -139,7 +139,7 @@ const MyPage = () => {
               />
               <span>후원하기</span>
               <span className="arrow">></span>
-            </div>
+            </Link>
           </div>
         </>
       ) : (

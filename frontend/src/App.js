@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -20,10 +20,9 @@ import LikedPage from "./pages/LikedPage";
 import ChatBot from "./pages/ChatBot";
 import FindIdPassword from "./pages/FindIdPassword";
 import EditPassword from "./pages/EditPassword";
+import Sponsor from "./pages/Sponsor"; // Sponsor 페이지 import 추가
 
 import "./App.css";
-
-
 
 function App() {
 
@@ -52,25 +51,16 @@ function App() {
               {/* Header가 포함된 페이지들 */}
               <Route element={<DefaultHeader />}>
                 <Route path="login" element={<LoginForm />} />
-                {/* 로그인 경로 */}
                 <Route path="signup" element={<SignUpForm />} />
-                {/* 회원가입 경로 */}
                 <Route path="findpet" element={<FindPet />} />
-                {/* 둘러보기 경로 */}
                 <Route path="findpet/petdetail/:petNum" element={<PetDetail />} />
-                {/* 상세페이지 경로 */}
                 <Route path="mypage" element={<MyPage />} />
-                {/* 마이페이지 경로 */}
                 <Route path="edit-profile" element={<EditProfileForm />} />
-                {/* 회원정보 수정 경로 */}
                 <Route path="liked" element={<LikedPage />} />
-                {/* 찜페이지 경로 */}
                 <Route path="chatbot" element={<ChatBot />} />
-                {/* 챗봇페이지 경로 */}
                 <Route path="find-id-password" element={<FindIdPassword />} />
-                {/* 아이디/비밀번호 찾기 경로 추가 */}
-                <Route path="edit-password" element={<EditPassword/>} />
-                {/* 아이디/비밀번호 찾기 경로 추가 */}
+                <Route path="edit-password" element={<EditPassword />} />
+                <Route path="sponsor" element={<Sponsor />} /> {/* 후원하기 페이지 경로 추가 */}
               </Route>
             </Routes>
           </div>
@@ -82,10 +72,9 @@ function App() {
 }
 
 function DefaultHeader() {
-  const location = useLocation(); // 현재 경로를 가져옴
+  const location = useLocation();
   const [pageTitle, setPageTitle] = useState("");
 
-  // 경로에 따라 페이지 타이틀을 설정
   useEffect(() => {
     if (location.pathname === "/login") {
       setPageTitle("로그인");
@@ -105,9 +94,9 @@ function DefaultHeader() {
       setPageTitle("비밀번호찾기페이지");
     } else if (location.pathname === "/edit-password") {
       setPageTitle("비밀번호 수정하기");
-    }
-      // 한글과 숫자를 포함한 동적 경로 매칭
-    else if (/^\/findpet\/petdetail\/[^/]+$/.test(location.pathname)) {
+    } else if (location.pathname === "/sponsor") {
+      setPageTitle("후원하기"); // 후원하기 페이지 타이틀 설정
+    } else if (/^\/findpet\/petdetail\/[^/]+$/.test(location.pathname)) {
       setPageTitle("상세페이지");
     } else {
       setPageTitle("Page Not Found");

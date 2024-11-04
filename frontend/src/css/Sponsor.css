@@ -1,0 +1,79 @@
+@font-face {
+    font-family: "KCC-Ganpan";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2")
+      format("woff2");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  .sponsorPageBG {
+    width: 100%;
+    height: 100vh;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .sponsorCard {
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid #86b8a1;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: rgba(245, 245, 245, 0.518);
+    text-align: center;
+  }
+  
+  .sponsorCardBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sponsorImgWrapper {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 15px;
+  }
+  
+  .sponsorImg {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .sponsorTxt {
+    font-size: 14px;
+    color: #333;
+    margin-top: 10px;
+    text-align: left;
+  }
+  
+  .sponsorName {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #5a5a5a;
+  }
+  
+  .sponsorButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #b8ce86;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sponsorButton:hover {
+    background-color: #a1b56a;
+  }
+  
