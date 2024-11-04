@@ -1,79 +1,225 @@
 @font-face {
-    font-family: "KCC-Ganpan";
-    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCC-Ganpan.woff2")
-      format("woff2");
-    font-weight: normal;
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
     font-style: normal;
-  }
-  
-  .sponsorPageBG {
+}
+
+.sponsorPageBG {
     width: 100%;
     height: 100vh;
-    background-color: #f9f9f9;
+    background-image: url("../assets/background.png");
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
-  }
-  
-  .sponsorCard {
-    width: 100%;
+    gap: 20px; /* 카드 사이 간격 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    overflow-x: hidden; /* 가로 스크롤 비활성화 */
+}
+
+/* 동물자유연대 카드 스타일 */
+.sponsorCard1 {
+    width: 95%;
     max-width: 400px;
-    border: 2px solid #86b8a1;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    background-color: rgba(245, 245, 245, 0.518);
     text-align: center;
-  }
-  
-  .sponsorCardBox {
+    margin-top: 20px;
+}
+
+.sponsorCardBox1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .sponsorImgWrapper {
+}
+
+.sponsorHeader1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.sponsorName1 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #5a5a5a;
+}
+
+.sponsorButton1 {
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #fffff0;
+    border: 1px solid #c7d2ad;
+    border-radius: 10px;
+    color: #855b3b;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sponsorButton1:hover {
+    background-color: #a1b56a;
+    border: 1px solid  #fffff0;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.sponsorImgWrapper1 {
     width: 100%;
     max-width: 300px;
     margin-bottom: 15px;
-  }
-  
-  .sponsorImg {
+}
+
+.sponsorImg1 {
     width: 100%;
     height: auto;
     border-radius: 8px;
     object-fit: cover;
-  }
-  
-  .sponsorTxt {
+}
+
+.sponsorTxt1 {
     font-size: 14px;
-    color: #333;
-    margin-top: 10px;
-    text-align: left;
-  }
-  
-  .sponsorName {
+    color: #707070;
+    text-align: justify;
+    line-height: 1.5; /* 행간(줄위아래틈) */
+}
+
+/* 동물권행동 카라 카드 스타일 */
+.sponsorCard2 {
+    width: 95%;
+    max-width: 400px;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+
+}
+
+.sponsorCardBox2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sponsorHeader2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.sponsorName2 {
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
     color: #5a5a5a;
-  }
-  
-  .sponsorButton {
-    margin-top: 20px;
-    padding: 10px 20px;
+}
+
+.sponsorButton2 {
+    padding: 10px 15px;
     font-size: 14px;
-    background-color: #b8ce86;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
+    background-color: #fffff0;
+    border: 1px solid #c7d2ad;
+    border-radius: 10px;
+    color: #855b3b;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .sponsorButton:hover {
+}
+
+.sponsorButton2:hover {
     background-color: #a1b56a;
-  }
-  
+    border: 1px solid  #fffff0;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.sponsorImgWrapper2 {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 15px;
+}
+
+.sponsorImg2 {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.sponsorTxt2 {
+    font-size: 14px;
+    color: #707070;
+    text-align: justify;
+    line-height: 1.5; /* 행간(줄위아래틈) */
+}
+
+/* 동물보호단체 라이프 카드 스타일 */
+.sponsorCard3 {
+    width: 95%;
+    max-width: 400px;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+
+}
+
+.sponsorCardBox3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sponsorHeader3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.sponsorName3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #5a5a5a;
+}
+
+.sponsorButton3 {
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #fffff0;
+    border: 1px solid #c7d2ad;
+    border-radius: 10px;
+    color: #855b3b;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sponsorButton3:hover {
+    background-color: #a1b56a;
+    border: 1px solid  #fffff0;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.sponsorImgWrapper3 {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 15px;
+}
+
+.sponsorImg3 {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.sponsorTxt3 {
+    font-size: 14px;
+    color: #707070;
+    text-align: justify;
+    line-height: 1.5; /* 행간(줄위아래틈) */
+}
