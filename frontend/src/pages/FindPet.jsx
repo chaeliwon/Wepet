@@ -9,7 +9,7 @@ const FindPet = () => {
   const [likedImages, setLikedImages] = useState(new Set());
   const [filterVisible, setFilterVisible] = useState(false);
   const [selectedType, setSelectedType] = useState("");
-  const userId = "test1@test.com"; // 예시 사용자 ID (로그인 구현 시 변경)
+  const [showModal, setShowModal] = useState(false);
   const nav = useNavigate();
 
   // 페이지가 로드될 때 유기동물 목록 가져오기
@@ -79,6 +79,7 @@ const FindPet = () => {
       setLikedImages(updatedLikedImages); // 상태 업데이트
     } catch (error) {
       console.error("찜하기 실패:", error);
+      setShowModal(true);
     }
   };
 
@@ -104,8 +105,21 @@ const FindPet = () => {
     setFilterVisible(false);
   };
 
+  const Modal = ({ message, onClose }) => (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <p>{message}</p>
+        <button onClick={onClose}>닫기</button>
+      </div>
+    </div>
+  );
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="findPageBG">
+      {showModal && <Modal message="로그인을 해주세요" onClose={closeModal} />}
       {filterVisible && <div className="overlay" onClick={closeFilter}></div>}
       <input type="button" className="filter-button" onClick={toggleFilter} />
 

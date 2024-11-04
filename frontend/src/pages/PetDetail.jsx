@@ -14,7 +14,7 @@ const PetDetail = () => {
   const [petDetail, setPetDetail] = useState(null);
   const [images, setImages] = useState([]);
   const [likedImages, setLikedImages] = useState(new Set());
-
+  const [showModal, setShowModal] = useState(false);
   const loc = useLocation();
   const nav = useNavigate();
 
@@ -84,7 +84,7 @@ const PetDetail = () => {
       setLikedImages(newLikedImages);
     } catch (error) {
       console.error("찜하기 실패:", error);
-      // console.log(petNum);
+      setShowModal(true);
     }
   };
   // 상세정보창 이동 함수
@@ -93,12 +93,26 @@ const PetDetail = () => {
     nav(`/findpet/petdetail/${pet.pet_num}`, { state: { pet } });
   };
 
+  // 모달창
+  const Modal = ({ message, onClose }) => (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <p>{message}</p>
+        <button onClick={onClose}>닫기</button>
+      </div>
+    </div>
+  );
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   let appendNumber = 4;
   let prependNumber = 1;
   let petInfo = petDetail?.pet || {};
 
   return (
     <div className="petDetail">
+      {showModal && <Modal message="로그인을 해주세요" onClose={closeModal} />}
       <div className="detailHeadTxt">희망 친구들</div>
       <div>
         <div className="detailBox">
