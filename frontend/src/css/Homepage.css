@@ -24,6 +24,12 @@ body {
   margin-top: 40px;
   margin-bottom: 30px;
 }
+.slidecat{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 18px;
+}
 
 .swiper-slide {
   display: flex;

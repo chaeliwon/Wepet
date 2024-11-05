@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../css/Homepage.css";
 import logo from "../assets/movelogo.png";
 import jelly from "../assets/jelly.png";
+import slidecat from "../assets/slidecat2.jpg"
 import chatbotIcon from "../assets/chatbot.png";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -104,7 +105,7 @@ const Homepage = () => {
           <Link to="/findpet">
             <div className="swiperImagesLink">
               <img
-          
+                src={slidecat}
                 className="swiperImagesLinkImg"
                 alt="둘러보기"
               />
