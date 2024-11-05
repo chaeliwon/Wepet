@@ -25,7 +25,7 @@ body {
   margin-bottom: 20px;
 }
 
-.slidecat{
+.slidecat {
   width: 240px;
   height: 330px;
   margin-top: 30px;
@@ -49,7 +49,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 18px; 
+  border-radius: 18px;
 }
 
 .swiperImagesLink {
@@ -133,21 +133,21 @@ a {
 }
 
 .signup-small-btn {
-  position: absolute; /* 절대 위치 설정 */
-  bottom: 100px; 
-  right: 90px; 
+  position: absolute;
+  bottom: 100px;
+  right: 90px;
   background-color: transparent;
   border: none;
   font-size: 12px;
   color: #a9a9a9;
   cursor: pointer;
-  display: inline-block; /* 텍스트 크기만큼만 버튼이 차지하게 함 */
+  display: inline-block;
 }
 
 /* 챗봇 페이지로 가는 버튼 */
 .home-chatbot-button-container {
   position: absolute;
-  right: 20px;
+  right: 15px;
   bottom: 15px;
   z-index: 100;
   filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
@@ -172,29 +172,45 @@ a {
   right: 0;
   bottom: 60px; /* 기본 위치 */
   z-index: 100;
+  gap: 10px; /* 버튼 사이 간격 */
 }
 
-/* MaruIcon 위치 조정 */
+/* MaruIcon 위치 및 크기 */
 .maru-option {
-  position: absolute;
-  right: 10px; /* home-chatbot-button 기준으로 오른쪽 */
-  bottom: 70px; /* home-chatbot-button 바로 위 */
-}
-
-/* NaruIcon 위치 조정 */
-.naru-option {
-  position: absolute;
-  right: 10px; /* home-chatbot-button 기준으로 오른쪽 */
-  bottom: 130px; /* MaruIcon 위에 위치 */
-}
-
-.option-button {
   width: 50px;
   height: 50px;
-  cursor: pointer;
-  transition: transform 0.2s;
+  position: relative;
 }
 
-.option-button:hover {
-  transform: scale(1.1);
+/* NaruIcon 위치 및 크기 */
+.naru-option {
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+
+/* 아이콘과 텍스트를 감싸는 컨테이너 */
+.icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* 텍스트 기본 스타일 */
+.icon-text {
+  display: none; /* 기본적으로 숨김 */
+  font-size: 10px;
+  color: #855b3b;
+  margin-top: 5px;
+  /* background-color: #ffffff; */
+  /* padding: 2px 5px; */
+  /* border-radius: 5px; */
+  /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); */
+  white-space: nowrap;
+}
+
+/* 아이콘에 마우스를 올렸을 때 텍스트 표시 */
+.icon-wrapper:hover .icon-text {
+  display: block;
 }

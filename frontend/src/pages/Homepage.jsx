@@ -136,14 +136,16 @@ const Homepage = () => {
         {/* 옵션 버튼 */}
         {showOptions && (
         <div className="home-chatbot-options">
-          <Link to="/chatbot2">
-            <img src={NaruIcon} alt="나루 챗봇" className="option-button" />
+          <Link to="/chatbot1" className="icon-wrapper">
+            <img src={NaruIcon} alt="나루 챗봇" className="option-button naru-option" />
+            <span className="icon-text">케어문의</span>
           </Link>
-          <Link to="/chatbot">
-            <img src={MaruIcon} alt="마루 챗봇" className="option-button" />
+          <Link to="/chatbot2" className="icon-wrapper">
+            <img src={MaruIcon} alt="마루 챗봇" className="option-button maru-option" />
+            <span className="icon-text">입양문의</span>
           </Link>
         </div>
-)}
+      )}
 
 
       </div>
