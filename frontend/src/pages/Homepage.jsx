@@ -4,7 +4,6 @@ import "../css/Homepage.css";
 import logo from "../assets/movelogo.png";
 import jelly from "../assets/jelly.png";
 import chatbotIcon from "../assets/chatbot.png";
-import slidecat2 from "../assets/slidecat2.jpg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
@@ -105,7 +104,7 @@ const Homepage = () => {
           <Link to="/findpet">
             <div className="swiperImagesLink">
               <img
-                src={slidecat2}
+          
                 className="swiperImagesLinkImg"
                 alt="둘러보기"
               />
