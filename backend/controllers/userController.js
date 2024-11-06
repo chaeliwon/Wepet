@@ -71,27 +71,42 @@ exports.login = (req, res) => {
     }
 
     if (rows.length > 0) {
-      console.log("로그인 성공!");
+      console.log("로그인 시도:", id);
 
       // JWT 발급
       const token = jwt.sign({ userId: id }, JWT_SECRET, { expiresIn: "1h" });
 
       // JWT를 쿠키에 저장
-      res.cookie("jwtToken", token, {
+      const cookieOptions = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // 배포 환경에서만 true
-        sameSite: "lax", // 쿠키의 전달 보안 정책
-        maxAge: 3600000,
-      });
+        secure: true, // HTTPS 필수
+        sameSite: "none", // 크로스 도메인 허용
+        maxAge: 3600000, // 1시간
+        domain: ".execute-api.ap-northeast-2.amazonaws.com", // API Gateway 도메인
+      };
+
+      res.cookie("jwtToken", token, cookieOptions);
 
       // 세션에 user_id 저장
       req.session.user_id = id;
-      console.log("JWT 토큰 발급:", token); // JWT 토큰 콘솔에 출력
-      console.log("세션 저장:", req.session.user_id);
 
-      res.json({ result: "로그인 성공" });
+      // 디버깅을 위한 로그 추가
+      console.log({
+        message: "로그인 처리 중",
+        token: token,
+        sessionId: req.sessionID,
+        userId: req.session.user_id,
+        cookies: req.cookies,
+        session: req.session,
+      });
+
+      res.json({
+        result: "로그인 성공",
+        token: token, // 토큰을 응답에도 포함
+        userId: id, // 사용자 ID도 포함
+      });
     } else {
-      console.log("로그인 실패!");
+      console.log("로그인 실패 - 잘못된 인증정보");
       res.status(401).json({ result: "로그인 실패" });
     }
   });

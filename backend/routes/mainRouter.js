@@ -6,6 +6,16 @@ const conn = require("../config/db"); // DB 연결
 router.get("/", (req, res) => {
   console.log("메인 페이지 데이터 요청!");
 
+  // 에러 처리 추가
+  if (!req.session) {
+    console.log("세션 없음");
+    return res.json({
+      result: "success",
+      images: [],
+      nums: [],
+    });
+  }
+
   let mainPetsql = `
     SELECT pet_img, pet_num
     FROM pet_info 
@@ -23,23 +33,29 @@ router.get("/", (req, res) => {
     (err, rows) => {
       if (err) {
         console.log("이미지 검색 오류", err);
-        return res.json({ result: "에러발생" });
+        return res.json({
+          result: "에러발생",
+          images: [],
+          nums: [],
+        });
       }
 
       if (rows.length === 5) {
         console.log("이미지 검색 성공");
-
-        res.json({
+        return res.json({
           result: "이미지 검색 성공",
           images: rows.map((row) => row.pet_img),
           nums: rows.map((row) => row.pet_num),
         });
-      } else {
-        console.log("이미지 검색 실패");
-        res.json({ result: "이미지 검색 실패" });
       }
+
+      console.log("이미지 검색 실패");
+      return res.json({
+        result: "이미지 검색 실패",
+        images: [],
+        nums: [],
+      });
     }
   );
 });
-
 module.exports = router;

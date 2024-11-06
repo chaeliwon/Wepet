@@ -71,9 +71,11 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
-      sameSite: "none",
-      maxAge: 3600000,
+      secure: true, // HTTPS 사용
+      httpOnly: true,
+      sameSite: "none", // API Gateway를 통한 크로스 도메인 요청 허용
+      maxAge: 3600000, // 1시간
+      domain: ".execute-api.ap-northeast-2.amazonaws.com", // API Gateway 도메인
     },
     proxy: true,
   })
@@ -99,7 +101,14 @@ app.use((err, req, res, next) => {
 const handler = serverless(app);
 
 module.exports.handler = async (event, context) => {
-  // 요청의 origin 확인
+  // 요청 로깅
+  console.log("Request event:", {
+    method: event.requestContext?.http?.method,
+    path: event.rawPath,
+    headers: event.headers,
+    body: event.body,
+  });
+
   const origin = event.headers.origin || "http://localhost:3000";
 
   // CORS 헤더 정의
@@ -114,12 +123,12 @@ module.exports.handler = async (event, context) => {
     Vary: "Origin",
   };
 
-  // Express response 객체에 CORS 헤더 추가하는 미들웨어
   if (!event.requestContext) event.requestContext = {};
   if (!event.requestContext.http) event.requestContext.http = {};
 
   // OPTIONS 요청 처리
   if (event.requestContext.http.method === "OPTIONS") {
+    console.log("Handling OPTIONS request");
     return {
       statusCode: 204,
       headers: corsHeaders,
@@ -138,24 +147,40 @@ module.exports.handler = async (event, context) => {
       }
     }
 
-    // 기존의 Express 앱 처리
+    // Express 앱 처리
     const response = await handler(event, context);
 
-    // 응답에 CORS 헤더 추가
-    return {
+    // 응답 로깅
+    console.log("Express response:", {
+      statusCode: response.statusCode,
+      headers: response.headers,
+      body: response.body,
+      cookies: response.multiValueHeaders?.["Set-Cookie"],
+    });
+
+    // 쿠키 처리를 위한 multiValueHeaders 설정
+    const finalResponse = {
       statusCode: response.statusCode || 200,
       headers: {
         ...corsHeaders,
         "Content-Type": "application/json",
         ...(response.headers || {}),
       },
+      multiValueHeaders: {
+        "Set-Cookie": response.multiValueHeaders?.["Set-Cookie"] || [],
+      },
       body:
         typeof response.body === "string"
           ? response.body
           : JSON.stringify(response.body || ""),
     };
+
+    // 최종 응답 로깅
+    console.log("Final Lambda response:", finalResponse);
+
+    return finalResponse;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in Lambda handler:", error);
 
     return {
       statusCode: 500,
@@ -166,6 +191,7 @@ module.exports.handler = async (event, context) => {
       body: JSON.stringify({
         error: "Internal Server Error",
         message: error.message,
+        stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
       }),
     };
   }
