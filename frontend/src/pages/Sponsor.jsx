@@ -1,8 +1,9 @@
 import React from "react";
 import "../css/Sponsor.css";
-import 동물자유연대 from "../assets/동물자유연대.png"; // 이미지 파일 import
-import 동물권행동카라 from "../assets/동물권행동카라.png"; // 이미지 파일 import
-import 동물보호단체라이프 from "../assets/동물보호단체라이프.jpg"; // 이미지 파일 import
+import 동물자유연대 from "../assets/동물자유연대.png"; 
+import 동물권행동카라 from "../assets/동물권행동카라.png"; 
+import 동물보호단체라이프 from "../assets/동물보호단체라이프.jpg"; 
+import 동물복지문제연구소어웨이 from "../assets/동물복지문제연구소어웨이.png"; 
 
 const Sponsor = () => {
 
@@ -18,9 +19,13 @@ const Sponsor = () => {
     window.location.href = "https://secure.donus.org/savelife/pay/step1";
   };
 
+  const handleExternalLink4 = () => {
+    window.location.href = "https://aware.kr/bbs/board.php?bo_table=B08";
+  };
+
   return (
     <div className="sponsorPageBG">
-      
+
       <div className="sponsorCard1">
         <div className="sponsorCardBox1">
             <div className="sponsorImgWrapper1">
@@ -46,11 +51,12 @@ const Sponsor = () => {
             <img src={동물권행동카라} alt="동물권행동카라" className="sponsorImg2" />
           </div>
           <div className="sponsorHeader2">
-            <span className="sponsorName2">동물권행동 카라</span>
             <button className="sponsorButton2" onClick={handleExternalLink2}>
-              후원하러 가기
-          </button>
+                후원하러 가기
+            </button>
+            <span className="sponsorName2">동물권행동 카라</span>
           </div>
+
           <div className="sponsorTxt2">
             <p> 
             &nbsp;동물권행동 카라는 대한민국에서 활동하는 주요 동물보호 및 동물권 단체입니다. 이 단체는 유기동물 지원과 동물학대 예방을 주요 활동으로 하며, 주로 개, 고양이 등 반려포유동물의 보호에 중점을 두고 있습니다. 동물권행동 카라는 시민들의 후원을 통해 운영되며, 투명하고 정직한 활동을 원칙으로 하고 있습니다.
@@ -74,6 +80,26 @@ const Sponsor = () => {
                 <p>
                 &nbsp;동물보호단체 라이프는 전북 장수군을 중심으로 활동하는 단체입니다. 이 단체는 동물들의 보호와 돌봄을 주요 활동으로 하며, 직접적인 길거리 구조뿐만 아니라 사회적 관심과 참여를 촉구하는 활동도 진행합니다. 라이프는 다양한 사회 매체 플랫폼을 통해 활동 내용을 공유하고, 후원을 받고 있습니다. 부산을 포함한 다양한 지역에서 활동하며, 동물 보호와 관련된 다양한 정보와 인식 증진을 목표로 하고 있습니다.
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <div className="sponsorCard4">
+        <div className="sponsorCardBox4">
+          <div className="sponsorImgWrapper4">
+            <img src={동물복지문제연구소어웨이} alt="동물복지문제연구소어웨이" className="sponsorImg2" />
+          </div>
+          <div className="sponsorHeader4">
+            <button className="sponsorButton4" onClick={handleExternalLink4}>
+                후원하러 가기
+            </button>
+            <span className="sponsorName4">동물복지문제연구소 어웨이</span>
+          </div>
+
+          <div className="sponsorTxt4">
+            <p> 
+            &nbsp;동물복지문제연구소 어웨어는 동물의 사회적 지위와 복지 기준을 높이기 위해 활동하는 비영리 단체입니다. 이 조직은 연구 및 교육을 통해 동물 보호와 관련된 정책 개선을 목표로 하고 있습니다. 동물의 복지 증진을 위한 다양한 활동과 보고서를 발표하여 사회적 인식을 높이고 있습니다.
+            </p>
             </div>
         </div>
     </div>
