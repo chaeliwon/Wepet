@@ -1,15 +1,24 @@
-# Python 3.12 베이스 이미지 사용
-FROM python:3.12
+FROM public.ecr.aws/lambda/python:3.11
 
-# 작업 디렉토리 설정
-WORKDIR /app
+# Create necessary directories with appropriate permissions
+RUN mkdir -p /tmp/.u2net
+RUN mkdir -p /tmp/rembg/sessions
+RUN chmod 777 /tmp/.u2net
+RUN chmod 777 /tmp/rembg/sessions
 
-# requirements.txt 파일을 복사하고 패키지 설치
+# Copy function code and model
+COPY . ${LAMBDA_TASK_ROOT}
+COPY ./u2net.onnx /tmp/rembg/sessions/u2net.onnx
+
+# Set environment variables
+ENV U2NET_HOME=/tmp/.u2net
+ENV REMBG_MODEL_PATH=/tmp/rembg/sessions/u2net.onnx
+ENV TRANSFORMERS_CACHE=/tmp/transformers
+ENV TORCH_HOME=/tmp/torch
+
+# Install the function's dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}" --no-cache-dir
 
-# 나머지 애플리케이션 파일 복사
-COPY . .
-
-# FastAPI 서버 실행
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Set the CMD to your handler
+CMD [ "main.handler" ]
