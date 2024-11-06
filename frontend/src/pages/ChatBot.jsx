@@ -6,6 +6,10 @@ import sendBtn from "../assets/sendbtn.png";
 import imgSend from "../assets/imgsend.png";
 import background from "../assets/background.png";
 import axios from "axios";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
@@ -22,9 +26,11 @@ const ChatBot = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [similarPets, setSimilarPets] = useState([]);
   const messagesRef = useRef(null);
   const navigate = useNavigate();
+  const loadingImage = "/static/LoadingImg.png";
 
   useEffect(() => {
     axios
@@ -68,7 +74,7 @@ const ChatBot = () => {
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
-
+    setShowModal(true);
     const currentTime = new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
@@ -82,42 +88,72 @@ const ChatBot = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/search_by_text",
-        {
-          text: input,
-        }
+        "https://1ylnvxbbb9.execute-api.ap-northeast-2.amazonaws.com/search_by_text",
+        { text: input }
       );
 
-      const botReply = response.data.message;
-      const similarPetsText = response.data.similar_pets
-        .map(
-          (pet, index) =>
-            `<div style="margin-bottom: 10px;">
-             <img src="${pet.pet_img}" alt="동물 이미지" class="pet-img"  />
-             <div>동물 번호: ${pet.pet_num}</div>
-             <div>유사도: ${pet.cosine_similarity.toFixed(2)}</div>
-           </div>`
-        )
-        .join("");
+      const similarPetsList = response.data.body.similar_pets.map((pet) => ({
+        num: pet.pet_num,
+        imgUrl: pet.pet_img,
+      }));
 
-      // 봇 메시지로 추가
+      const botReply = (
+        <div>
+          <p>이 친구들은 어떠세요?</p>
+          <Swiper
+            slidesPerView={2}
+            centeredSlides={false}
+            spaceBetween={5}
+            grabCursor={true}
+            pagination={{ clickable: true }}
+            modules={[Pagination]}
+            className="chatMySwiper"
+          >
+            {similarPetsList.map((pet, index) => (
+              <SwiperSlide
+                key={index}
+                onClick={() =>
+                  window.open(`/findpet/petdetail/${pet.num}`, "_blank")
+                }
+              >
+                <img
+                  src={pet.imgUrl}
+                  alt={`유사한 동물 ${index + 1}`}
+                  className="swiper-pet-img"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      );
+
       setMessages([
         ...newMessages,
         {
           sender: "bot",
-          text: `유사한 동물 목록:\n${similarPetsText}`,
+          text: botReply,
           time: currentTime,
           isHtml: true,
         },
       ]);
-      console.log(response);
     } catch (error) {
       console.error("메시지 전송 중 오류:", error);
+      setMessages([
+        ...newMessages,
+        {
+          sender: "bot",
+          text: "찾고 싶은 동물의 특징을 적어주세요!",
+          time: currentTime,
+        },
+      ]);
     }
+    setShowModal(false);
   };
 
   const sendImage = async () => {
     if (!selectedFile) return;
+
+    setShowModal(true);
 
     const formData = new FormData();
     formData.append("file", selectedFile);
@@ -126,25 +162,74 @@ const ChatBot = () => {
       hour: "2-digit",
       minute: "2-digit",
     });
+
+    // 업로드한 이미지 미리보기 메시지를 JSX로 채팅에 추가
     setMessages((prev) => [
       ...prev,
-      { sender: "user", text: "이미지 전송 중...", time: currentTime },
+      {
+        sender: "user",
+        text: (
+          <img
+            src={previewUrl}
+            alt="이미지 전송 중..."
+            className="pet-img"
+            style={{ maxWidth: "100px", borderRadius: "8px" }}
+          />
+        ),
+        time: currentTime,
+        isHtml: true,
+      },
     ]);
+
+    setSelectedFile(null);
+    setPreviewUrl(null);
 
     try {
       const response = await axios.post(
-        "https://<your-lambda-url>.lambda.amazonaws.com/api/search_by_image",
+        "https://1ylnvxbbb9.execute-api.ap-northeast-2.amazonaws.com/search_by_image",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+      console.log(response);
 
-      const botReply = response.data.similar_pets
-        ? `유사한 동물: ${response.data.similar_pets.join(", ")}`
-        : "이미지 분석 결과가 없습니다.";
+      const similarPetsList = response.data.body.similar_pets.map((pet) => ({
+        num: pet.pet_num,
+        imgUrl: pet.pet_img,
+      }));
+      const botReply = (
+        <div>
+          <p>이 친구들은 어떠세요?</p>
+          <Swiper
+            slidesPerView={2}
+            centeredSlides={false}
+            spaceBetween={5}
+            grabCursor={true}
+            pagination={{ clickable: true }}
+            modules={[Pagination]}
+            className="chatMySwiper"
+          >
+            {similarPetsList.map((pet, index) => (
+              <SwiperSlide
+                key={index}
+                onClick={() =>
+                  window.open(`/findpet/petdetail/${pet.num}`, "_blank")
+                }
+              >
+                <img
+                  src={pet.imgUrl}
+                  alt={`유사한 동물 ${index + 1}`}
+                  className="swiper-pet-img"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      );
+
       setMessages((prev) => [
-        ...prev.slice(0, -1),
+        ...prev,
         {
           sender: "bot",
           text: botReply,
@@ -152,14 +237,30 @@ const ChatBot = () => {
             hour: "2-digit",
             minute: "2-digit",
           }),
+          isHtml: true,
         },
       ]);
-      setSelectedFile(null);
-      setPreviewUrl(null);
     } catch (error) {
       console.error("이미지 전송 중 오류:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: "이미지를 전송할 수 없습니다. 다시 시도해주세요.",
+          time: currentTime,
+        },
+      ]);
     }
+    setShowModal(false);
   };
+
+  const Modal = () => (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <img src={loadingImage} alt="로딩 중..." className="loading-image" />
+      </div>
+    </div>
+  );
 
   useEffect(() => {
     if (messagesRef.current) {
@@ -177,6 +278,7 @@ const ChatBot = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
+      {showModal && <Modal />}
       {isLoggedIn ? (
         <div className="chat-window">
           <div className="chat-header">
@@ -198,14 +300,11 @@ const ChatBot = () => {
                   }`}
                 >
                   {message.isHtml ? (
-                    // HTML 메시지를 렌더링할 때
-                    <div dangerouslySetInnerHTML={{ __html: message.text }} />
+                    <div>{message.text}</div> // JSX 요소를 직접 출력
                   ) : (
-                    // 일반 텍스트 메시지를 렌더링할 때
                     <div>{message.text}</div>
                   )}
                 </div>
-
                 <div className="message-time">{message.time}</div>
               </div>
             ))}
@@ -216,8 +315,10 @@ const ChatBot = () => {
               <img src={previewUrl} alt="미리보기" className="preview-image" />
               <button className="cancel-preview" onClick={cancelImagePreview}>
                 X
-              </button>{" "}
-              {/* 취소 버튼 */}
+              </button>
+              <button onClick={sendImage} className="send-image-btn">
+                전송
+              </button>
             </div>
           )}
 
@@ -236,6 +337,8 @@ const ChatBot = () => {
             >
               <img src={imgSend} alt="이미지 전송" className="send-icon" />
             </button>
+
+            {previewUrl && <div className="image-preview"></div>}
             <textarea
               value={input}
               onChange={handleInputChange}

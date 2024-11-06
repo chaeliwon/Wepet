@@ -11,11 +11,13 @@ import logout from "../assets/mylogout.png";
 import mydelete from "../assets/mydelete.png";
 import myuseredit from "../assets/myuseredit.png";
 import mydonation from "../assets/mydonation.png";
+import api from "../api";
 
 const MyPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
+  const [userNick, setUserNick] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +40,20 @@ const MyPage = () => {
         setIsLoggedIn(false);
       });
   }, []);
+  useEffect(() => {
+    if (userData) {
+      getNick();
+    }
+  }, [userData]);
+  // 닉네임 가져오기
+  const getNick = async () => {
+    let userId = userData.userId;
+    const response = await api.get("/user/send-nick-mypage", {
+      userId: userId,
+    });
+    setUserNick(response.data.rows[0].user_nick);
+    console.log(response);
+  };
 
   const handleLogout = () => {
     Swal.fire({
@@ -50,14 +66,23 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post("http://localhost:3001/user/logout", {}, { withCredentials: true })
-        .then(() => {
-          Swal.fire("로그아웃 완료", "성공적으로 로그아웃 되었습니다.", "success");
-          navigate("/login");
-        })
-        .catch((error) => {
-          console.error("로그아웃 중 오류:", error);
-        });
+        axios
+          .post(
+            "http://localhost:3001/user/logout",
+            {},
+            { withCredentials: true }
+          )
+          .then(() => {
+            Swal.fire(
+              "로그아웃 완료",
+              "성공적으로 로그아웃 되었습니다.",
+              "success"
+            );
+            navigate("/login");
+          })
+          .catch((error) => {
+            console.error("로그아웃 중 오류:", error);
+          });
       }
     });
   };
@@ -73,11 +98,11 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post("/user/delete", {}, { withCredentials: true })
+        api
+          .post("/user/delete")
           .then(() => {
             Swal.fire("탈퇴 완료", "회원 탈퇴가 완료되었습니다.", "success");
-            navigate("/login");
+            navigate("/");
           })
           .catch((error) => {
             console.error("회원 탈퇴 중 오류:", error);
@@ -102,7 +127,7 @@ const MyPage = () => {
             />
             <div className="profile-info">
               <p className="username">
-                <span className="username-main">{userData?.userId}</span>
+                <span className="username-main">{userNick}</span>
                 <span className="username-sub">님, 안녕하세요!</span>
               </p>
             </div>
@@ -119,17 +144,25 @@ const MyPage = () => {
 
             {/* 옵션 버튼 */}
             {showOptions && (
-            <div className="home-chatbot-options">
-              <Link to="/chatbot" className="icon-wrapper">
-                <img src={MaruIcon} alt="마루 챗봇" className="option-button maru-option" />
-                <span className="icon-text">입양문의</span>
-              </Link>
-              <Link to="/chatbot2" className="icon-wrapper">
-                <img src={NaruIcon} alt="나루 챗봇" className="option-button naru-option" />
-                <span className="icon-text">케어문의</span>
-              </Link>
-            </div>
-          )}
+              <div className="home-chatbot-options">
+                <Link to="/chatbot" className="icon-wrapper">
+                  <img
+                    src={MaruIcon}
+                    alt="마루 챗봇"
+                    className="option-button maru-option"
+                  />
+                  <span className="icon-text">입양문의</span>
+                </Link>
+                <Link to="/chatbot2" className="icon-wrapper">
+                  <img
+                    src={NaruIcon}
+                    alt="나루 챗봇"
+                    className="option-button naru-option"
+                  />
+                  <span className="icon-text">케어문의</span>
+                </Link>
+              </div>
+            )}
           </div>
 
           <div className="menu-list">
@@ -152,7 +185,9 @@ const MyPage = () => {
               <span>회원정보 수정</span>
               <span className="arrow">></span>
             </Link>
-            <Link to="/sponsor" className="menu-item"> {/* 후원 페이지로 이동 */}
+            <Link to="/sponsor" className="menu-item">
+              {" "}
+              {/* 후원 페이지로 이동 */}
               <img
                 src={mydonation}
                 alt="후원하기 아이콘"

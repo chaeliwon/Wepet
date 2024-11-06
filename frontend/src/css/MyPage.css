@@ -10,7 +10,7 @@
 body {
   font-family: "Pretendard-Regular", sans-serif;
   color: #855b3b;
-} 
+}
 
 .homepage-background {
   width: 100%;
@@ -107,9 +107,9 @@ body {
 .email {
   font-size: 14px;
   color: #a8a8a8;
-  text-align: left; 
+  text-align: left;
   margin: 0; /* 간격 완전히 없앰 */
-  padding: 0; /* padding도 없앰 */  
+  padding: 0; /* padding도 없앰 */
 }
 
 .menu-list {
@@ -126,6 +126,7 @@ body {
   color: #333;
   margin-bottom: 20px;
   transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
 }
 
 .menu-item:hover {
@@ -153,7 +154,6 @@ body {
 .menu-item:hover .arrow {
   color: #5a5a5a; /* 호버 시 화살표 색상 변경 */
 }
-
 
 .menu-icon {
   width: 16px;
