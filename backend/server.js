@@ -19,15 +19,24 @@ const app = express();
 const corsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+  ],
   exposedHeaders: ["Set-Cookie"],
+  maxAge: 86400,
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
 
 // CORS 미들웨어 설정
 app.use(cors(corsOptions));
+
+// preflight 요청을 위한 OPTIONS 처리
+app.options("*", cors(corsOptions));
 
 // CORS 미들웨어
 const corsMiddleware = (req, res, next) => {
@@ -90,76 +99,73 @@ app.use((err, req, res, next) => {
 const handler = serverless(app);
 
 module.exports.handler = async (event, context) => {
-  // 경로 정보를 rawPath에서 가져오기
-  let path = event.rawPath;
-  console.log("Original Path:", path);
+  // 요청의 origin 확인
+  const origin = event.headers.origin || "http://localhost:3000";
 
-  // /dev 제거
-  if (path) {
-    path = path.replace("/dev", "");
-    // event 객체 업데이트
-    event.path = path;
-    event.rawPath = path;
-    if (event.requestContext && event.requestContext.http) {
-      event.requestContext.http.path = path;
-    }
-  }
+  // CORS 헤더 정의
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS,PATCH",
+    "Access-Control-Allow-Headers":
+      "Content-Type,Authorization,X-Requested-With,Accept",
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Expose-Headers": "Set-Cookie",
+    "Access-Control-Max-Age": "86400",
+    Vary: "Origin",
+  };
 
-  console.log("Modified Path:", path);
-  console.log("HTTP Method:", event.requestContext.http.method);
+  // Express response 객체에 CORS 헤더 추가하는 미들웨어
+  if (!event.requestContext) event.requestContext = {};
+  if (!event.requestContext.http) event.requestContext.http = {};
 
+  // OPTIONS 요청 처리
   if (event.requestContext.http.method === "OPTIONS") {
     return {
       statusCode: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers":
-          "Content-Type, Authorization, X-Requested-With",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Max-Age": "86400",
-        "Access-Control-Expose-Headers": "Set-Cookie",
-      },
+      headers: corsHeaders,
       body: "",
     };
   }
 
   try {
-    // 일반 요청 처리
+    // 경로 처리
+    if (event.rawPath) {
+      const path = event.rawPath.replace("/dev", "");
+      event.path = path;
+      event.rawPath = path;
+      if (event.requestContext?.http) {
+        event.requestContext.http.path = path;
+      }
+    }
+
+    // 기존의 Express 앱 처리
     const response = await handler(event, context);
 
+    // 응답에 CORS 헤더 추가
     return {
       statusCode: response.statusCode || 200,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+        ...(response.headers || {}),
+      },
       body:
         typeof response.body === "string"
           ? response.body
           : JSON.stringify(response.body || ""),
-      headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers":
-          "Content-Type, Authorization, X-Requested-With",
-        "Access-Control-Expose-Headers": "Set-Cookie",
-        "Content-Type": "application/json",
-        ...response.headers,
-      },
     };
   } catch (error) {
-    console.error("Error in handler:", error);
+    console.error("Error:", error);
+
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers":
-          "Content-Type, Authorization, X-Requested-With",
+        ...corsHeaders,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         error: "Internal Server Error",
-        details: error.message,
+        message: error.message,
       }),
     };
   }
