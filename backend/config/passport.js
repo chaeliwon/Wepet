@@ -32,6 +32,7 @@ passport.use(
         user_id: profile.id,
         user_nick: profile.displayName,
         user_pw: null, // 소셜 로그인 사용자는 비밀번호를 null로 설정
+        user_type: "google", // Google 로그인 유형 설정
       };
 
       conn.query(
@@ -75,6 +76,7 @@ passport.use(
         user_id: profile.id,
         user_nick: profile.username,
         user_pw: null,
+        user_type: "kakao", // Kakao 로그인 유형 설정
       };
 
       conn.query(

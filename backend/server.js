@@ -3,6 +3,7 @@ const cors = require("cors");
 const passport = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const serverless = require("serverless-http");
 
 const userRouter = require("./routes/userRouter");
 const mainRouter = require("./routes/mainRouter");
@@ -10,10 +11,49 @@ const authRouter = require("./routes/authRouter");
 const likeRouter = require("./routes/likeRouter");
 const findfetRouter = require("./routes/findfetRouter");
 
-require("./config/passport"); // passport 설정 불러오기
+require("./config/passport");
 
-const path = require("path");
 const app = express();
+
+// CORS 옵션 설정
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  exposedHeaders: ["Set-Cookie"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
+// CORS 미들웨어 설정
+app.use(cors(corsOptions));
+
+// CORS 미들웨어
+const corsMiddleware = (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+};
+
+app.use(corsMiddleware);
+
+// 모든 라우트에 대해 OPTIONS 요청 처리
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Requested-With"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.status(204).send();
+});
+
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
 
 // 세션 설정
 app.use(
@@ -22,47 +62,105 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // 로컬 환경에서는 false로 설정
-      sameSite: "lax", // SameSite 설정
-      maxAge: 3600000, // 1시간 유지
+      secure: true,
+      sameSite: "none",
+      maxAge: 3600000,
     },
+    proxy: true,
   })
 );
 
-// CORS 설정 - 중복 제거
-app.use(
-  cors({
-    origin: "http://localhost:3000", // 프론트엔드 주소
-    credentials: true, // 쿠키를 허용
-  })
-);
-
-app.use(cookieParser()); // 쿠키 파서 설정
-
-// 미들웨어 설정
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(passport.initialize()); // 세션 제거, 초기화만 유지
-
-// 라우터 등록
+// 라우터 설정
 app.use("/user", userRouter);
 app.use("/main", mainRouter);
 app.use("/auth", authRouter);
 app.use("/findfet", findfetRouter);
 app.use("/like", likeRouter);
 
-// 정적 파일 제공 (React 빌드 폴더)
-app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
-
-// React 프론트엔드의 모든 경로에 대해 index.html 파일 제공
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "frontend", "build", "index.html"));
+// 에러 핸들링 미들웨어
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    message: "Internal Server Error",
+    error: process.env.NODE_ENV === "development" ? err.message : undefined,
+  });
 });
 
-// 포트 설정
-app.set("port", process.env.PORT || 3001);
+// Lambda 핸들러
+const handler = serverless(app);
 
-// 서버 시작
-app.listen(app.get("port"), () => {
-  console.log(`Server is running on port ${app.get("port")}`);
-});
+module.exports.handler = async (event, context) => {
+  // 경로 정보를 rawPath에서 가져오기
+  let path = event.rawPath;
+  console.log("Original Path:", path);
+
+  // /dev 제거
+  if (path) {
+    path = path.replace("/dev", "");
+    // event 객체 업데이트
+    event.path = path;
+    event.rawPath = path;
+    if (event.requestContext && event.requestContext.http) {
+      event.requestContext.http.path = path;
+    }
+  }
+
+  console.log("Modified Path:", path);
+  console.log("HTTP Method:", event.requestContext.http.method);
+
+  if (event.requestContext.http.method === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers":
+          "Content-Type, Authorization, X-Requested-With",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Max-Age": "86400",
+        "Access-Control-Expose-Headers": "Set-Cookie",
+      },
+      body: "",
+    };
+  }
+
+  try {
+    // 일반 요청 처리
+    const response = await handler(event, context);
+
+    return {
+      statusCode: response.statusCode || 200,
+      body:
+        typeof response.body === "string"
+          ? response.body
+          : JSON.stringify(response.body || ""),
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers":
+          "Content-Type, Authorization, X-Requested-With",
+        "Access-Control-Expose-Headers": "Set-Cookie",
+        "Content-Type": "application/json",
+        ...response.headers,
+      },
+    };
+  } catch (error) {
+    console.error("Error in handler:", error);
+    return {
+      statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers":
+          "Content-Type, Authorization, X-Requested-With",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        error: "Internal Server Error",
+        details: error.message,
+      }),
+    };
+  }
+};
