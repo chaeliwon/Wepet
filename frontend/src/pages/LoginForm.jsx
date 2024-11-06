@@ -25,7 +25,8 @@ const LoginForm = () => {
 
   // Kakao 로그인
   const handleKakaoLogin = () => {
-    window.location.href = "http://localhost:3001/auth/kakao"; // 서버의 카카오 로그인 경로로 이동
+    window.location.href =
+      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao"; // 서버의 카카오 로그인 경로로 이동
   };
 
   // URL에서 JWT 토큰 추출 및 저장
@@ -46,7 +47,8 @@ const LoginForm = () => {
 
   // Google 로그인 시작 함수
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:3001/auth/google"; // 서버의 Google 로그인 경로로 이동
+    window.location.href =
+      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google"; // 서버의 Google 로그인 경로로 이동
   };
 
   const handleEmailChange = (e) => {

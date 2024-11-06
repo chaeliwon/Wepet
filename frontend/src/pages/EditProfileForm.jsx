@@ -20,7 +20,7 @@ const EditProfileForm = () => {
 
   useEffect(() => {
     api
-      .get("http://localhost:3001/user/checkLoginStatus", {
+      .get("/user/checkLoginStatus", {
         withCredentials: true,
       })
       .then((response) => {

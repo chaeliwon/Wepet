@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "../css/FindIdPassword.css";
+import api from "../api";
 
 const FindIdPassword = () => {
   const [email, setEmail] = useState("");
@@ -13,8 +14,8 @@ const FindIdPassword = () => {
 
   // 이메일로 인증번호 전송
   const sendVerificationCode = () => {
-    axios
-      .post("http://localhost:3001/user/send-reset-code", { email })
+    api
+      .post("/user/send-reset-code", { email })
       .then((response) => {
         setGeneratedCode(response.data.code); // 서버에서 받은 인증번호 저장
         setIsCodeSent(true); // 인증번호 전송 상태 업데이트
@@ -35,8 +36,8 @@ const FindIdPassword = () => {
 
   // 인증 코드 검증
   const verifyCode = () => {
-    axios
-      .post("http://localhost:3001/user/verify-reset-code", {
+    api
+      .post("/user/verify-reset-code", {
         email,
         code: verificationCode,
       })
@@ -46,7 +47,7 @@ const FindIdPassword = () => {
           text: "인증번호가 일치합니다.",
           icon: "success",
         });
-        navigate("/edit-password", { state: { email } });// 비밀번호 찾기 페이지로(로그인하지않고 수정)
+        navigate("/edit-password", { state: { email } }); // 비밀번호 찾기 페이지로(로그인하지않고 수정)
       })
       .catch(() => {
         Swal.fire({

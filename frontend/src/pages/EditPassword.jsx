@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../css/EditPassword.css";
+import api from "../api";
 
 const EditPassword = () => {
   const location = useLocation();
@@ -29,9 +30,12 @@ const EditPassword = () => {
     e.preventDefault();
     let valid = true;
 
-    const passwordPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{10,}$/;
+    const passwordPattern =
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{10,}$/;
     if (!passwordPattern.test(password)) {
-      setPasswordError("비밀번호는 숫자와 특수문자를 포함한 최소 10자 이상이어야 합니다.");
+      setPasswordError(
+        "비밀번호는 숫자와 특수문자를 포함한 최소 10자 이상이어야 합니다."
+      );
       valid = false;
     }
 
@@ -41,8 +45,8 @@ const EditPassword = () => {
     }
 
     if (valid) {
-      axios
-        .post("http://localhost:3001/user/reset-password", { email, newPassword: password })
+      api
+        .post("/user/reset-password", { email, newPassword: password })
         .then(() => {
           Swal.fire({
             position: "center",
@@ -98,7 +102,9 @@ const EditPassword = () => {
             required
           />
         </div>
-        {confirmPasswordError && <p className="validation-error">비밀번호가 일치하지 않습니다.</p>}
+        {confirmPasswordError && (
+          <p className="validation-error">비밀번호가 일치하지 않습니다.</p>
+        )}
 
         <button type="submit" className="password1-submit-btn">
           수정하기

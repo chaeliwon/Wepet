@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
+import api from "../api";
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
@@ -33,8 +34,8 @@ const ChatBot = () => {
   const loadingImage = "/static/LoadingImg.png";
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/user/checkLoginStatus", {
+    api
+      .get("/user/checkLoginStatus", {
         withCredentials: true,
       })
       .then((response) => {

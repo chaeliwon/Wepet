@@ -22,8 +22,8 @@ const MyPage = () => {
 
   useEffect(() => {
     // checkLoginStatus API를 통해 로그인 상태 확인
-    axios
-      .get("http://localhost:3001/user/checkLoginStatus", {
+    api
+      .get("/user/checkLoginStatus", {
         withCredentials: true,
       })
       .then((response) => {
@@ -66,12 +66,8 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .post(
-            "http://localhost:3001/user/logout",
-            {},
-            { withCredentials: true }
-          )
+        api
+          .post("/user/logout", {}, { withCredentials: true })
           .then(() => {
             Swal.fire(
               "로그아웃 완료",
