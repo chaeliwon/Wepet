@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 // import axios from "axios";
 import api from "../api";
 import "../css/findPetPage.css";
+import ChatbotButton from "../components/ChatbotButton";
 
 const FindPet = () => {
   const [images, setImages] = useState([]);
@@ -141,6 +142,8 @@ const FindPet = () => {
           </div>
         ))}
       </div>
+
+      <ChatbotButton />
 
       <div className={`filter-section ${filterVisible ? "visible" : "hidden"}`}>
         <div className="filter-options">
