@@ -22,8 +22,10 @@ const LoginForm = () => {
 
   // Kakao 로그인
   const handleKakaoLogin = () => {
+    console.log("Initiating Kakao login");
     const kakaoAuthUrl =
       "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao";
+    console.log("Kakao Auth URL:", kakaoAuthUrl);
 
     // 팝업 창 설정
     const width = 500;
@@ -36,24 +38,15 @@ const LoginForm = () => {
       "Kakao Login",
       `width=${width},height=${height},left=${left},top=${top}`
     );
+    console.log("Kakao login window opened");
   };
-
-  // URL에서 JWT 토큰 추출 및 저장
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-
-    if (token) {
-      console.log("JWT 토큰:", token);
-      localStorage.setItem("token", token);
-      navigate("/");
-    }
-  }, [navigate]);
 
   // Google 로그인
   const handleGoogleLogin = () => {
+    console.log("Initiating Google login");
     const googleAuthUrl =
       "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google";
+    console.log("Google Auth URL:", googleAuthUrl);
 
     // 팝업 창 설정
     const width = 500;
@@ -66,7 +59,54 @@ const LoginForm = () => {
       "Google Login",
       `width=${width},height=${height},left=${left},top=${top}`
     );
+    console.log("Google login window opened");
   };
+
+  // URL에서 JWT 토큰 추출 및 저장
+  useEffect(() => {
+    console.log("Checking URL for token");
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    console.log("Token from URL:", token);
+
+    if (token) {
+      console.log("Token found, storing in localStorage");
+      localStorage.setItem("token", token);
+      console.log("Navigating to home page");
+      navigate("/");
+    } else {
+      console.log("No token found in URL");
+    }
+  }, [navigate]);
+
+  // 소셜 로그인 완료 후 처리를 위한 이벤트 리스너
+  useEffect(() => {
+    console.log("Setting up social login message listener");
+
+    const handleSocialLogin = (event) => {
+      console.log("Received message:", event);
+
+      if (
+        event.origin !==
+        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com"
+      ) {
+        console.log("Message from unauthorized origin:", event.origin);
+        return;
+      }
+
+      if (event.data.token) {
+        console.log("Received token from social login:", event.data.token);
+        localStorage.setItem("token", event.data.token);
+        navigate("/");
+      }
+    };
+
+    window.addEventListener("message", handleSocialLogin);
+    return () => {
+      console.log("Cleaning up message listener");
+      window.removeEventListener("message", handleSocialLogin);
+    };
+  }, [navigate]);
 
   // 소셜 로그인 완료 후 처리를 위한 이벤트 리스너
   useEffect(() => {
@@ -192,30 +232,40 @@ const LoginForm = () => {
 
         <button type="submit" className="login-btn">
           로그인
-          <img src={jelly} alt="paw" className="jellyicon" />
+          <img src={jelly} alt="paw" className="jelleyicon" />
         </button>
         {loginFail && (
           <p className="validation-error-login">입력 정보를 확인해주세요.</p>
         )}
-        <div className="social-login-box">
-          <div className="social-login">
-            <button className="kakao-login" onClick={handleKakaoLogin}>
-              <img src={kakaoIcon} alt="Kakao" />
-            </button>
-          </div>
-          <div className="social-login">
-            <button className="google-login" onClick={handleGoogleLogin}>
-              <img src={googleIcon} alt="Google" />
-            </button>
-          </div>
-        </div>
-
-        <Link to="/signup" className="signup-link">
-          <p className="not-member" style={{ textDecoration: "none" }}>
-            아직 회원이 아니신가요?
-          </p>
-        </Link>
       </form>
+
+      {/* 소셜 로그인 부분을 form 밖으로 이동 */}
+      <div className="social-login-box">
+        <div className="social-login">
+          <button
+            type="button"
+            className="kakao-login"
+            onClick={handleKakaoLogin}
+          >
+            <img src={kakaoIcon} alt="Kakao" />
+          </button>
+        </div>
+        <div className="social-login">
+          <button
+            type="button"
+            className="google-login"
+            onClick={handleGoogleLogin}
+          >
+            <img src={googleIcon} alt="Google" />
+          </button>
+        </div>
+      </div>
+
+      <Link to="/signup" className="signup-link">
+        <p className="not-member" style={{ textDecoration: "none" }}>
+          아직 회원이 아니신가요?
+        </p>
+      </Link>
     </div>
   );
 };

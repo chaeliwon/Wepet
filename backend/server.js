@@ -56,6 +56,13 @@ app.use(
   })
 );
 
+// 환경 변수 로깅 추가
+console.log("Environment variables:", {
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  KAKAO_CLIENT_ID: process.env.KAKAO_CLIENT_ID,
+  JWT_SECRET: process.env.JWT_SECRET,
+});
+
 // 라우터 설정
 app.use("/user", userRouter);
 app.use("/main", mainRouter);

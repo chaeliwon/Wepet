@@ -29,11 +29,13 @@ passport.use(
         "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log("Google Strategy - Profile received:", profile); // 로그 추가
+
       const userData = {
         user_id: profile.id,
         user_nick: profile.displayName,
-        user_pw: null, // 소셜 로그인 사용자는 비밀번호를 null로 설정
-        user_type: "google", // Google 로그인 유형 설정
+        user_pw: null,
+        user_type: "google",
       };
 
       conn.query(
@@ -74,11 +76,13 @@ passport.use(
         "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback",
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log("Kakao Strategy - Profile received:", profile); // 로그 추가
+
       const userData = {
         user_id: profile.id,
         user_nick: profile.username,
         user_pw: null,
-        user_type: "kakao", // Kakao 로그인 유형 설정
+        user_type: "kakao",
       };
 
       conn.query(
