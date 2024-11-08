@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom"; // useNavigate 추가
+import { Link, useNavigate } from "react-router-dom";
 import "../css/LoginForm.css";
 import kakaoIcon from "../assets/kakaotalk.png";
 import googleIcon from "../assets/google.png";
@@ -15,9 +15,6 @@ const LoginForm = () => {
   const [showDomain, setShowDomain] = useState(true);
   const [loginFail, setLoginFail] = useState(false);
 
-  // const emailRef = useRef();
-  // const pwdRef = useRef();
-
   const navigate = useNavigate();
 
   // 이메일 형식 구성
@@ -25,8 +22,20 @@ const LoginForm = () => {
 
   // Kakao 로그인
   const handleKakaoLogin = () => {
-    window.location.href =
-      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao"; // 서버의 카카오 로그인 경로로 이동
+    const kakaoAuthUrl =
+      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao";
+
+    // 팝업 창 설정
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    window.open(
+      kakaoAuthUrl,
+      "Kakao Login",
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
   };
 
   // URL에서 JWT 토큰 추출 및 저장
@@ -35,21 +44,48 @@ const LoginForm = () => {
     const token = urlParams.get("token");
 
     if (token) {
-      console.log("JWT 토큰:", token); // JWT 토큰을 콘솔에 출력
-
-      // JWT 토큰을 세션 스토리지에 저장
-      sessionStorage.setItem("jwtToken", token);
-
-      // 메인 페이지로 리디렉션
+      console.log("JWT 토큰:", token);
+      localStorage.setItem("token", token);
       navigate("/");
     }
   }, [navigate]);
 
-  // Google 로그인 시작 함수
+  // Google 로그인
   const handleGoogleLogin = () => {
-    window.location.href =
-      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google"; // 서버의 Google 로그인 경로로 이동
+    const googleAuthUrl =
+      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google";
+
+    // 팝업 창 설정
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    window.open(
+      googleAuthUrl,
+      "Google Login",
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
   };
+
+  // 소셜 로그인 완료 후 처리를 위한 이벤트 리스너
+  useEffect(() => {
+    const handleSocialLogin = (event) => {
+      if (
+        event.origin !==
+        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com"
+      )
+        return;
+
+      if (event.data.token) {
+        localStorage.setItem("token", event.data.token);
+        navigate("/");
+      }
+    };
+
+    window.addEventListener("message", handleSocialLogin);
+    return () => window.removeEventListener("message", handleSocialLogin);
+  }, [navigate]);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -89,7 +125,6 @@ const LoginForm = () => {
 
       if (response.data.result === "로그인 성공") {
         console.log("로그인 성공:", response.data);
-        // 토큰 저장 추가
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);
         }
@@ -118,7 +153,6 @@ const LoginForm = () => {
             id="useremail"
             name="useremail"
             value={email}
-            // ref={emailRef}
             onChange={handleEmailChange}
             placeholder="이메일을 입력하세요"
             onFocus={() => setShowDomain(false)}
@@ -140,7 +174,6 @@ const LoginForm = () => {
           id="password"
           name="password"
           value={password}
-          // ref={pwdRef}
           onChange={handlePasswordChange}
           placeholder="비밀번호를 입력하세요"
           required

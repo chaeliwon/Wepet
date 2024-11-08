@@ -25,7 +25,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
+      callbackURL:
+        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       const userData = {
@@ -69,7 +70,8 @@ passport.use(
   new KakaoStrategy(
     {
       clientID: process.env.KAKAO_CLIENT_ID,
-      callbackURL: "/auth/kakao/callback",
+      callbackURL:
+        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       const userData = {
