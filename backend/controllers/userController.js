@@ -58,93 +58,145 @@ exports.checkEmail = (req, res) => {
   });
 };
 
-// 로그인 로직 (JWT 발급 및 쿠키에 저장, 세션에 user_id 저장)
+// 로그인 로직
 exports.login = (req, res) => {
   let { id, pw } = req.body;
+  console.log("Login attempt for:", id);
 
   const loginsql = `SELECT * FROM user_info WHERE user_id = ? AND user_pw = SHA2(?, 256)`;
   conn.query(loginsql, [id, pw], (err, rows) => {
     if (err) {
-      console.error("로그인 오류 발생:", err);
-      res.status(500).json({ result: "에러 발생" });
-      return;
+      console.error("Login query error:", err);
+      return res.status(500).json({ result: "에러 발생" });
     }
 
     if (rows.length > 0) {
-      console.log("로그인 시도:", id);
+      console.log("Login successful for:", id);
 
-      // JWT 발급
       const token = jwt.sign({ userId: id }, JWT_SECRET, { expiresIn: "1h" });
+      console.log("Generated token:", token);
 
-      // JWT를 쿠키에 저장
+      // 쿠키 옵션 설정
       const cookieOptions = {
         httpOnly: true,
-        secure: true, // HTTPS 필수
-        sameSite: "none", // 크로스 도메인 허용
-        maxAge: 3600000, // 1시간
-        domain: ".execute-api.ap-northeast-2.amazonaws.com", // API Gateway 도메인
+        secure: true,
+        sameSite: "none",
+        path: "/",
+        maxAge: 3600000,
       };
 
       res.cookie("jwtToken", token, cookieOptions);
 
-      // 세션에 user_id 저장
-      req.session.user_id = id;
+      // Authorization 헤더 설정
+      res.setHeader("Authorization", `Bearer ${token}`);
 
-      // 디버깅을 위한 로그 추가
-      console.log({
-        message: "로그인 처리 중",
-        token: token,
-        sessionId: req.sessionID,
-        userId: req.session.user_id,
-        cookies: req.cookies,
-        session: req.session,
-      });
+      console.log("Setting cookie with options:", cookieOptions);
+      console.log("Cookie header:", res.getHeader("Set-Cookie"));
 
-      res.json({
+      return res.status(200).json({
         result: "로그인 성공",
-        token: token, // 토큰을 응답에도 포함
-        userId: id, // 사용자 ID도 포함
+        userId: id,
+        token: token,
       });
-    } else {
-      console.log("로그인 실패 - 잘못된 인증정보");
-      res.status(401).json({ result: "로그인 실패" });
     }
+
+    console.log("Login failed for:", id);
+    return res.status(401).json({ result: "로그인 실패" });
   });
 };
 
-// 로그인 상태 확인 API
+// 로그인 상태 확인 로직
 exports.checkLoginStatus = (req, res) => {
-  const token = req.cookies?.jwtToken; // 쿠키가 없을 경우 대비
+  // 요청 헤더와 쿠키 로깅
+  console.log("Request headers:", req.headers);
+  console.log("Request cookies:", req.cookies);
+
+  // 쿠키나 Authorization 헤더에서 토큰 찾기
+  let token = req.cookies?.jwtToken;
+
+  // 쿠키에 토큰이 없으면 Authorization 헤더에서 확인
+  if (!token && req.headers.authorization) {
+    const authHeader = req.headers.authorization;
+    if (authHeader.startsWith("Bearer ")) {
+      token = authHeader.substring(7); // 'Bearer ' 부분을 제외한 토큰
+    }
+  }
+
+  console.log("Found token:", token);
 
   if (!token) {
-    return res.json({ isLoggedIn: false });
+    console.log("No token found in cookies or Authorization header");
+    return res.status(401).json({
+      isLoggedIn: false,
+      message: "No token found",
+      debug: {
+        cookies: req.cookies,
+        headers: req.headers,
+      },
+    });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.json({ isLoggedIn: true, userId: decoded.userId });
+    console.log("Successfully decoded token:", decoded);
+
+    return res.status(200).json({
+      isLoggedIn: true,
+      userId: decoded.userId,
+      message: "Valid token",
+    });
   } catch (error) {
-    res.json({ isLoggedIn: false });
+    console.error("Token verification failed:", error);
+    return res.status(401).json({
+      isLoggedIn: false,
+      message: "Invalid token",
+      error: error.message,
+    });
   }
 };
 
-// 로그아웃 로직 (세션과 쿠키에서 정보 삭제)
+// 로그아웃 로직
 exports.logout = (req, res) => {
-  // 세션에서 user_id 삭제
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("세션 삭제 오류:", err);
-      res.status(500).json({ result: "로그아웃 실패" });
-      return;
-    }
+  try {
+    // 세션에서 user_id 삭제
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("세션 삭제 오류:", err);
+        res.status(500).json({ result: "로그아웃 실패" });
+        return;
+      }
 
-    // 쿠키에서 jwtToken 및 connect.sid 삭제
-    res.clearCookie("jwtToken");
-    res.clearCookie("connect.sid"); // 세션 쿠키 삭제
-    console.log("세션 삭제 확인:", req.session);
+      // 쿠키에서 토큰 삭제
+      res.clearCookie("jwtToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/",
+      });
 
-    res.json({ result: "로그아웃 성공" });
-  });
+      // 세션 쿠키 삭제
+      res.clearCookie("connect.sid", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/",
+      });
+
+      console.log("세션 및 쿠키 삭제 완료");
+
+      // 클라이언트에 로그아웃 성공 응답
+      res.status(200).json({
+        result: "로그아웃 성공",
+        message: "Successfully logged out",
+      });
+    });
+  } catch (error) {
+    console.error("로그아웃 처리 중 오류 발생:", error);
+    res.status(500).json({
+      result: "로그아웃 실패",
+      error: error.message,
+    });
+  }
 };
 
 exports.sendNickMypage = (req, res) => {

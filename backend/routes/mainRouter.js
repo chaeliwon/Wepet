@@ -1,25 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const conn = require("../config/db"); // DB 연결
+const conn = require("../config/db"); // pool이 아닌 conn 사용
 
 // 메인 페이지 동물 이미지 가져오기
 router.get("/", (req, res) => {
   console.log("메인 페이지 데이터 요청!");
 
-  // 에러 처리 추가
-  if (!req.session) {
-    console.log("세션 없음");
-    return res.json({
-      result: "success",
-      images: [],
-      nums: [],
-    });
-  }
-
   let mainPetsql = `
     SELECT pet_img, pet_num
     FROM pet_info 
-    WHERE pet_num IN (?, ?, ?, ?, ?)`;
+    WHERE pet_num IN (?, ?, ?, ?, ?)
+  `;
 
   conn.query(
     mainPetsql,
@@ -33,11 +24,7 @@ router.get("/", (req, res) => {
     (err, rows) => {
       if (err) {
         console.log("이미지 검색 오류", err);
-        return res.json({
-          result: "에러발생",
-          images: [],
-          nums: [],
-        });
+        return res.json({ result: "에러발생" });
       }
 
       if (rows.length === 5) {
@@ -50,12 +37,9 @@ router.get("/", (req, res) => {
       }
 
       console.log("이미지 검색 실패");
-      return res.json({
-        result: "이미지 검색 실패",
-        images: [],
-        nums: [],
-      });
+      return res.json({ result: "이미지 검색 실패" });
     }
   );
 });
+
 module.exports = router;

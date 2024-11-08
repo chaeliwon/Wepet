@@ -42,7 +42,7 @@ router.get(
     req.session.user_id = req.user.user_id;
 
     // 홈으로 리다이렉트
-    res.redirect("http://localhost:3000");
+    res.redirect("https://main.d2agnx57wvpluz.amplifyapp.com");
   }
 );
 
@@ -82,7 +82,7 @@ router.get(
     console.log("세션에 저장된 user_id:", req.session.user_id);
 
     // 프론트엔드 홈 또는 원하는 페이지로 리다이렉트
-    res.redirect("http://localhost:3000");
+    res.redirect("https://main.d2agnx57wvpluz.amplifyapp.com");
   }
 );
 

@@ -22,10 +22,14 @@ const Homepage = () => {
     logInState();
   }, []);
 
+  // 로그인 상태 확인 함수 수정
   const logInState = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await api.get("/user/checkLoginStatus", {
-        withCredentials: true,
+        headers: {
+          Authorization: token ? `Bearer ${token}` : undefined,
+        },
       });
       setIsLoggedIn(response.data.isLoggedIn || false);
     } catch (error) {
@@ -34,10 +38,13 @@ const Homepage = () => {
     }
   };
 
+  // 로그아웃 함수 수정
   const logout = async () => {
     try {
       const response = await api.post("/user/logout");
       if (response.data.result === "로그아웃 성공") {
+        // 로컬 스토리지에서 토큰 제거
+        localStorage.removeItem("token");
         setIsLoggedIn(false);
         nav("/");
       } else {

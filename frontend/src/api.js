@@ -8,14 +8,12 @@ const api = axios.create({
   },
 });
 
-// 요청 인터셉터 추가
 api.interceptors.request.use(
   (config) => {
-    // 요청 보내기 전 수행
-    config.headers = {
-      ...config.headers,
-      Accept: "application/json",
-    };
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -23,15 +21,14 @@ api.interceptors.request.use(
   }
 );
 
-// 응답 인터셉터
+// 응답 인터셉터에서 401 에러 처리
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error("API Error Details:", {
-      config: error.config,
-      response: error.response,
-      message: error.message,
-    });
+    if (error.response?.status === 401) {
+      // 토큰이 만료되었거나 유효하지 않은 경우
+      localStorage.removeItem("token"); // 토큰 제거
+    }
     return Promise.reject(error);
   }
 );

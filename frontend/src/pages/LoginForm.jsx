@@ -89,6 +89,10 @@ const LoginForm = () => {
 
       if (response.data.result === "로그인 성공") {
         console.log("로그인 성공:", response.data);
+        // 토큰 저장 추가
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+        }
         navigate("/");
       } else {
         console.error("로그인 실패:", response.data.message);
