@@ -23,43 +23,21 @@ const LoginForm = () => {
   // Kakao 로그인
   const handleKakaoLogin = () => {
     console.log("Initiating Kakao login");
-    const kakaoAuthUrl =
-      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao";
-    console.log("Kakao Auth URL:", kakaoAuthUrl);
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${
+      process.env.REACT_APP_KAKAO_CLIENT_ID
+    }&redirect_uri=${encodeURIComponent(
+      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
+    )}&response_type=code`;
 
-    // 팝업 창 설정
-    const width = 500;
-    const height = 600;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2;
-
-    window.open(
-      kakaoAuthUrl,
-      "Kakao Login",
-      `width=${width},height=${height},left=${left},top=${top}`
-    );
-    console.log("Kakao login window opened");
+    window.location.href = kakaoAuthUrl; // 팝업 대신 전체 페이지 리다이렉션
   };
 
   // Google 로그인
   const handleGoogleLogin = () => {
     console.log("Initiating Google login");
-    const googleAuthUrl =
-      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google";
-    console.log("Google Auth URL:", googleAuthUrl);
+    const googleAuthUrl = `https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google`;
 
-    // 팝업 창 설정
-    const width = 500;
-    const height = 600;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2;
-
-    window.open(
-      googleAuthUrl,
-      "Google Login",
-      `width=${width},height=${height},left=${left},top=${top}`
-    );
-    console.log("Google login window opened");
+    window.location.href = googleAuthUrl; // 팝업 대신 전체 페이지 리다이렉션
   };
 
   // URL에서 JWT 토큰 추출 및 저장

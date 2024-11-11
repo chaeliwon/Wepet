@@ -50,65 +50,47 @@ router.get("/kakao", (req, res) => {
       "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
     )}&response_type=code`;
 
-    console.log("Redirecting to Kakao Auth URL:", kakaoAuthURL);
-
-    // Lambda 환경에서의 리다이렉트를 위한 응답
-    return {
-      statusCode: 302,
-      headers: {
-        Location: kakaoAuthURL,
-      },
-    };
+    res.redirect(kakaoAuthURL); // Lambda에서 직접 리다이렉션
   } catch (error) {
     console.error("Kakao auth error:", error);
-    return res.status(500).json({
-      error: "Authentication failed",
-      details: error.message,
-    });
+    res.redirect(
+      "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed"
+    );
   }
 });
 
-// Kakao 로그인 콜백
-router.get(
-  "/kakao/callback",
-  async (req, res, next) => {
-    try {
-      console.log("Kakao callback received - query params:", req.query);
-      console.log("Kakao callback headers:", req.headers);
-
-      passport.authenticate("kakao", {
-        failureRedirect:
-          "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=callback_failed",
-        session: false,
-      })(req, res, next);
-    } catch (error) {
-      console.error("Kakao callback authentication error:", error);
-      return res.redirect(
-        "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed"
-      );
+// Kakao 콜백
+router.get("/kakao/callback", async (req, res, next) => {
+  try {
+    const { code } = req.query;
+    if (!code) {
+      throw new Error("Authorization code not found");
     }
-  },
-  (req, res) => {
-    try {
-      console.log("Kakao auth successful - user:", req.user);
+
+    passport.authenticate("kakao", { session: false }, (err, user) => {
+      if (err || !user) {
+        return res.redirect(
+          "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed"
+        );
+      }
 
       const token = jwt.sign(
-        { userId: req.user.user_id, userNick: req.user.user_nick },
+        { userId: user.user_id, userNick: user.user_nick },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
 
-      console.log("Generated token for Kakao user:", token);
-      const redirectUrl = `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${token}`;
-      return res.redirect(redirectUrl);
-    } catch (error) {
-      console.error("Kakao callback error:", error);
-      return res.redirect(
-        "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=token_error"
+      res.redirect(
+        `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${token}`
       );
-    }
+    })(req, res, next);
+  } catch (error) {
+    console.error("Kakao callback error:", error);
+    res.redirect(
+      "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed"
+    );
   }
-);
+});
 
 // 환경 변수 확인
 console.log("Environment variables:", {
