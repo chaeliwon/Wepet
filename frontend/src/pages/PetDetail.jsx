@@ -12,6 +12,8 @@ const PetDetail = () => {
   const { petNum } = useParams();
   const [swiperRef, setSwiperRef] = useState(null);
   const [petDetail, setPetDetail] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [images, setImages] = useState([]);
   const [likedImages, setLikedImages] = useState(new Set());
   const [showModal, setShowModal] = useState(false);
@@ -21,6 +23,8 @@ const PetDetail = () => {
   useEffect(() => {
     const fetchPetDetail = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const token = localStorage.getItem("token");
         const response = await api.post(
           `/findfet/petdetails`,
@@ -33,18 +37,26 @@ const PetDetail = () => {
             },
           }
         );
-        setPetDetail(response.data);
-        console.log(response.data);
 
-        // isFavorite 값에 따라 likedImages 초기화
-        const isFavorite = response.data.pet.isFavorite;
-        if (isFavorite) {
-          setLikedImages((prev) => new Set(prev).add(petNum));
+        // 응답 구조 확인을 위한 로깅
+        console.log("API Response:", response.data);
+
+        if (response.data && response.data.pet) {
+          setPetDetail(response.data);
+          if (response.data.pet.isFavorite) {
+            setLikedImages((prev) => new Set(prev).add(petNum));
+          }
+        } else {
+          throw new Error("Invalid response structure");
         }
       } catch (error) {
         console.error("펫 상세 정보 가져오기 실패:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchPetDetail();
     fetchPets();
   }, [petNum]);
@@ -142,78 +154,80 @@ const PetDetail = () => {
   return (
     <div className="petDetail">
       {showModal && <Modal message="로그인을 해주세요" onClose={closeModal} />}
-      <div className="detailHeadTxt">희망 친구들</div>
-      <div>
-        <div className="detailBox">
-          <div className="detailProfilBox">
-            <div className="detailProfilIcon">
-              <img
-                src="/static/DetailIcon.png"
-                alt="프로필"
-                className="detailProfilIcon"
-              />
-            </div>
-            <div className="detailProfilTxtbox">
-              <img
-                src="/static/detailLogoBlack.png"
-                alt="프로필 이름"
-                className="detailProfilTxt"
-              />
+      {loading && <div>로딩중...</div>}
+      {error && <div>에러 발생: {error}</div>}
+      {!loading && !error && petDetail && petDetail.pet && (
+        <>
+          <div className="detailHeadTxt">희망 친구들</div>
+          <div>
+            <div className="detailBox">
+              <div className="detailProfilBox">
+                <div className="detailProfilIcon">
+                  <img
+                    src="/static/DetailIcon.png"
+                    alt="프로필"
+                    className="detailProfilIcon"
+                  />
+                </div>
+                <div className="detailProfilTxtbox">
+                  <img
+                    src="/static/detailLogoBlack.png"
+                    alt="프로필 이름"
+                    className="detailProfilTxt"
+                  />
+                </div>
+              </div>
+              <div className="detailPhotoBox">
+                <img
+                  className="detailPhoto"
+                  src={petDetail.pet.pet_img}
+                  alt="사진"
+                />
+              </div>
+              <div className="detailInsideBox">
+                <div className="detailIconBox">
+                  <div
+                    className={`detailHeartIcon ${
+                      likedImages.has(petDetail.pet.pet_num)
+                        ? "detailFilledHeart detailAnimateHeart"
+                        : ""
+                    }`}
+                    onClick={() => toggleLike(petDetail.pet.pet_num)}
+                  ></div>
+                  <img className="detailIcon" src="/static/chat.png" alt="" />
+                  <img className="detailIcon" src="/static/share.png" alt="" />
+                </div>
+                <div className="detailHashTag">
+                  <span>
+                    #{petDetail.pet.pet_breed} #{petDetail.pet.pet_color} #
+                    {petDetail.pet.pet_age} #{petDetail.pet.pet_gender} #
+                    {petDetail.pet.pet_weight}kg #중성화 여부 :{" "}
+                    {petDetail.pet.pet_neutered} #{petDetail.pet.pet_shelter} #
+                    {petDetail.pet.pet_shelter_phone}
+                  </span>
+                </div>
+                <div className="detailInfo">{petDetail.pet.pet_info}</div>
+              </div>
             </div>
           </div>
-          <div className="detailPhotoBox">
-            <img className="detailPhoto" src={petInfo.pet_img} alt="사진" />
-          </div>
-          <div className="detailInsideBox">
-            <div className="detailIconBox">
-              <div
-                className={`detailHeartIcon ${
-                  likedImages.has(petInfo.pet_num)
-                    ? "detailFilledHeart detailAnimateHeart"
-                    : ""
-                }`}
-                onClick={() => toggleLike(petInfo.pet_num)}
-              ></div>
-              <img className="detailIcon" src="/static/chat.png" alt="" />
-              <img className="detailIcon" src="/static/share.png" alt="" />
-            </div>
-            <div className="detailHashTag">
-              <span>
-                #{petInfo.pet_breed} #{petInfo.pet_color} #{petInfo.pet_age} #
-                {petInfo.pet_gender} #{petInfo.pet_weight}kg #중성화 여부 :{" "}
-                {petInfo.pet_neutered} #{petInfo.pet_shelter} #
-                {petInfo.pet_shelter_phone}
-              </span>
-            </div>
-            <div className="detailInfo">{petInfo.pet_info}</div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
       <div className="detailBottomTxt">또 다른 친구들 둘러보기</div>
-      <>
-        <Swiper
-          onSwiper={setSwiperRef}
-          slidesPerView={3}
-          centeredSlides={true}
-          spaceBetween={30}
-          pagination={{
-            type: "fraction",
-          }}
-          navigation={true}
-          modules={[Pagination, Navigation]}
-          className="detailSwiper"
-        >
-          {images.map((image, index) => (
-            <SwiperSlide key={image.pet_num || index}>
-              <img
-                src={image.pet_img}
-                alt=""
-                onClick={() => moveDetail(image)}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </>
+      <Swiper
+        slidesPerView={3}
+        centeredSlides={true}
+        spaceBetween={30}
+        pagination={{ type: "fraction" }}
+        navigation={true}
+        modules={[Pagination, Navigation]}
+        className="detailSwiper"
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={image.pet_num || index}>
+            <img src={image.pet_img} alt="" onClick={() => moveDetail(image)} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };
