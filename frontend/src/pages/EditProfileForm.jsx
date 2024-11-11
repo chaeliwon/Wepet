@@ -48,14 +48,28 @@ const EditProfileForm = () => {
     e.preventDefault();
     let valid = true;
 
-    if (nickname.length === 0 || nickname.length > 8) {
+    // 둘 다 비어있는 경우 체크
+    if (!nickname && !password) {
       setNicknameError(true);
-      valid = false;
-    }
-
-    if (password.length < 10 || !pwdSpecial.test(password)) {
       setPasswordError(true);
       valid = false;
+      return;
+    }
+
+    // 닉네임이 입력된 경우에만 유효성 검사
+    if (nickname) {
+      if (nickname.length === 0 || nickname.length > 8) {
+        setNicknameError(true);
+        valid = false;
+      }
+    }
+
+    // 비밀번호가 입력된 경우에만 유효성 검사
+    if (password) {
+      if (password.length < 10 || !pwdSpecial.test(password)) {
+        setPasswordError(true);
+        valid = false;
+      }
     }
 
     if (valid) {
@@ -80,12 +94,27 @@ const EditProfileForm = () => {
   };
 
   const editProfie = async () => {
-    const response = await api.post("/user/update", {
-      nick: nickname,
-      pw: password,
-    });
-    console.log(response);
-    nav("/mypage");
+    try {
+      const token = localStorage.getItem("token");
+      const updateData = {};
+
+      // 입력된 값만 포함
+      if (nickname) updateData.nick = nickname;
+      if (password) updateData.pw = password;
+
+      const response = await api.post("/user/update", updateData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response);
+      if (response.data.result === "회원정보 수정 성공") {
+        nav("/mypage");
+      }
+    } catch (error) {
+      console.error("회원정보 수정 실패:", error);
+    }
   };
 
   const checkPwd = async (e) => {
@@ -144,8 +173,7 @@ const EditProfileForm = () => {
               name="nickname"
               value={nickname || ""}
               onChange={handleNicknameChange}
-              placeholder="최대 8글자까지만 입력 가능합니다."
-              required
+              placeholder="닉네임 변경 시 입력해주세요 (최대 8글자)"
             />
           </div>
           {nicknameError && (
@@ -164,8 +192,7 @@ const EditProfileForm = () => {
                 className="changePwdinput"
                 value={password || ""}
                 onChange={handlePasswordChange}
-                placeholder="비밀번호 입력(숫자,특수문자 포함 10글자 이상)"
-                required
+                placeholder="비밀번호 변경 시 입력해주세요 (숫자,특수문자 포함 10글자 이상)"
               />
             </div>
           )}
