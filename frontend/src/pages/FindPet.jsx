@@ -21,10 +21,18 @@ const FindPet = () => {
   // 유기동물 이미지 불러오기 함수
   const fetchPets = async (type = "") => {
     try {
-      const response = await api.post("/findfet", {
-        type: type,
-      });
-
+      const token = localStorage.getItem("token");
+      const response = await api.post(
+        "/findfet",
+        {
+          type: type,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       // console.log("확인:", response);
       const petsData = response.data.pets;
       console.log("받은 데이터:", petsData);
@@ -59,10 +67,18 @@ const FindPet = () => {
   // 찜하기/찜 해제 함수
   const toggleLike = async (petNum) => {
     try {
-      // 서버에 찜 상태 변경 요청
-      const response = await api.post("/findfet/favorite", {
-        pet_num: petNum,
-      });
+      const token = localStorage.getItem("token");
+      const response = await api.post(
+        "/findfet/favorite",
+        {
+          pet_num: petNum,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log("찜 상태 변경 응답:", response);
 

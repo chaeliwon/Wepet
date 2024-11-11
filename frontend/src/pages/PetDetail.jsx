@@ -21,9 +21,18 @@ const PetDetail = () => {
   useEffect(() => {
     const fetchPetDetail = async () => {
       try {
-        const response = await api.post(`/findfet/petdetails`, {
-          pet_num: petNum,
-        });
+        const token = localStorage.getItem("token");
+        const response = await api.post(
+          `/findfet/petdetails`,
+          {
+            pet_num: petNum,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setPetDetail(response.data);
         console.log(response.data);
 
@@ -42,7 +51,18 @@ const PetDetail = () => {
 
   const fetchPets = async (type = "") => {
     try {
-      const response = await api.post("/findfet", { params: { type } });
+      const token = localStorage.getItem("token");
+      const response = await api.post(
+        "/findfet",
+        {
+          params: { type },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       // 배열을 무작위로 섞는 함수 (Fisher-Yates Shuffle)
       const shuffleArray = (array) => {
@@ -65,9 +85,18 @@ const PetDetail = () => {
   // 찜하기/찜 해제 함수
   const toggleLike = async (petNum) => {
     try {
-      const response = await api.post("/findfet/favorite", {
-        pet_num: petNum,
-      });
+      const token = localStorage.getItem("token");
+      const response = await api.post(
+        "/findfet/favorite",
+        {
+          pet_num: petNum,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log(response);
 
