@@ -200,18 +200,31 @@ exports.logout = (req, res) => {
 };
 
 exports.sendNickMypage = (req, res) => {
-  const userId = req.session.user_id;
+  // JWT 토큰에서 user_id 가져오기
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ result: "인증이 필요합니다" });
+  }
 
-  const sendSql = `SELECT user_nick, user_type FROM user_info WHERE user_id = ?`;
-  conn.query(sendSql, [userId], (err, rows) => {
-    if (err) {
-      console.log("닉네임 가져오기 실패:", err);
-      return res.status(500).json({ result: "닉네임 가져오기 실패" });
-    }
+  try {
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
 
-    console.log("닉네임 가져오기 성공", rows);
-    return res.json({ result: "닉네임 가져오기 성공", rows });
-  });
+    const sendSql = `SELECT user_nick, user_type FROM user_info WHERE user_id = ?`;
+    conn.query(sendSql, [userId], (err, rows) => {
+      if (err) {
+        console.log("닉네임 가져오기 실패:", err);
+        return res.status(500).json({ result: "닉네임 가져오기 실패" });
+      }
+
+      console.log("닉네임 가져오기 성공", rows);
+      return res.json({ result: "닉네임 가져오기 성공", rows });
+    });
+  } catch (error) {
+    console.error("토큰 검증 실패:", error);
+    return res.status(401).json({ result: "인증 실패" });
+  }
 };
 
 // 회원정보 수정 로직

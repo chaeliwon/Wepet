@@ -22,37 +22,49 @@ const MyPage = () => {
 
   useEffect(() => {
     // checkLoginStatus API를 통해 로그인 상태 확인
-    api
-      .get("/user/checkLoginStatus", {
-        withCredentials: true,
-      })
-      .then((response) => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await api.get("/user/checkLoginStatus", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         if (response.data.isLoggedIn) {
           setIsLoggedIn(true);
           setUserData({ userId: response.data.userId });
-          console.log("로그인 상태 확인:", response.data);
+          // 로그인 상태 확인 후 바로 getNick 호출
+          getNick();
         } else {
           setIsLoggedIn(false);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("로그인 상태 확인 오류:", error);
         setIsLoggedIn(false);
-      });
-  }, []);
-  useEffect(() => {
-    if (userData) {
-      getNick();
-    }
-  }, [userData]);
+      }
+    };
+
+    checkLoginStatus();
+  }, []); // userData 의존성 제거
   // 닉네임 가져오기
   const getNick = async () => {
-    let userId = userData.userId;
-    const response = await api.get("/user/send-nick-mypage", {
-      userId: userId,
-    });
-    setUserNick(response.data.rows[0].user_nick);
-    console.log(response);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.get("/user/send-nick-mypage", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.rows && response.data.rows.length > 0) {
+        setUserNick(response.data.rows[0].user_nick);
+      } else {
+        console.error("닉네임 데이터가 없습니다.");
+      }
+    } catch (error) {
+      console.error("닉네임 가져오기 실패:", error);
+    }
   };
 
   const handleLogout = () => {
