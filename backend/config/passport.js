@@ -2,7 +2,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const KakaoStrategy = require("passport-kakao").Strategy;
 const conn = require("./db");
-require("dotenv").config(); // .env 파일 로드
+require("dotenv").config();
 
 // Serialize user
 passport.serializeUser((user, done) => {
@@ -29,40 +29,52 @@ passport.use(
         "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log("Google Strategy - Profile received:", profile); // 로그 추가
+      console.log("Google login attempt - profile:", profile);
+      console.log("Google login - access token:", accessToken);
 
-      const userData = {
-        user_id: profile.id,
-        user_nick: profile.displayName,
-        user_pw: null,
-        user_type: "google",
-      };
+      try {
+        const userData = {
+          user_id: profile.id,
+          user_nick: profile.displayName,
+          user_pw: null,
+          user_type: "google",
+        };
 
-      conn.query(
-        "SELECT * FROM user_info WHERE user_id = ?",
-        [userData.user_id],
-        (err, rows) => {
-          if (err) {
-            return done(err);
-          }
+        console.log("Google login - userData:", userData);
 
-          if (rows.length > 0) {
-            return done(null, rows[0]);
-          } else {
-            conn.query(
-              "INSERT INTO user_info SET ?",
-              userData,
-              (err, result) => {
-                if (err) {
-                  return done(err);
+        conn.query(
+          "SELECT * FROM user_info WHERE user_id = ?",
+          [userData.user_id],
+          (err, rows) => {
+            if (err) {
+              console.error("Google login - DB error:", err);
+              return done(err);
+            }
+
+            if (rows.length > 0) {
+              console.log("Google login - Existing user found:", rows[0]);
+              return done(null, rows[0]);
+            } else {
+              conn.query(
+                "INSERT INTO user_info SET ?",
+                userData,
+                (err, result) => {
+                  if (err) {
+                    console.error("Google login - Insert error:", err);
+                    return done(err);
+                  }
+                  userData.id = result.insertId;
+                  console.log("Google login - New user created:", userData);
+                  return done(null, userData);
                 }
-                userData.id = result.insertId;
-                return done(null, userData);
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      } catch (error) {
+        console.error("Google login - Unexpected error:", error);
+        return done(error);
+      }
     }
   )
 );
@@ -76,40 +88,52 @@ passport.use(
         "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback",
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log("Kakao Strategy - Profile received:", profile); // 로그 추가
+      console.log("Kakao login attempt - profile:", profile);
+      console.log("Kakao login - access token:", accessToken);
 
-      const userData = {
-        user_id: profile.id,
-        user_nick: profile.username,
-        user_pw: null,
-        user_type: "kakao",
-      };
+      try {
+        const userData = {
+          user_id: profile.id,
+          user_nick: profile.username || profile._json.properties.nickname,
+          user_pw: null,
+          user_type: "kakao",
+        };
 
-      conn.query(
-        "SELECT * FROM user_info WHERE user_id = ?",
-        [userData.user_id],
-        (err, rows) => {
-          if (err) {
-            return done(err);
-          }
+        console.log("Kakao login - userData:", userData);
 
-          if (rows.length > 0) {
-            return done(null, rows[0]);
-          } else {
-            conn.query(
-              "INSERT INTO user_info SET ?",
-              userData,
-              (err, result) => {
-                if (err) {
-                  return done(err);
+        conn.query(
+          "SELECT * FROM user_info WHERE user_id = ?",
+          [userData.user_id],
+          (err, rows) => {
+            if (err) {
+              console.error("Kakao login - DB error:", err);
+              return done(err);
+            }
+
+            if (rows.length > 0) {
+              console.log("Kakao login - Existing user found:", rows[0]);
+              return done(null, rows[0]);
+            } else {
+              conn.query(
+                "INSERT INTO user_info SET ?",
+                userData,
+                (err, result) => {
+                  if (err) {
+                    console.error("Kakao login - Insert error:", err);
+                    return done(err);
+                  }
+                  userData.id = result.insertId;
+                  console.log("Kakao login - New user created:", userData);
+                  return done(null, userData);
                 }
-                userData.id = result.insertId;
-                return done(null, userData);
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      } catch (error) {
+        console.error("Kakao login - Unexpected error:", error);
+        return done(error);
+      }
     }
   )
 );

@@ -47,10 +47,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true, // HTTPS 사용하므로 true
+      secure: true,
       httpOnly: true,
-      sameSite: "none", // 크로스 도메인 요청 허용
-      maxAge: 3600000, // 1시간
+      sameSite: "none",
+      maxAge: 3600000,
     },
     proxy: true,
   })
@@ -91,7 +91,7 @@ module.exports.handler = async (event, context) => {
     "Access-Control-Allow-Headers":
       "Content-Type,Authorization,X-Requested-With,Accept,Cookie",
     "Access-Control-Allow-Credentials": "true",
-    "Access-Control-Expose-Headers": "Set-Cookie",
+    "Access-Control-Expose-Headers": "Set-Cookie,Location", // Location 헤더 추가
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   };
@@ -119,14 +119,26 @@ module.exports.handler = async (event, context) => {
     // Express 앱 처리
     const response = await handler(event, context);
 
+    // 리다이렉트 응답 처리
+    if (response.statusCode === 302 && response.headers?.Location) {
+      console.log("Processing redirect to:", response.headers.Location);
+      return {
+        statusCode: 302,
+        headers: {
+          Location: response.headers.Location,
+          "Access-Control-Allow-Origin": FRONTEND_ORIGIN,
+          "Access-Control-Allow-Credentials": "true",
+        },
+      };
+    }
+
     // 쿠키 처리
     let cookies = [];
     if (response.headers?.["set-cookie"]) {
       cookies = Array.isArray(response.headers["set-cookie"])
         ? response.headers["set-cookie"]
         : [response.headers["set-cookie"]];
-
-      console.log("Original cookies:", cookies); // 디버깅용 로그 추가
+      console.log("Processing cookies:", cookies);
     }
 
     const finalResponse = {
@@ -137,20 +149,16 @@ module.exports.handler = async (event, context) => {
       },
       multiValueHeaders: {
         "Set-Cookie": cookies.map(
-          (cookie) => `${cookie}; Secure; SameSite=None` // Domain 설정 제거
+          (cookie) => `${cookie}; Secure; SameSite=None`
         ),
       },
       body:
         typeof response.body === "string"
           ? response.body
-          : JSON.stringify(response.body),
+          : JSON.stringify(response.body || ""),
     };
 
-    console.log(
-      "Final response cookies:",
-      finalResponse.multiValueHeaders["Set-Cookie"]
-    ); // 디버깅용 로그 추가
-
+    console.log("Final response headers:", finalResponse.headers);
     return finalResponse;
   } catch (error) {
     console.error("Handler error:", error);
@@ -160,6 +168,7 @@ module.exports.handler = async (event, context) => {
       body: JSON.stringify({
         error: "Internal Server Error",
         message: error.message,
+        stack: error.stack,
       }),
     };
   }

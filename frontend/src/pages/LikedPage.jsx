@@ -33,13 +33,30 @@ const LikedPage = () => {
   };
 
   const likedPets = async () => {
-    const response = await api.post("/like");
-    const petsData = response.data.pets;
-    const likedSet = new Set(
-      petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
-    );
-    setLikedPetInfo(response.data.pets);
-    setLikedImages(likedSet);
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("토큰이 없습니다.");
+        return;
+      }
+
+      const response = await api.post("/like", null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.pets) {
+        const petsData = response.data.pets;
+        const likedSet = new Set(
+          petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
+        );
+        setLikedPetInfo(petsData);
+        setLikedImages(likedSet);
+      }
+    } catch (error) {
+      console.error("찜 목록 가져오기 실패:", error);
+    }
   };
 
   const moveDetail = (pet) => {
