@@ -214,10 +214,13 @@ const PetDetail = () => {
       )}
       <div className="detailBottomTxt">또 다른 친구들 둘러보기</div>
       <Swiper
+        onSwiper={setSwiperRef}
         slidesPerView={3}
         centeredSlides={true}
         spaceBetween={30}
-        pagination={{ type: "fraction" }}
+        pagination={{
+          type: "fraction",
+        }}
         navigation={true}
         modules={[Pagination, Navigation]}
         className="detailSwiper"
