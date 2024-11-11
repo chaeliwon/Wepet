@@ -35,12 +35,8 @@ const LikedPage = () => {
   const likedPets = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("토큰이 없습니다.");
-        return;
-      }
-
-      const response = await api.post("/like", null, {
+      const response = await api.get("/like", {
+        // POST에서 GET으로 변경
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -49,7 +45,7 @@ const LikedPage = () => {
       if (response.data.pets) {
         const petsData = response.data.pets;
         const likedSet = new Set(
-          petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
+          petsData.map((pet) => pet.pet_num) // 이미 모든 데이터가 찜한 것이므로 filter 제거
         );
         setLikedPetInfo(petsData);
         setLikedImages(likedSet);
@@ -65,9 +61,19 @@ const LikedPage = () => {
 
   const toggleLike = async (petNum) => {
     try {
-      const response = await api.post("/findfet/favorite", {
-        pet_num: petNum,
-      });
+      const token = localStorage.getItem("token");
+      const response = await api.post(
+        "/like/favorite",
+        {
+          // /findfet/favorite에서 /like/favorite으로 변경
+          pet_num: petNum,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log("찜 상태 변경 응답:", response);
 
