@@ -106,9 +106,19 @@ const MyPage = () => {
       cancelButtonColor: "#3085d6",
     }).then((result) => {
       if (result.isConfirmed) {
+        const token = localStorage.getItem("token");
         api
-          .post("/user/delete")
+          .post(
+            "/user/delete",
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then(() => {
+            localStorage.removeItem("token"); // 토큰 삭제
             Swal.fire("탈퇴 완료", "회원 탈퇴가 완료되었습니다.", "success");
             navigate("/");
           })
@@ -177,12 +187,12 @@ const MyPage = () => {
             <div className="menu-item" onClick={handleLogout}>
               <img src={logout} alt="로그아웃 아이콘" className="menu-icon" />
               <span>로그아웃</span>
-              <span className="arrow">></span>
+              <span className="arrow"></span>
             </div>
             <div className="menu-item" onClick={handleDeleteAccount}>
               <img src={mydelete} alt="회원탈퇴 아이콘" className="menu-icon" />
               <span>회원탈퇴</span>
-              <span className="arrow">></span>
+              <span className="arrow"></span>
             </div>
             <Link to="/edit-profile" className="menu-item">
               <img
@@ -191,7 +201,7 @@ const MyPage = () => {
                 className="menu-icon"
               />
               <span>회원정보 수정</span>
-              <span className="arrow">></span>
+              <span className="arrow"></span>
             </Link>
             <Link to="/sponsor" className="menu-item">
               {" "}
@@ -202,7 +212,7 @@ const MyPage = () => {
                 className="menu-icon"
               />
               <span>후원하기</span>
-              <span className="arrow">></span>
+              <span className="arrow"></span>
             </Link>
           </div>
         </>

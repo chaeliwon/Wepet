@@ -3,7 +3,7 @@ const conn = require("../config/db");
 // 유기동물 전체 이미지 또는 필터 조건에 따른 이미지 가져오기
 exports.getFilteredPets = (req, res) => {
   const { type } = req.body;
-  const user_id = req.session.user_id;
+  const user_id = req.session.userId;
   console.log(user_id, type);
 
   // 모든 동물들의 이미지와 번호를 가져오는 기본 쿼리
@@ -58,7 +58,7 @@ exports.getFilteredPets = (req, res) => {
 // 유기동물 상세 정보 가져오기 (POST 방식)
 exports.getPetDetails = (req, res) => {
   const { pet_num } = req.body; // user_id와 pet_num을 body에서 가져옴
-  const user_id = req.session.user_id;
+  const user_id = req.session.userId;
 
   const sql = "SELECT * FROM pet_info WHERE pet_num = ?";
 
@@ -108,7 +108,7 @@ exports.getPetDetails = (req, res) => {
 // 찜하기 (favorite_info에 추가)
 exports.addFavorite = (req, res) => {
   const { pet_num } = req.body;
-  const user_id = req.session.user_id;
+  const user_id = req.session.userId;
   console.log("찜하기 확인", user_id);
 
   const checkSql =

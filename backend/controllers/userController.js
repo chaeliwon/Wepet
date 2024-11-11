@@ -229,61 +229,102 @@ exports.sendNickMypage = (req, res) => {
 
 // 회원정보 수정 로직
 exports.updateUser = (req, res) => {
-  const userId = req.session.user_id; // JWT 토큰에서 사용자 ID 추출
-  const { nick, pw } = req.body; // 클라이언트에서 새로운 정보 입력
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ result: "인증이 필요합니다" });
+  }
 
-  const updateSql = `UPDATE user_info SET user_nick = ?, user_pw = SHA2(?, 256) WHERE user_id = ?`;
-  conn.query(updateSql, [nick, pw, userId], (err, result) => {
-    if (err) {
-      console.error("회원정보 수정 실패:", err);
-      return res.status(500).json({ result: "회원정보 수정 실패" });
+  try {
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
+    const { nick, pw } = req.body;
+
+    // SQL 쿼리와 파라미터를 동적으로 구성
+    let updateSql = "UPDATE user_info SET";
+    const params = [];
+
+    if (nick && pw) {
+      // 둘 다 변경하는 경우
+      updateSql += " user_nick = ?, user_pw = SHA2(?, 256)";
+      params.push(nick, pw);
+    } else if (nick) {
+      // 닉네임만 변경하는 경우
+      updateSql += " user_nick = ?";
+      params.push(nick);
+    } else if (pw) {
+      // 비밀번호만 변경하는 경우
+      updateSql += " user_pw = SHA2(?, 256)";
+      params.push(pw);
+    } else {
+      return res.status(400).json({ result: "변경할 정보가 없습니다" });
     }
 
-    console.log("회원정보 수정 성공:", result);
-    return res.json({ result: "회원정보 수정 성공" });
-  });
+    updateSql += " WHERE user_id = ?";
+    params.push(userId);
+
+    conn.query(updateSql, params, (err, result) => {
+      if (err) {
+        console.error("회원정보 수정 실패:", err);
+        return res.status(500).json({ result: "회원정보 수정 실패" });
+      }
+
+      console.log("회원정보 수정 성공:", result);
+      return res.json({
+        result: "회원정보 수정 성공",
+        message:
+          nick && pw
+            ? "닉네임과 비밀번호가 변경되었습니다"
+            : nick
+            ? "닉네임이 변경되었습니다"
+            : "비밀번호가 변경되었습니다",
+      });
+    });
+  } catch (error) {
+    console.error("토큰 검증 실패:", error);
+    return res.status(401).json({ result: "인증 실패" });
+  }
 };
 
 // 회원탈퇴 로직
 exports.deleteUser = (req, res) => {
-  const userId = req.session.user_id;
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ result: "인증이 필요합니다" });
+  }
 
-  const deleteFavoritesSql = `DELETE FROM favorite_info WHERE user_id = ?`;
-  const deleteUserSql = `DELETE FROM user_info WHERE user_id = ?`;
+  try {
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.userId;
 
-  // 먼저 favorite_info에서 사용자 관련 레코드 삭제
-  conn.query(deleteFavoritesSql, [userId], (err, result) => {
-    if (err) {
-      console.error("찜 정보 삭제 실패:", err);
-      return res.status(500).json({ result: "찜 정보 삭제 실패" });
-    }
+    const deleteFavoritesSql = `DELETE FROM favorite_info WHERE user_id = ?`;
+    const deleteUserSql = `DELETE FROM user_info WHERE user_id = ?`;
 
-    // 이후 user_info에서 사용자 삭제
-    conn.query(deleteUserSql, [userId], (err, result) => {
+    // 먼저 favorite_info에서 사용자 관련 레코드 삭제
+    conn.query(deleteFavoritesSql, [userId], (err, result) => {
       if (err) {
-        console.error("회원 탈퇴 실패:", err);
-        return res.status(500).json({ result: "회원 탈퇴 실패" });
+        console.error("찜 정보 삭제 실패:", err);
+        return res.status(500).json({ result: "찜 정보 삭제 실패" });
       }
 
-      console.log("회원 탈퇴 성공:", result);
-
-      // 세션과 쿠키를 삭제하여 로그아웃 처리
-      req.session.destroy((err) => {
+      // 이후 user_info에서 사용자 삭제
+      conn.query(deleteUserSql, [userId], (err, result) => {
         if (err) {
-          console.error("세션 삭제 오류:", err);
-          return res.status(500).json({ result: "회원 탈퇴 후 로그아웃 실패" });
+          console.error("회원 탈퇴 실패:", err);
+          return res.status(500).json({ result: "회원 탈퇴 실패" });
         }
 
-        // 쿠키에서 jwtToken 및 connect.sid 삭제
-        res.clearCookie("jwtToken");
-        res.clearCookie("connect.sid"); // 세션 쿠키 삭제
-        console.log("세션 삭제 확인:", req.session);
+        console.log("회원 탈퇴 성공:", result);
 
-        // 탈퇴 및 로그아웃 성공 응답
-        return res.json({ result: "회원 탈퇴 및 로그아웃 성공" });
+        // 로컬 스토리지의 토큰 삭제 요청
+        return res.json({ result: "회원 탈퇴 성공" });
       });
     });
-  });
+  } catch (error) {
+    console.error("토큰 검증 실패:", error);
+    return res.status(401).json({ result: "인증 실패" });
+  }
 };
 
 // 비밀번호 찾기 및 회원가입 - 인증 코드 전송
