@@ -2,7 +2,6 @@ import json
 import numpy as np
 from db import get_database_connection
 import time
-from clip_embedding import generate_text_embedding
 
 # 데이터베이스에서 임베딩 데이터 검색 함수
 def search_similar_embeddings(query_embedding, top_n=5):

@@ -4,7 +4,6 @@ import numpy as np
 import time
 from PIL import Image
 from rembg.bg import remove
-import traceback
 
 # CLIP 모델 및 프로세서 로드
 clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")

@@ -1,5 +1,5 @@
 from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
+from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
 from dotenv import load_dotenv
@@ -14,24 +14,75 @@ load_dotenv()
 # 환경 변수에서 OPENAI_API_KEY 불러오기
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-# Langchain 설정
-llm_model = ChatOpenAI(api_key=openai_api_key, model_name="gpt-4o-mini", temperature=0.5, max_tokens=500)
-
-# 프롬프트 설정
-prompt = PromptTemplate.from_template(
-    "당신은 애완동물을 추천하기위해 사람들과 대화합니다. 사람들의 대화에서 원하고있는 동물의 키워드를 뽑아낼거에요. 대답을 할때에 사람들의 말속에서 키워드를 뽑아 나열해 대답합니다. 당신이 뽑아낸 데이터는 임베딩하는 api에 전달될것입니다 "
-    "말끝에 알았다 멍! 을 붙일거에요. 이전 대화: {history} 새로운 질문: {input}"
+# 기본 LLM 모델 설정
+llm_model = ChatOpenAI(
+    api_key=openai_api_key,
+    model_name="gpt-4",
+    temperature=0.3,
+    max_tokens=1000
 )
+
+# 시스템 메시지 정의
+SYSTEM_MESSAGE = """당신은 15년 경력의 수의사이자 고양이입니다! 당신의 이름은 나루입니다! 전문성과 귀여움을 동시에 가진 AI 고양이 수의사로서,
+동물들의 건강과 행동을 분석하는 것이 특기이지만, 너무 딱딱하지 않게 친근한 대화체로 조언해줍니다.
+
+대화 스타일:
+- 문장 끝에 '냥!'을 붙여서 대화합니다
+- 이모지를 적절히 사용해 친근함을 표현합니다 (😺 🐾 ✨ 등)
+- 전문 용어는 쉽게 풀어서 설명합니다
+- 너무 장황하지 않게, 핵심적인 내용만 전달합니다
+- 필요할 때만 추가 질문을 합니다
+
+관찰할 주요 포인트:
+- 동물의 기분과 건강 상태
+- 특이한 행동이나 변화
+- 주의가 필요한 징후
+- 개선이 필요한 부분"""
+
+# Chat 프롬프트 템플릿 설정
+behavior_prompt = ChatPromptTemplate.from_messages([
+    ("system", SYSTEM_MESSAGE),
+    MessagesPlaceholder(variable_name="history"),
+    ("human", "{input}")
+])
 
 # 사용자별 메모리 저장 딕셔너리
 user_memories = {}
 
-# 사용자별 메모리 생성 및 체인 생성 함수
-def get_conversation_chain(user_id):
+
+def get_behavior_chain(user_id):
+    """사용자별 대화 체인 생성"""
     if user_id not in user_memories:
         user_memories[user_id] = ConversationBufferMemory(return_messages=True)
-    user_memory = user_memories[user_id]
-    return ConversationChain(llm=llm_model, memory=user_memory, prompt=prompt)
+
+    return ConversationChain(
+        llm=llm_model,
+        memory=user_memories[user_id],
+        prompt=behavior_prompt
+    )
+
+
+async def analyze_pet_behavior(user_id, user_input):
+    """반려동물 행동 분석 함수"""
+    try:
+        start_time = time.time()
+
+        # 일반 체인 사용
+        chain = get_behavior_chain(user_id)
+        chain_response = chain.invoke({"input": user_input})
+
+        # AI의 응답만 추출
+        result = chain_response['response']
+
+        result += "\n\n[주의사항: 전 AI기 때문에, 실제 건강 문제는 직접 동물병원에서 진찰받으시는 게 가장 좋을 것 같네냥! 🏥]"
+
+        print(f"행동 분석 실행 시간: {time.time() - start_time:.2f}초")
+        return result
+
+    except Exception as e:
+        print("행동 분석 중 오류 발생:")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"행동 분석 실패: {str(e)}")
 
 # GPT를 사용하여 키워드 추출 및 영어 번역 함수
 def extract_keywords(text):
@@ -60,5 +111,3 @@ def extract_keywords(text):
         print("extract_keywords 함수에서 오류 발생:")
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"키워드 추출 실패: {str(e)}")
-
-
