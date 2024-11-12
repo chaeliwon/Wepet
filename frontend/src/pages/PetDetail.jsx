@@ -171,7 +171,7 @@ const PetDetail = () => {
                 </div>
                 <div className="detailProfilTxtbox">
                   <img
-                    src="/static/detailLogoBlack.png"
+                    src="/static/DetailLogoBlack.png"
                     alt="프로필 이름"
                     className="detailProfilTxt"
                   />

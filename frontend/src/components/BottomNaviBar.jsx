@@ -16,7 +16,7 @@ const BottomNaviBar = () => {
       case "/mypage":
         return location.pathname === "/mypage"
           ? "/static/MyOn.png"
-          : "/static/Myoff.png";
+          : "/static/MyOff.png";
     }
   };
   return (
