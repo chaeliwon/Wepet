@@ -12,6 +12,7 @@ import mydelete from "../assets/mydelete.png";
 import myuseredit from "../assets/myuseredit.png";
 import mydonation from "../assets/mydonation.png";
 import api from "../api";
+import leaveDogIcon from "../assets/leavedog.png"; 
 
 const MyPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,6 +48,7 @@ const MyPage = () => {
 
     checkLoginStatus();
   }, []); // userData 의존성 제거
+
   // 닉네임 가져오기
   const getNick = async () => {
     try {
@@ -98,7 +100,10 @@ const MyPage = () => {
   const handleDeleteAccount = () => {
     Swal.fire({
       title: "정말로 회원 탈퇴 하시겠습니까?",
-      icon: "warning",
+      imageUrl: leaveDogIcon, // 커스텀 이미지 추가
+      imageWidth: 88,
+      imageHeight: 88,
+
       showCancelButton: true,
       confirmButtonText: "탈퇴",
       cancelButtonText: "취소",

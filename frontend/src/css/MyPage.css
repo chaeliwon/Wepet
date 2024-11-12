@@ -25,6 +25,8 @@ body {
   align-items: center;
 }
 
+
+
 /* 로그인하지 않은 상태일 때 중앙에 표시되는 로그인 유도 문구와 버튼 */
 .mylogin-prompt {
   display: flex;
@@ -159,6 +161,32 @@ body {
   width: 16px;
   height: 16px;
   margin-right: 10px;
+}
+
+.swal2-image {
+  width: 120px !important; /* 원하는 너비 */
+  height: auto !important; /* 비율 유지 */
+  border-radius: 10px; /* 모서리 둥글게 */
+}
+
+/* SweetAlert2 타이틀 폰트 크기 조절 */
+.swal2-title {
+  font-size: 18px !important; /* 원하는 폰트 크기로 설정 */
+}
+
+/* SweetAlert2 내용(메시지) 폰트 크기 조절 */
+.swal2-content {
+  font-size: 14px !important; /* 원하는 폰트 크기로 설정 */
+}
+
+/* SweetAlert2 버튼 폰트 크기 조절 */
+.swal2-confirm, .swal2-cancel {
+  font-size: 14px !important; /* 원하는 폰트 크기로 설정 */
+}
+
+.swal2-popup {
+  width: 350px !important; /* 원하는 너비로 설정 */
+  max-width: 90%; /* 화면 크기에 따른 최대 너비 제한 */
 }
 
 /* 챗봇 페이지 버튼 */
