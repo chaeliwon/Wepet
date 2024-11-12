@@ -8,19 +8,19 @@ import 동물복지문제연구소어웨이 from "../assets/동물복지문제�
 const Sponsor = () => {
 
   const handleExternalLink1 = () => {
-    window.location.href = "https://www.animals.or.kr/support/intro?utm_source=google&utm_medium=sa&utm_campaign=pc&utm_content=%EB%B8%8C%EB%9E%9C%EB%93%9C&utm_term=%EB%8F%99%EB%AC%BC%EC%9E%90%EC%9C%A0%EC%97%B0%EB%8C%80%20%ED%9B%84%EC%9B%90&gad_source=1&gclid=Cj0KCQjwvpy5BhDTARIsAHSilyk2I0SUlsuZxH0s0d-Nbo2oq77QbH4EuEdq_-dynhSXP_A2hCLaOToaAvJ4EALw_wcB";
+    window.open("https://www.animals.or.kr/support/intro?utm_source=google&utm_medium=sa&utm_campaign=pc&utm_content=%EB%B8%8C%EB%9E%9C%EB%93%9C&utm_term=%EB%8F%99%EB%AC%BC%EC%9E%90%EC%9C%A0%EC%97%B0%EB%8C%80%20%ED%9B%84%EC%9B%90&gad_source=1&gclid=Cj0KCQjwvpy5BhDTARIsAHSilyk2I0SUlsuZxH0s0d-Nbo2oq77QbH4EuEdq_-dynhSXP_A2hCLaOToaAvJ4EALw_wcB", "_blank");
   };
 
   const handleExternalLink2 = () => {
-    window.location.href = "https://www.ekara.org/support/introduce";
+    window.open("https://www.ekara.org/support/introduce", "_blank");
   };
 
   const handleExternalLink3 = () => {
-    window.location.href = "https://secure.donus.org/savelife/pay/step1";
+    window.open("https://secure.donus.org/savelife/pay/step1", "_blank");
   };
 
   const handleExternalLink4 = () => {
-    window.location.href = "https://aware.kr/bbs/board.php?bo_table=B08";
+    window.open("https://aware.kr/bbs/board.php?bo_table=B08", "_blank");
   };
 
   return (
@@ -70,7 +70,7 @@ const Sponsor = () => {
             <div className="sponsorImgWrapper3">
                 <img src={동물보호단체라이프} alt="동물보호단체라이프" className="sponsorImg3" />
             </div>
-            <div className="sponsorHeader1">
+            <div className="sponsorHeader3">
                 <span className="sponsorName1">동물보호단체 라이프</span>
                 <button className="sponsorButton1" onClick={handleExternalLink3}>
                     후원하러 가기
