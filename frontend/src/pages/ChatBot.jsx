@@ -93,7 +93,7 @@ const ChatBot = () => {
         { text: input }
       );
 
-      const similarPetsList = response.data.body.similar_pets.map((pet) => ({
+      const similarPetsList = response.data.similar_pets.map((pet) => ({
         num: pet.pet_num,
         imgUrl: pet.pet_img,
       }));
@@ -195,7 +195,7 @@ const ChatBot = () => {
       );
       console.log(response);
 
-      const similarPetsList = response.data.body.similar_pets.map((pet) => ({
+      const similarPetsList = response.data.similar_pets.map((pet) => ({
         num: pet.pet_num,
         imgUrl: pet.pet_img,
       }));
