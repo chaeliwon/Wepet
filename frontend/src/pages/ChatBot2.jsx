@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import "../css/ChatBot2.css";
 import AiNaru from "../assets/AiNaru.png";
 import sendBtn from "../assets/sendbtn.png";
@@ -48,10 +49,6 @@ const ChatBot2 = () => {
         setIsLoggedIn(false);
       });
   }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-  });
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
@@ -133,49 +130,58 @@ const ChatBot2 = () => {
   return (
     <div className="chat-container2">
       {showModal && <Modal />}
-      <div className="chat-window2">
-        <div className="chat-header2">
-          <img src={AiNaru} alt="뒤로" className="chat-icon2" />
-          <h1 className="chat-title2">AI 나루</h1>
-        </div>
+      {isLoggedIn ? (
+        <div className="chat-window2">
+          <div className="chat-header2">
+            <img src={AiNaru} alt="뒤로" className="chat-icon2" />
+            <h1 className="chat-title2">AI 나루</h1>
+          </div>
 
-        <div className="chat-messages2" ref={messagesRef}>
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`message-wrapper2 ${
-                message.sender === "bot" ? "bot-wrapper2" : "user-wrapper2"
-              }`}
-            >
+          <div className="chat-messages2" ref={messagesRef}>
+            {messages.map((message, index) => (
               <div
-                className={`message2 ${
-                  message.sender === "bot" ? "bot2" : "user2"
+                key={index}
+                className={`message-wrapper2 ${
+                  message.sender === "bot" ? "bot-wrapper2" : "user-wrapper2"
                 }`}
               >
-                {message.isHtml ? (
-                  <div>{message.text}</div>
-                ) : (
-                  <div>{message.text}</div>
-                )}
+                <div
+                  className={`message2 ${
+                    message.sender === "bot" ? "bot2" : "user2"
+                  }`}
+                >
+                  {message.isHtml ? (
+                    <div>{message.text}</div>
+                  ) : (
+                    <div>{message.text}</div>
+                  )}
+                </div>
+                <div className="message-time2">{message.time}</div>
               </div>
-              <div className="message-time2">{message.time}</div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        <div className="chat-input2">
-          <textarea
-            value={input}
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            placeholder="텍스트를 입력하세요."
-            className="textarea2"
-          />
-          <button onClick={sendMessage}>
-            <img src={sendBtn} alt="보내기" className="send-icon2" />
-          </button>
+          <div className="chat-input2">
+            <textarea
+              value={input}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+              placeholder="텍스트를 입력하세요."
+              className="textarea2"
+            />
+            <button onClick={sendMessage}>
+              <img src={sendBtn} alt="보내기" className="send-icon2" />
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="mylogin-prompt">
+          <p>로그인 회원만 이용 가능합니다.</p>
+          <Link to="/login">
+            <button className="mylogin-btn">로그인 하러 가기</button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
