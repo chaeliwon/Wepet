@@ -19,9 +19,7 @@ const ChatBot2 = () => {
     },
   ]);
   const [input, setInput] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
   const [userId, setUserId] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const messagesRef = useRef(null);
@@ -66,11 +64,6 @@ const ChatBot2 = () => {
     }
   };
 
-  const cancelImagePreview = () => {
-    setSelectedFile(null);
-    setPreviewUrl(null);
-  };
-
   const sendMessage = async () => {
     if (input.trim() === "") return;
     setShowModal(true);
@@ -86,22 +79,20 @@ const ChatBot2 = () => {
     setInput("");
 
     try {
-      const token = localStorage.getItem("jwtToken");
-      const response = await axios.post(
-        "https://1ylnvxbbb9.execute-api.ap-northeast-2.amazonaws.com/openai/chat",
-        { text: input, user_id: userId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // JWT 토큰 추가
-          },
-        }
-      );
+      const formData = new FormData();
+      formData.append("user_id", userId);
+      formData.append("input", input);
+      const response = await axios({
+        method: "post",
+        url: "https://1ylnvxbbb9.execute-api.ap-northeast-2.amazonaws.com/openai/chat",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
 
-      const botReply = (
-        <div>
-          <p>{response}</p>
-        </div>
-      );
+      const botReply = response.data?.response || "응답을 받지 못했습니다.";
 
       setMessages([
         ...newMessages,
@@ -109,7 +100,6 @@ const ChatBot2 = () => {
           sender: "bot",
           text: botReply,
           time: currentTime,
-          isHtml: true,
         },
       ]);
     } catch (error) {
@@ -118,7 +108,7 @@ const ChatBot2 = () => {
         ...newMessages,
         {
           sender: "bot",
-          text: "찾고 싶은 동물의 특징을 적어주세요!",
+          text: "현재 동물의 상태를 알려주세요!",
           time: currentTime,
         },
       ]);
