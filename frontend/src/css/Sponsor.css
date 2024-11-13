@@ -1,321 +1,318 @@
 @font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
 }
 
 .sponsorPageBG {
-    width: 100%;
-    height: 100vh;
-    background-image: url("../assets/background.png");
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 20px;
-    box-sizing: border-box;
-    gap: 20px; /* 카드 사이 간격 */
-    overflow-y: auto; /* 세로 스크롤 활성화 */
-    overflow-x: hidden; /* 가로 스크롤 비활성화 */
+  width: 100%;
+  height: 100%;
+  background-image: url("../assets/background.png");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  gap: 20px; /* 카드 사이 간격 */
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  overflow-x: hidden; /* 가로 스크롤 비활성화 */
 }
 
 /* 스크롤바 스타일링 (웹킷 기반 브라우저) */
 .sponsorPageBG::-webkit-scrollbar {
-    width: 8px;
-  }
+  width: 8px;
+}
 
 .sponsorPageBG::-webkit-scrollbar-thumb {
-    background-color: #855b3b; /* 스크롤바 색상 */
-    border-radius: 4px;
-  }
+  background-color: #855b3b; /* 스크롤바 색상 */
+  border-radius: 4px;
+}
 
 .sponsorPageBG::-webkit-scrollbar-track {
-    background-color: transparent; /* 스크롤바 트랙 배경 */
-  }
-  
+  background-color: transparent; /* 스크롤바 트랙 배경 */
+}
 
 /* 동물자유연대 카드 스타일 */
 .sponsorCard1 {
-    width: 95%;
-    max-width: 400px;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    margin-top: 800px;
-    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
+  width: 95%;
+  max-width: 400px;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  margin-top: 800px;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
 }
 
 .sponsorCardBox1 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sponsorHeader1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .sponsorName1 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #5a5a5a;
+  font-size: 20px;
+  font-weight: bold;
+  color: #5a5a5a;
 }
 
 .sponsorButton1 {
-    padding: 10px 15px;
-    font-size: 14px;
-    background-color: #fffff0;
-    border: 1px solid #c7d2ad;
-    border-radius: 10px;
-    color: #855b3b;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #fffff0;
+  border: 1px solid #c7d2ad;
+  border-radius: 10px;
+  color: #855b3b;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .sponsorButton1:hover {
-    background-color: #a1b56a;
-    border: 1px solid  #fffff0;
-    border-radius: 10px;
-    color: #ffffff;
+  background-color: #a1b56a;
+  border: 1px solid #fffff0;
+  border-radius: 10px;
+  color: #ffffff;
 }
 
 .sponsorImgWrapper1 {
-    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
-    height: auto; /* 자동 높이 */
-    overflow: hidden; /* 이미지가 부모 요소를 넘치지 않도록 */
-    border-radius: 15px; /* 모서리 둥글게 */
-    margin-bottom: 20px;
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+  height: auto; /* 자동 높이 */
+  overflow: hidden; /* 이미지가 부모 요소를 넘치지 않도록 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  margin-bottom: 20px;
 }
 
 .sponsorImg1 {
-    width: 100%; /* 이미지 너비를 100%로 설정 */
-    height: auto; /* 자동 높이 */
-    object-fit: cover;
-    display: block; /* 이미지 하단 여백 제거 */
+  width: 100%; /* 이미지 너비를 100%로 설정 */
+  height: auto; /* 자동 높이 */
+  object-fit: cover;
+  display: block; /* 이미지 하단 여백 제거 */
 }
 
 .sponsorTxt1 {
-    font-size: 14px;
-    color: #707070;
-    /* background-color:rgba(255, 255, 240, 0.5); */
-    text-align: justify;
-    line-height: 1.5; /* 행간(줄위아래틈) */
+  font-size: 14px;
+  color: #707070;
+  /* background-color:rgba(255, 255, 240, 0.5); */
+  text-align: justify;
+  line-height: 1.5; /* 행간(줄위아래틈) */
 }
 
 /* 동물권행동 카라 카드 스타일 */
 .sponsorCard2 {
-    width: 95%;
-    max-width: 400px;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
+  width: 95%;
+  max-width: 400px;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
 }
 
-
 .sponsorCardBox2 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sponsorHeader2 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .sponsorButton2 {
-    padding: 10px 15px;
-    font-size: 14px;
-    background-color: #fffff0;
-    border: 1px solid #c7d2ad;
-    border-radius: 10px;
-    color: #855b3b;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #fffff0;
+  border: 1px solid #c7d2ad;
+  border-radius: 10px;
+  color: #855b3b;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .sponsorButton2:hover {
-    background-color: #a1b56a;
-    border: 1px solid  #fffff0;
-    border-radius: 10px;
-    color: #ffffff;
+  background-color: #a1b56a;
+  border: 1px solid #fffff0;
+  border-radius: 10px;
+  color: #ffffff;
 }
 
 .sponsorName2 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #5a5a5a;
+  font-size: 20px;
+  font-weight: bold;
+  color: #5a5a5a;
 }
 
 .sponsorImgWrapper2 {
-    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
-    height: auto; /* 자동 높이 */
-    overflow: hidden; /* 이미지가 부모 요소를 넘치지 않도록 */
-    border-radius: 15px; /* 모서리 둥글게 */
-    margin-bottom: 20px;
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+  height: auto; /* 자동 높이 */
+  overflow: hidden; /* 이미지가 부모 요소를 넘치지 않도록 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  margin-bottom: 20px;
 }
 
 .sponsorImg2 {
-    width: 100%; /* 이미지 너비를 100%로 설정 */
-    height: auto; /* 자동 높이 */
-    object-fit: cover;
-    display: block; /* 이미지 하단 여백 제거 */
+  width: 100%; /* 이미지 너비를 100%로 설정 */
+  height: auto; /* 자동 높이 */
+  object-fit: cover;
+  display: block; /* 이미지 하단 여백 제거 */
 }
 
 .sponsorTxt2 {
-    font-size: 14px;
-    color: #707070;
-    text-align: justify;
-    line-height: 1.5; /* 행간(줄위아래틈) */
+  font-size: 14px;
+  color: #707070;
+  text-align: justify;
+  line-height: 1.5; /* 행간(줄위아래틈) */
 }
 
 /* 동물보호단체 라이프 카드 스타일 */
 .sponsorCard3 {
-    width: 95%;
-    max-width: 400px;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
-
+  width: 95%;
+  max-width: 400px;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
 }
 
 .sponsorCardBox3 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sponsorHeader3 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .sponsorName3 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #5a5a5a;
+  font-size: 20px;
+  font-weight: bold;
+  color: #5a5a5a;
 }
 
 .sponsorButton3 {
-    padding: 10px 15px;
-    font-size: 14px;
-    background-color: #fffff0;
-    border: 1px solid #c7d2ad;
-    border-radius: 10px;
-    color: #855b3b;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: #fffff0;
+  border: 1px solid #c7d2ad;
+  border-radius: 10px;
+  color: #855b3b;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .sponsorButton3:hover {
-    background-color: #a1b56a;
-    border: 1px solid  #fffff0;
-    border-radius: 10px;
-    color: #ffffff;
+  background-color: #a1b56a;
+  border: 1px solid #fffff0;
+  border-radius: 10px;
+  color: #ffffff;
 }
 
 .sponsorImgWrapper3 {
-    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
-    height: auto; /* 자동 높이 */
-    overflow: hidden; /* 이미지가 부모 요소를 넘치지 않도록 */
-    border-radius: 15px; /* 모서리 둥글게 */
-    margin-bottom: 20px;
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+  height: auto; /* 자동 높이 */
+  overflow: hidden; /* 이미지가 부모 요소를 넘치지 않도록 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  margin-bottom: 20px;
 }
 
 .sponsorImg3 {
-    width: 100%; /* 이미지 너비를 100%로 설정 */
-    height: auto; /* 자동 높이 */
-    object-fit: cover; /* 이미지 비율 유지하며 꽉 채우기 */
-    display: block; /* 이미지 하단 여백 제거 */
+  width: 100%; /* 이미지 너비를 100%로 설정 */
+  height: auto; /* 자동 높이 */
+  object-fit: cover; /* 이미지 비율 유지하며 꽉 채우기 */
+  display: block; /* 이미지 하단 여백 제거 */
 }
 
 .sponsorTxt3 {
-    font-size: 14px;
-    color: #707070;
-    text-align: justify;
-    line-height: 1.5; /* 행간(줄위아래틈) */
+  font-size: 14px;
+  color: #707070;
+  text-align: justify;
+  line-height: 1.5; /* 행간(줄위아래틈) */
 }
 
 /* 동물복지문제연구소 어웨이 카드 스타일 */
 .sponsorCard4 {
-    width: 95%;
-    max-width: 400px;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
+  width: 95%;
+  max-width: 400px;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  */
 }
 
 .sponsorCardBox4 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sponsorHeader4 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .sponsorButton4 {
-    padding: 10px 10px;
-    font-size: 14px;
-    background-color: #fffff0;
-    border: 1px solid #c7d2ad;
-    border-radius: 10px;
-    color: #855b3b;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 10px;
+  font-size: 14px;
+  background-color: #fffff0;
+  border: 1px solid #c7d2ad;
+  border-radius: 10px;
+  color: #855b3b;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .sponsorButton4:hover {
-    background-color: #a1b56a;
-    border: 1px solid  #fffff0;
-    border-radius: 10px;
-    color: #ffffff;
+  background-color: #a1b56a;
+  border: 1px solid #fffff0;
+  border-radius: 10px;
+  color: #ffffff;
 }
 
 .sponsorName4 {
-    font-size: 20px;
-    font-weight:bold;
-    color: #5a5a5a;
+  font-size: 20px;
+  font-weight: bold;
+  color: #5a5a5a;
 }
 
 .sponsorImgWrapper4 {
-    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
-    height: auto; /* 자동 높이 */
-    overflow: hidden; /* 이미지가 부모 요소를 넘치지 않도록 */
-    border-radius: 15px; /* 모서리 둥글게 */
-    margin-bottom: 20px;
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+  height: auto; /* 자동 높이 */
+  overflow: hidden; /* 이미지가 부모 요소를 넘치지 않도록 */
+  border-radius: 15px; /* 모서리 둥글게 */
+  margin-bottom: 20px;
 }
 
 .sponsorImg4 {
-    width: 100%; /* 이미지 너비를 100%로 설정 */
-    height: auto; /* 자동 높이 */
-    object-fit: cover; /* 이미지 비율 유지하며 꽉 채우기 */
-    display: block; /* 이미지 하단 여백 제거 */
+  width: 100%; /* 이미지 너비를 100%로 설정 */
+  height: auto; /* 자동 높이 */
+  object-fit: cover; /* 이미지 비율 유지하며 꽉 채우기 */
+  display: block; /* 이미지 하단 여백 제거 */
 }
 
 .sponsorTxt4 {
-    font-size: 14px;
-    color: #707070;
-    text-align: justify;
-    line-height: 1.5; /* 행간(줄위아래틈) */
+  font-size: 14px;
+  color: #707070;
+  text-align: justify;
+  line-height: 1.5; /* 행간(줄위아래틈) */
 }
-
