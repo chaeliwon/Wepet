@@ -3,9 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios"; // Axios 임포트 필요
 import "../css/MyPage.css";
-import chatbotIcon from "../assets/ChatIcon.png";
-import NaruIcon from "../assets/Naru.png";
-import MaruIcon from "../assets/Maru.png"; // 두 가지 버튼 이미지 추가
 import userprofile from "../assets/userprofile.png";
 import logout from "../assets/mylogout.png";
 import mydelete from "../assets/mydelete.png";
@@ -13,6 +10,7 @@ import myuseredit from "../assets/myuseredit.png";
 import mydonation from "../assets/mydonation.png";
 import api from "../api";
 import leaveDogIcon from "../assets/leavedog.png"; 
+import ChatbotButton from "../components/ChatbotButton";
 
 const MyPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -156,37 +154,8 @@ const MyPage = () => {
             </div>
           </div>
 
-          {/* 챗봇으로 이동하는 이미지 버튼 추가 */}
-          <div className="home-chatbot-button-container">
-            <img
-              src={chatbotIcon}
-              alt="챗봇 버튼"
-              className="home-chatbot-button"
-              onClick={toggleOptions} // 클릭 시 옵션 버튼 표시 상태를 변경
-            />
-
-            {/* 옵션 버튼 */}
-            {showOptions && (
-              <div className="home-chatbot-options">
-                <Link to="/chatbot" className="icon-wrapper">
-                  <img
-                    src={MaruIcon}
-                    alt="마루 챗봇"
-                    className="option-button maru-option"
-                  />
-                  <span className="icon-text">입양문의</span>
-                </Link>
-                <Link to="/chatbot2" className="icon-wrapper">
-                  <img
-                    src={NaruIcon}
-                    alt="나루 챗봇"
-                    className="option-button naru-option"
-                  />
-                  <span className="icon-text">케어문의</span>
-                </Link>
-              </div>
-            )}
-          </div>
+          {/* ChatbotButton 컴포넌트 추가 */}
+        <ChatbotButton /> 
 
           <div className="menu-list">
             <div className="menu-item" onClick={handleLogout}>

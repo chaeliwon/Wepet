@@ -98,7 +98,7 @@ const FindIdPassword = () => {
         </div>
 
         <button type="button" onClick={verifyCode} className="submit-btn">
-          비밀번호찾기
+          비밀번호 수정
         </button>
       </form>
     </div>

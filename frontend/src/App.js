@@ -18,9 +18,10 @@ import EditProfileForm from "./pages/EditProfileForm";
 import PetDetail from "./pages/PetDetail";
 import LikedPage from "./pages/LikedPage";
 import ChatBot from "./pages/ChatBot";
+import ChatBot2 from "./pages/ChatBot2";
 import FindIdPassword from "./pages/FindIdPassword";
 import EditPassword from "./pages/EditPassword";
-import Sponsor from "./pages/Sponsor"; // Sponsor 페이지 import 추가
+import Sponsor from "./pages/Sponsor"; 
 
 import "./App.css";
 
@@ -58,9 +59,10 @@ function App() {
                 <Route path="edit-profile" element={<EditProfileForm />} />
                 <Route path="liked" element={<LikedPage />} />
                 <Route path="chatbot" element={<ChatBot />} />
+                <Route path="chatbot2" element={<ChatBot2 />} />
                 <Route path="find-id-password" element={<FindIdPassword />} />
                 <Route path="edit-password" element={<EditPassword />} />
-                <Route path="sponsor" element={<Sponsor />} /> {/* 후원하기 페이지 경로 추가 */}
+                <Route path="sponsor" element={<Sponsor />} /> 
               </Route>
             </Routes>
           </div>
@@ -89,13 +91,15 @@ function DefaultHeader() {
     } else if (location.pathname === "/liked") {
       setPageTitle("찜페이지");
     } else if (location.pathname === "/chatbot") {
-      setPageTitle("상담페이지");
+      setPageTitle("입양상담페이지");
+    } else if (location.pathname === "/chatbot2") {
+      setPageTitle("행동상담페이지");
     } else if (location.pathname === "/find-id-password") {
       setPageTitle("비밀번호찾기페이지");
     } else if (location.pathname === "/edit-password") {
       setPageTitle("비밀번호 수정하기");
     } else if (location.pathname === "/sponsor") {
-      setPageTitle("후원하기"); // 후원하기 페이지 타이틀 설정
+      setPageTitle("후원하기"); 
     } else if (/^\/findpet\/petdetail\/[^/]+$/.test(location.pathname)) {
       setPageTitle("상세페이지");
     } else {
