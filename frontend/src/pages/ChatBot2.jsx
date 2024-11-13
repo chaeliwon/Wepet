@@ -23,7 +23,7 @@ const ChatBot2 = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const messagesRef = useRef(null);
-  const loadingImage = "/static/LoadingImg.png";
+  const loadingImage = "/static/NaruLoadingImg.png";
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
