@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import "../css/ChatBot2.css";
 import AiNaru from "../assets/AiNaru.png";
 import sendBtn from "../assets/sendbtn.png";
-import imgSend from "../assets/imgsend.png";
 import axios from "axios";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
 import api from "../api";
 
 const ChatBot2 = () => {
@@ -24,23 +20,29 @@ const ChatBot2 = () => {
   ]);
   const [input, setInput] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const messagesRef = useRef(null);
-  const navigate = useNavigate();
   const loadingImage = "/static/LoadingImg.png";
 
   useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
     api
       .get("/user/checkLoginStatus", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         withCredentials: true,
       })
       .then((response) => {
         if (response.data.isLoggedIn) {
           setIsLoggedIn(true);
+          setUserId(response.data.userId);
         } else {
           setIsLoggedIn(false);
+          setUserId(null);
         }
       })
       .catch((error) => {
@@ -48,6 +50,10 @@ const ChatBot2 = () => {
         setIsLoggedIn(false);
       });
   }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+  });
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
@@ -58,12 +64,6 @@ const ChatBot2 = () => {
       e.preventDefault();
       sendMessage();
     }
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
   };
 
   const cancelImagePreview = () => {
@@ -86,43 +86,20 @@ const ChatBot2 = () => {
     setInput("");
 
     try {
+      const token = localStorage.getItem("jwtToken");
       const response = await axios.post(
-        "https://1ylnvxbbb9.execute-api.ap-northeast-2.amazonaws.com/search_by_text",
-        { text: input }
+        "https://1ylnvxbbb9.execute-api.ap-northeast-2.amazonaws.com/openai/chat",
+        { text: input, user_id: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // JWT 토큰 추가
+          },
+        }
       );
-
-      const similarPetsList = response.data.similar_pets.map((pet) => ({
-        num: pet.pet_num,
-        imgUrl: pet.pet_img,
-      }));
 
       const botReply = (
         <div>
-          <p>이 친구들은 어떠세요?</p>
-          <Swiper
-            slidesPerView={2}
-            centeredSlides={false}
-            spaceBetween={5}
-            grabCursor={true}
-            pagination={{ clickable: true }}
-            modules={[Pagination]}
-            className="chatMySwiper2"
-          >
-            {similarPetsList.map((pet, index) => (
-              <SwiperSlide
-                key={index}
-                onClick={() =>
-                  window.open(`/findpet/petdetail/${pet.num}`, "_blank")
-                }
-              >
-                <img
-                  src={pet.imgUrl}
-                  alt={`유사한 동물 ${index + 1}`}
-                  className="swiper-pet-img2"
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <p>{response}</p>
         </div>
       );
 
@@ -142,109 +119,6 @@ const ChatBot2 = () => {
         {
           sender: "bot",
           text: "찾고 싶은 동물의 특징을 적어주세요!",
-          time: currentTime,
-        },
-      ]);
-    }
-    setShowModal(false);
-  };
-
-  const sendImage = async () => {
-    if (!selectedFile) return;
-
-    setShowModal(true);
-
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    const currentTime = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    setMessages((prev) => [
-      ...prev,
-      {
-        sender: "user",
-        text: (
-          <img
-            src={previewUrl}
-            alt="이미지 전송 중..."
-            className="pet-img2"
-            style={{ maxWidth: "100px", borderRadius: "8px" }}
-          />
-        ),
-        time: currentTime,
-        isHtml: true,
-      },
-    ]);
-
-    setSelectedFile(null);
-    setPreviewUrl(null);
-
-    try {
-      const response = await axios.post(
-        "https://1ylnvxbbb9.execute-api.ap-northeast-2.amazonaws.com/search_by_image",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      console.log(response);
-
-      const similarPetsList = response.data.similar_pets.map((pet) => ({
-        num: pet.pet_num,
-        imgUrl: pet.pet_img,
-      }));
-      const botReply = (
-        <div>
-          <p>이 친구들은 어떠세요?</p>
-          <Swiper
-            slidesPerView={2}
-            centeredSlides={false}
-            spaceBetween={5}
-            grabCursor={true}
-            pagination={{ clickable: true }}
-            modules={[Pagination]}
-            className="chatMySwiper2"
-          >
-            {similarPetsList.map((pet, index) => (
-              <SwiperSlide
-                key={index}
-                onClick={() =>
-                  window.open(`/findpet/petdetail/${pet.num}`, "_blank")
-                }
-              >
-                <img
-                  src={pet.imgUrl}
-                  alt={`유사한 동물 ${index + 1}`}
-                  className="swiper-pet-img2"
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      );
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "bot",
-          text: botReply,
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          isHtml: true,
-        },
-      ]);
-    } catch (error) {
-      console.error("이미지 전송 중 오류:", error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "bot",
-          text: "이미지를 전송할 수 없습니다. 다시 시도해주세요.",
           time: currentTime,
         },
       ]);
@@ -272,7 +146,7 @@ const ChatBot2 = () => {
       <div className="chat-window2">
         <div className="chat-header2">
           <img src={AiNaru} alt="뒤로" className="chat-icon2" />
-          <h1 className="chat-title2">AI 마루</h1>
+          <h1 className="chat-title2">AI 나루</h1>
         </div>
 
         <div className="chat-messages2" ref={messagesRef}>
@@ -299,34 +173,7 @@ const ChatBot2 = () => {
           ))}
         </div>
 
-        {previewUrl && (
-          <div className="image-preview2">
-            <img src={previewUrl} alt="미리보기" className="preview-image2" />
-            <button className="cancel-preview2" onClick={cancelImagePreview}>
-              X
-            </button>
-            <button onClick={sendImage} className="send-image-btn2">
-              전송
-            </button>
-          </div>
-        )}
-
         <div className="chat-input2">
-          <label htmlFor="file-input" style={{ display: "none" }}>
-            파일 선택
-          </label>
-          <input
-            type="file"
-            id="file-input"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-          <button
-            onClick={() => document.getElementById("file-input").click()}
-          >
-            <img src={imgSend} alt="이미지 전송" className="send-icon2" />
-          </button>
-
           <textarea
             value={input}
             onChange={handleInputChange}
