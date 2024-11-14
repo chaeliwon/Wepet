@@ -64,20 +64,26 @@ const PetDetail = () => {
             setLikedImages((prev) => new Set(prev).add(petNum));
           }
         } else {
-          throw new Error("Invalid response structure");
+          throw new Error("Invalid detail response structure");
         }
 
         // 다른 펫 목록 처리
-        const shuffleArray = (array) => {
-          for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-          }
-          return array;
-        };
+        if (petsResponse.data && Array.isArray(petsResponse.data.pets)) {
+          const shuffleArray = (array) => {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+          };
 
-        const shuffledPets = shuffleArray(petsResponse.data.pets).slice(0, 6);
-        setImages(shuffledPets);
+          const shuffledPets = shuffleArray(petsResponse.data.pets).slice(0, 6);
+          setImages(shuffledPets);
+        } else {
+          console.warn("No pets data available in response");
+          setImages([]);
+        }
       } catch (error) {
         console.error("데이터 로딩 실패:", error);
         setError(error.message);
