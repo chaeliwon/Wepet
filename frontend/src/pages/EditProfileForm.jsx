@@ -161,17 +161,19 @@ const EditProfileForm = () => {
         </form>
       ) : (
         <form onSubmit={handleSubmit}>
-          <label htmlFor="nickname" className="edit-label">
-            닉네임
-          </label>
-          <input
-            type="text"
-            id="nickname"
-            name="nickname"
-            value={nickname || ""}
-            onChange={handleNicknameChange}
-            placeholder="닉네임 변경 시 입력해주세요 (최대 8글자)"
-          />
+          <div className="changePwd">
+            <label htmlFor="nickname" className="edit-label">
+              닉네임
+            </label>
+            <input
+              type="text"
+              id="nickname"
+              name="nickname"
+              value={nickname || ""}
+              onChange={handleNicknameChange}
+              placeholder="닉네임 변경 시 입력해주세요 (최대 8글자)"
+            />
+          </div>
           {nicknameError && (
             <p className="validation-error">닉네임을 입력해주세요.</p>
           )}
