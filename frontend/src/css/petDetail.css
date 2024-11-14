@@ -119,11 +119,12 @@
   margin-top: 15px;
   font-size: 12px;
   text-align: left;
+  color: black;
 }
 .detailInfo {
   margin-top: 15px;
   text-align: left;
-  font-size: 9px;
+  font-size: 12px;
   color: #9c9b9b;
 }
 
