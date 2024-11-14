@@ -12,7 +12,7 @@ const ChatBot2 = () => {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "반가워, 냥!",
+      text: "반가워, 냥!😺\n\n난 반려동물의 마음을 읽어주는 행동분석 AI 나루야!\n\n우리 아이가 이상한 행동을 하거나 평소와 다르게 구는데 이해가 안 되니?\n\n꼬리를 이렇게 흔들거나,\n갑자기 벽을 긁더니 달려간다거나,\n새벽에 갑자기 우다다다 뛰어다닌다거나...\n\n그럴 땐 언제든 나한테 말해줘!\n행동의 숨은 의미를 쉽게 풀이해줄게 🐱\n\n반려동물의 행동이 궁금하다면, 지금 바로 물어봐 냥!",
       time: new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
