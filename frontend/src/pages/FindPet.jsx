@@ -53,8 +53,8 @@ const FindPet = () => {
         return array;
       };
 
-      // 데이터를 무작위로 섞고 54장으로 제한
-      const shuffledPets = shuffleArray(response.data.pets).slice(0, 54);
+      // 데이터를 무작위로 섞음
+      const shuffledPets = shuffleArray(response.data.pets);
       // const shuffledPets = response.data.pets.slice(0, 150); // 찜하기 기능 확인용
 
       setImages(shuffledPets);
