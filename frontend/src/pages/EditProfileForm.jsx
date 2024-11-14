@@ -169,6 +169,7 @@ const EditProfileForm = () => {
               type="text"
               id="nickname"
               name="nickname"
+              className="changePwdinput"
               value={nickname || ""}
               onChange={handleNicknameChange}
               placeholder="닉네임 변경 시 입력해주세요 (최대 8글자)"
