@@ -148,7 +148,7 @@ body {
 .detailSwiper .swiper-slide {
   text-align: center;
   font-size: 10px;
-  background: #fff;
+  background: transparent;
 
   /* Center slide text vertically */
   display: flex;
