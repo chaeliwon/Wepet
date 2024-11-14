@@ -142,7 +142,9 @@ const PetDetail = () => {
     <div className="modal-overlay">
       <div className="detail-modal-content">
         <p>{message}</p>
-        <button onClick={onClose}>닫기</button>
+        <button className="modal-close-btn" onClick={onClose}>
+          닫기
+        </button>
       </div>
     </div>
   );
@@ -166,7 +168,13 @@ const PetDetail = () => {
 
   return (
     <div className="petDetail">
-      {showModal && <Modal message="로그인을 해주세요" onClose={closeModal} />}
+      {showModal && (
+        <Modal
+          message="로그인을 해주세요"
+          className="modal-text"
+          onClose={closeModal}
+        />
+      )}
       {loading && <div>로딩중...</div>}
       {error && <div>에러 발생: {error}</div>}
       {!loading && !error && petDetail && petDetail.pet && (
