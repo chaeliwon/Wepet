@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/Homepage.css";
 import logo from "../assets/movelogo.png";
@@ -6,16 +7,14 @@ import api from "../api";
 import MaruIcon from "../assets/Maru.png";
 import NaruIcon from "../assets/Naru.png";
 import "../css/ChatbotButton.css";
-// Swiper imports
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 
 const Homepage = () => {
+  const [images, setImages] = useState([]);
   const [showOptions] = useState(true);
-  const [pets, setPets] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const nav = useNavigate();
 
@@ -58,17 +57,17 @@ const Homepage = () => {
     try {
       const response = await api.get("/main");
       const petsData = response.data.images.map((image, index) => ({
-        image: image,
-        num: response.data.nums[index],
+        pet_img: image,
+        pet_num: response.data.nums[index],
       }));
-      setPets(petsData);
+      setImages(petsData); // 이미지 상태 업데이트
     } catch (error) {
       console.error("유기동물 정보 가져오기 실패:", error);
     }
   };
 
   const moveDetail = (pet) => {
-    nav(`/findpet/petdetail/${pet.num}`);
+    nav(`/findpet/petdetail/${pet.pet_num}`);
   };
 
   return (
@@ -128,23 +127,23 @@ const Homepage = () => {
       )}
 
       {/* Swiper 슬라이더 */}
-      <div className="swiper-container-home">
-        <Swiper
-          modules={[Pagination, Navigation]}
-          spaceBetween={20}
-          slidesPerView={1}
-          navigation
-          pagination={{ clickable: true }}
-        >
-          {pets.map((pet, index) => (
-            <SwiperSlide key={index} onClick={() => moveDetail(pet)}>
-              <div className="swiper-slide-content-home">
-                <img src={pet.image} alt="유기동물 사진" className="swiper-slide-image-home" />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      <Swiper
+        slidesPerView={3}
+        centeredSlides={true}
+        spaceBetween={30}
+        pagination={{
+          type: "fraction",
+        }}
+        navigation={true}
+        modules={[Pagination, Navigation]}
+        className="detailSwiper"
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={image.pet_num || index}>
+            <img src={image.pet_img} alt="유기동물 사진" onClick={() => moveDetail(image)} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };
