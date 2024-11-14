@@ -141,8 +141,6 @@ const EditProfileForm = () => {
 
   return (
     <div className="homepage-background">
-      <h1 className="edit-title">회원 조회 / 수정</h1>
-
       {userType === "unknown" ? (
         <p>로딩 중...</p>
       ) : userType === "normal" && !checkPwdstate ? (
