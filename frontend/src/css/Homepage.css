@@ -164,3 +164,28 @@ a {
 .bold-text-naru {
   font-weight: bold;
 }
+
+/* 찜페이지 swiper */
+.swiper-container-home {
+  width: 100%;
+  height: 150px; /* 또는 원하는 높이 */
+  padding: 20px;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 0;
+  z-index: 10; /* 다른 요소보다 위에 표시 */
+}
+
+.swiper-slide-content-home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide-image-home {
+  width: 100%;
+  height: auto;
+  max-width: 250px;
+  border-radius: 10px;
+  object-fit: cover;
+}

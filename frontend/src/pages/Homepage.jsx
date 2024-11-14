@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/Homepage.css";
 import logo from "../assets/movelogo.png";
-import { useNavigate } from "react-router-dom";
 import api from "../api";
 import MaruIcon from "../assets/Maru.png";
 import NaruIcon from "../assets/Naru.png";
 import "../css/ChatbotButton.css";
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Pagination, Navigation } from "swiper/modules";
 
 const Homepage = () => {
   const [showOptions] = useState(true);
@@ -121,6 +126,25 @@ const Homepage = () => {
           </div>
         </div>
       )}
+
+      {/* Swiper 슬라이더 */}
+      <div className="swiper-container-home">
+        <Swiper
+          modules={[Pagination, Navigation]}
+          spaceBetween={20}
+          slidesPerView={1}
+          navigation
+          pagination={{ clickable: true }}
+        >
+          {pets.map((pet, index) => (
+            <SwiperSlide key={index} onClick={() => moveDetail(pet)}>
+              <div className="swiper-slide-content-home">
+                <img src={pet.image} alt="유기동물 사진" className="swiper-slide-image-home" />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     </div>
   );
 };
