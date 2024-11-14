@@ -216,7 +216,7 @@ const SignupForm = () => {
     <div className="signup-container">
       <h1 className="signup-title">회원가입</h1>
       <p className="signup-subtitle">회원이 되어 멍냥이들을 도와주세요!</p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="signup-form">
         <label htmlFor="nickname" className="signup-label">
           닉네임
         </label>
