@@ -127,23 +127,25 @@ const Homepage = () => {
       )}
 
       {/* Swiper 슬라이더 */}
-      <Swiper
-        slidesPerView={3}
-        centeredSlides={true}
-        spaceBetween={30}
-        pagination={{
-          type: "fraction",
-        }}
-        navigation={true}
-        modules={[Pagination, Navigation]}
-        className="detailSwiper"
-      >
-        {images.map((image, index) => (
-          <SwiperSlide key={image.pet_num || index}>
-            <img src={image.pet_img} alt="유기동물 사진" onClick={() => moveDetail(image)} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      <div className="homepage-swiper-container">
+        <Swiper
+          slidesPerView={3}
+          centeredSlides={true}
+          spaceBetween={30}
+          pagination={{
+            type: "fraction",
+          }}
+          navigation={true}
+          modules={[Pagination, Navigation]}
+          className="homepage-swiper"
+        >
+          {images.map((image, index) => (
+            <SwiperSlide key={image.pet_num || index}>
+              <img src={image.pet_img} alt="유기동물 사진" onClick={() => moveDetail(image)} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     </div>
   );
 };

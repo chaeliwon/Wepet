@@ -23,30 +23,30 @@ const ChatbotButton = () => {
 
       {showOptions && (
         <div className="home-chatbot-options">
-          <Link to="/chatbot" className="icon-wrapper">
-            <div className="balloon">
+          <Link to="/chatbot" className="icon-wrapper-botbtn">
+            <div className="balloon-botbtn">
               <img
                 src={`${process.env.PUBLIC_URL}/static/TxtMessage.png`}
                 alt="말풍선"
-                className="balloon-image"
+                className="balloon-image-botbtn"
               />
-              <span className="balloon-text">
+              <span className="balloon-text-botbtn">
                 저는 입양매칭을 도와주는 <br />
-                <span className="bold-text">AI마루</span>입니다! 멍!
+                <span className="bold-text-botbtn">AI마루</span>입니다! 멍!
               </span>
             </div>
             <img src={MaruIcon} alt="마루 챗봇" className="option-button maru-option" />
           </Link>
-          <Link to="/chatbot2" className="icon-wrapper">
+          <Link to="/chatbot2" className="icon-wrapper-botbtn">
             <div className="balloon">
               <img
                 src={`${process.env.PUBLIC_URL}/static/TxtMessage.png`}
                 alt="말풍선"
-                className="balloon-image"
+                className="balloon-image-botbtn"
               />
-              <span className="balloon-text">
+              <span className="balloon-text-botbtn">
                 나는 문제행동을 분석하는 <br />
-                <span className="bold-text">AI나루</span>다, 냥!
+                <span className="bold-text-botbtn">AI나루</span>다, 냥!
               </span>
             </div>
             <img src={NaruIcon} alt="나루 챗봇" className="option-button naru-option" />

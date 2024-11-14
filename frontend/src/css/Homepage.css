@@ -166,3 +166,43 @@ a {
   font-weight: bold;
 }
 
+/* Swiper 스타일 */
+.homepage-swiper-container {
+  width: 100%;
+  height: 150px; /* 슬라이드 높이 */
+  padding: 20px;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 0;
+  z-index: 10; /* 다른 요소보다 위에 표시 */
+}
+
+.homepage-swiper .swiper-slide {
+  text-align: center;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+}
+
+.homepage-swiper .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.homepage-swiper .swiper-button-prev,
+.homepage-swiper .swiper-button-next {
+  color: white !important;
+  background-color: #b8ce86;
+  width: 15px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.homepage-swiper .swiper-pagination-fraction {
+  font-size: 12px;
+}

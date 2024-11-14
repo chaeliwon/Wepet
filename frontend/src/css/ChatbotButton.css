@@ -27,7 +27,7 @@
   gap: 10px;
 }
 
-.icon-wrapper {
+.icon-wrapper-botbtn {
   position: relative;
   display: flex;
   align-items: center;
@@ -40,7 +40,7 @@
   padding-bottom: 5px;
 }
 
-.balloon {
+.balloon-botbtn {
   position: absolute;
   right: 50px;
   bottom : 20px;
@@ -48,12 +48,12 @@
   align-items: center;
 }
 
-.balloon-image {
+.balloon-image-botbtn {
   width: 185px;
   height: 55px;
 }
 
-.balloon-text {
+.balloon-text-botbtn {
   position: absolute;
   font-size: 14px;
   color: #555;
@@ -62,6 +62,6 @@
   line-height: 1.2;
 }
 
-.bold-text {
+.bold-text-botbtn {
   font-weight: bold;
 }
