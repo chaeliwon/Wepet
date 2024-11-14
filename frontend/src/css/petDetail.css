@@ -182,7 +182,12 @@ body {
 
 .detailSwiper .swiper-button-prev,
 .detailSwiper .swiper-button-next {
-  color: #855b3b !important;
+  color: white !important;
+  background-color: #b8ce86;
+  width: 15px;
+  height: 20px;
+  --swiper-navigation-size: 10px;
+  border-radius: 5px;
 }
 
 .detailSwiper .swiper-pagination-fraction,
