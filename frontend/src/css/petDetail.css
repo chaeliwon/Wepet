@@ -194,4 +194,16 @@ body {
 
 .detail-modal-content {
   background-color: beige;
+  width: 200px;
+  height: 120px;
+  border-radius: 15px;
+}
+
+.modal-text {
+  margin-top: 30px;
+  position: relative;
+}
+.modal-close-btn {
+  cursor: pointer;
+  margin-bottom: 20px;
 }

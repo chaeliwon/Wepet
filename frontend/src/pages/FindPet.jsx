@@ -106,16 +106,24 @@ const FindPet = () => {
 
   const Modal = ({ message, onClose }) => (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className="find-modal-content">
         <p>{message}</p>
-        <button onClick={onClose}>닫기</button>
+        <button className="modal-close-btn" onClick={onClose}>
+          닫기
+        </button>
       </div>
     </div>
   );
 
   return (
     <div className="findPageBG">
-      {showModal && <Modal message="로그인을 해주세요" onClose={closeModal} />}
+      {showModal && (
+        <Modal
+          message="로그인을 해주세요"
+          onClose={closeModal}
+          className="modal-text"
+        />
+      )}
       {filterVisible && <div className="overlay" onClick={closeFilter}></div>}
       <input type="button" className="filter-button" onClick={toggleFilter} />
 
