@@ -21,8 +21,7 @@ const PetDetail = () => {
   const nav = useNavigate();
 
   const baseUrl = "https://main.d2agnx57wvpluz.amplifyapp.com";
-  const pathUrl = location.pathname;
-  const currentUrl = baseUrl + pathUrl;
+  const currentUrl = `${baseUrl}${location.pathname}`;
 
   useEffect(() => {
     const fetchPetDetail = async () => {
@@ -150,13 +149,14 @@ const PetDetail = () => {
   const closeModal = () => {
     setShowModal(false);
   };
-
-  const copyUrl = async (url) => {
+  // url복사
+  const copyUrl = async () => {
     try {
-      await navigator.clipboard.writeText(url);
-      alert("복사완료");
+      await navigator.clipboard.writeText(currentUrl);
+      alert("URL이 복사되었습니다.");
     } catch (error) {
-      alert("복사실패");
+      console.error("URL 복사 실패:", error);
+      alert("URL 복사에 실패했습니다.");
     }
   };
 
@@ -210,9 +210,7 @@ const PetDetail = () => {
                   <img
                     className="detailIcon"
                     src="/static/share.png"
-                    onClick={() => {
-                      copyUrl(currentUrl);
-                    }}
+                    onClick={copyUrl}
                   />
                 </div>
                 <div className="detailHashTag">
