@@ -77,17 +77,33 @@ app.use("/like", likeRouter);
 
 // 에러 핸들링 미들웨어
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    message: "Internal Server Error",
-    error: err.message,
+  console.error("Error details:", {
+    message: err.message,
+    stack: err.stack,
+    type: err.name,
   });
+
+  // Lambda 환경에 맞는 에러 응답 형식
+  return {
+    statusCode: err.status || 500,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": FRONTEND_ORIGIN,
+      "Access-Control-Allow-Credentials": "true",
+    },
+    body: JSON.stringify({
+      error: err.message || "Internal Server Error",
+      status: err.status || 500,
+    }),
+  };
 });
 
 // Lambda 핸들러
 const handler = serverless(app);
 
 module.exports.handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
   console.log("Incoming event:", JSON.stringify(event, null, 2));
 
   const corsHeaders = {
@@ -121,39 +137,54 @@ module.exports.handler = async (event, context) => {
       }
     }
 
-    // Express 앱 처리
-    const response = await handler(event, context);
+    // 카카오 콜백 경로 특별 처리
+    if (event.rawPath.includes("/auth/kakao/callback")) {
+      console.log("Processing kakao callback");
+      const response = await handler(event, context);
+      console.log("Kakao callback response:", response);
 
-    // 로깅 추가
-    console.log("Raw response:", response);
+      if (response.body && typeof response.body === "string") {
+        try {
+          const parsedBody = JSON.parse(response.body);
+          if (parsedBody.token) {
+            console.log("Token found in response:", parsedBody.token);
+            return {
+              statusCode: 302,
+              headers: {
+                ...corsHeaders,
+                Location: `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${parsedBody.token}`,
+                "Cache-Control": "no-cache",
+              },
+            };
+          }
+        } catch (e) {
+          console.error("Error parsing response body:", e);
+        }
+      }
 
-    // 카카오 로그인 리다이렉션 특별 처리
-    if (event.path === "/auth/kakao") {
-      console.log("Processing Kakao auth request");
-      const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
-        process.env.KAKAO_CLIENT_ID
-      }&redirect_uri=${encodeURIComponent(
-        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
-      )}`;
-
-      console.log("Redirecting to:", kakaoAuthURL);
+      // 기본 리다이렉션
       return {
         statusCode: 302,
         headers: {
-          Location: kakaoAuthURL,
           ...corsHeaders,
+          Location:
+            "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed",
+          "Cache-Control": "no-cache",
         },
       };
     }
 
-    // 일반적인 리다이렉트 응답 처리
+    // Express 앱 처리
+    const response = await handler(event, context);
+
+    // 리다이렉트 응답 처리
     if (response.statusCode === 302 && response.headers?.Location) {
       console.log("Processing redirect to:", response.headers.Location);
       return {
         statusCode: 302,
         headers: {
-          Location: response.headers.Location,
           ...corsHeaders,
+          Location: response.headers.Location,
         },
       };
     }
@@ -187,7 +218,7 @@ module.exports.handler = async (event, context) => {
           : JSON.stringify(response.body || ""),
     };
 
-    console.log("Final response:", finalResponse);
+    console.log("Final response headers:", finalResponse.headers);
     return finalResponse;
   } catch (error) {
     console.error("Handler error:", error);
