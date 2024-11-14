@@ -2,17 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/Homepage.css";
 import logo from "../assets/movelogo.png";
-import jelly from "../assets/jelly.png";
-import slidecat from "../assets/slidecat2.jpg";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-cards";
-import { EffectCards } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
-import ChatbotButton from "../components/ChatbotButton"; // ChatbotButton 컴포넌트 추가
+import MaruIcon from "../assets/Maru.png";
+import NaruIcon from "../assets/Naru.png";
+import "../css/ChatbotButton.css";
 
 const Homepage = () => {
+  const [showOptions] = useState(true);
   const [pets, setPets] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const nav = useNavigate();
@@ -22,7 +19,6 @@ const Homepage = () => {
     logInState();
   }, []);
 
-  // 로그인 상태 확인 함수 수정
   const logInState = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -38,12 +34,10 @@ const Homepage = () => {
     }
   };
 
-  // 로그아웃 함수 수정
   const logout = async () => {
     try {
       const response = await api.post("/user/logout");
       if (response.data.result === "로그아웃 성공") {
-        // 로컬 스토리지에서 토큰 제거
         localStorage.removeItem("token");
         setIsLoggedIn(false);
         nav("/");
@@ -76,75 +70,56 @@ const Homepage = () => {
     <div className="homepage-background">
       <img src={logo} alt="We Pet Logo" className="logo" />
 
-      <Swiper
-        effect={"cards"}
-        grabCursor={true}
-        modules={[EffectCards]}
-        className="mySwiper"
-      >
-        {pets.map((data, index) => (
-          <SwiperSlide key={data.num}>
-            <img
-              key={pets.num || index}
-              src={data.image}
-              alt="동물사진"
-              className="swiperImages"
-              onClick={() => moveDetail(data)}
-            />
-          </SwiperSlide>
-        ))}
-        <SwiperSlide>
-          <Link to="/findpet">
-            <div className="swiperImagesLink">
-              <img
-                src={slidecat}
-                className="swiperImagesLinkImg"
-                alt="둘러보기"
-              />
-              <p className="swiperImagesLinkTxt">
-                둘러보기
-                <br />
-                <br />
-                <img
-                  className="swiperImagesLinkIcon"
-                  src="./static/Arrow-right-circle.png"
-                  alt=""
-                />
-              </p>
-            </div>
-          </Link>
-        </SwiperSlide>
-      </Swiper>
-
-      {/* ChatbotButton 컴포넌트 추가 */}
-      <ChatbotButton />
-
-      <div className="bottom-buttons">
-        <Link to="/findpet">
-          <button className="bottom-btn">
-            둘러보기
-            <img src={jelly} alt="paw" className="jelleyicon" />
-          </button>
-        </Link>
+      <div className="login-buttons">
         {isLoggedIn ? (
-          <button className="bottom-btn" onClick={logout}>
-            로그아웃
-            <img src={jelly} alt="paw" className="jelleyicon" />
+          <button className="login-btn-home" onClick={logout}>
+            LOGOUT
           </button>
         ) : (
           <Link to="/login">
-            <button className="bottom-btn">
-              로그인
-              <img src={jelly} alt="paw" className="jelleyicon" />
-            </button>
+            <button className="login-btn-home">LOGIN</button>
           </Link>
         )}
       </div>
 
-      {!isLoggedIn && (
-        <Link to="/signup">
-          <button className="signup-small-btn">회원가입 하기</button>
-        </Link>
+      {showOptions && (
+        <div className="home-chatbot-options">
+          {/* Maru */}
+          <div className="maru-wrapper">
+            <Link to="/chatbot" className="icon-wrapper">
+              <div className="balloon-maru">
+                <img
+                  src={`${process.env.PUBLIC_URL}/static/maru-balloon.png`}
+                  alt="마루 말풍선"
+                  className="balloon-image-maru"
+                />
+                <span className="balloon-text-maru">
+                  저는 입양매칭을 도와주는 <br />
+                  <span className="bold-text-maru">AI마루</span>입니다! 멍!
+                </span>
+              </div>
+              <img src={MaruIcon} alt="마루 챗봇" className="option-button maru-option-home" />
+            </Link>
+          </div>
+
+          {/* Naru */}
+          <div className="naru-wrapper">
+            <Link to="/chatbot2" className="icon-wrapper">
+              <img src={NaruIcon} alt="나루 챗봇" className="option-button naru-option-home" />
+              <div className="balloon-naru">
+                <img
+                  src={`${process.env.PUBLIC_URL}/static/naru-balloon.png`}
+                  alt="나루 말풍선"
+                  className="balloon-image-naru"
+                />
+                <span className="balloon-text-naru">
+                  나는 문제행동을 분석하는 <br />
+                  <span className="bold-text-naru">AI나루</span>다, 냥!
+                </span>
+              </div>
+            </Link>
+          </div>
+        </div>
       )}
     </div>
   );
