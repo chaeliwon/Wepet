@@ -191,3 +191,7 @@ body {
 .detailSwiper .swiper-pagination-bullets.swiper-pagination-horizontal {
   font-size: 12px;
 }
+
+.detail-modal-content {
+  background-color: beige;
+}

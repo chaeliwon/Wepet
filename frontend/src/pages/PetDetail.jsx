@@ -89,7 +89,7 @@ const PetDetail = () => {
       };
 
       // 데이터를 무작위로 섞고 6장으로 제한
-      const shuffledPets = shuffleArray(response.data.pets).slice(0, 10);
+      const shuffledPets = shuffleArray(response.data.pets).slice(0, 6);
 
       setImages(shuffledPets);
       // console.log("Fetched Pets:", shuffledPets);
@@ -140,7 +140,7 @@ const PetDetail = () => {
   // 모달창
   const Modal = ({ message, onClose }) => (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className="detail-modal-content">
         <p>{message}</p>
         <button onClick={onClose}>닫기</button>
       </div>
