@@ -3,6 +3,7 @@ const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const querystring = require("querystring");
 
 // 상수로 클라이언트 ID 설정
 const KAKAO_CLIENT_ID = "26a4b372c5672f44eb37762116d25ca8";
@@ -49,97 +50,111 @@ module.exports = function () {
   // Kakao OAuth
   router.get("/kakao", (req, res) => {
     try {
-      console.log("Starting Kakao authentication");
-
-      // 카카오 로그인 URL 직접 구성
-      const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
-      const CLIENT_ID = "26a4b372c5672f44eb37762116d25ca8"; // 하드코딩된 클라이언트 ID
-      const REDIRECT_URI = encodeURIComponent(
+      const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(
         "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
-      );
+      )}`;
 
-      const kakaoAuthURL = `${KAKAO_AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
-
-      console.log("Redirecting to:", kakaoAuthURL);
-
-      // Lambda 응답 형식
-      const response = {
+      // Lambda 환경에 맞는 응답 형식 사용
+      return {
         statusCode: 302,
         headers: {
           Location: kakaoAuthURL,
           "Access-Control-Allow-Origin":
             "https://main.d2agnx57wvpluz.amplifyapp.com",
           "Access-Control-Allow-Credentials": "true",
-          "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Cache-Control": "no-cache",
         },
-        body: JSON.stringify({ redirectUrl: kakaoAuthURL }),
       };
-
-      res.status(302).set(response.headers).json(response);
     } catch (error) {
       console.error("Kakao auth error:", error);
-      res.status(500).json({
-        error: "Authentication failed",
-        details: error.message,
-      });
+      return {
+        statusCode: 302,
+        headers: {
+          Location:
+            "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed",
+          "Access-Control-Allow-Origin":
+            "https://main.d2agnx57wvpluz.amplifyapp.com",
+          "Access-Control-Allow-Credentials": "true",
+        },
+      };
     }
   });
 
+  // authRouter.js의 카카오 콜백 부분 수정
   router.get("/kakao/callback", async (req, res) => {
-    const { code } = req.query;
+    console.log("Kakao callback reached"); // 추가된 로그
+
     try {
-      console.log("Kakao callback received code:", code);
+      const code = req.query.code;
+      console.log("Received code:", code);
 
-      const clientId = KAKAO_CLIENT_ID || process.env.KAKAO_CLIENT_ID;
+      if (!code) {
+        throw new Error("Authorization code not found");
+      }
 
+      // 카카오 토큰 요청
       const tokenResponse = await axios({
         method: "POST",
         url: "https://kauth.kakao.com/oauth/token",
         headers: {
-          "content-type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
         },
-        data: {
+        data: querystring.stringify({
           grant_type: "authorization_code",
-          client_id: clientId,
+          client_id: KAKAO_CLIENT_ID,
           redirect_uri:
             "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback",
-          code,
-        },
+          code: code,
+        }),
       });
 
-      const accessToken = tokenResponse.data.access_token;
+      console.log("Token response:", tokenResponse.data);
 
+      // 카카오 사용자 정보 요청
       const userResponse = await axios({
         method: "GET",
         url: "https://kapi.kakao.com/v2/user/me",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${tokenResponse.data.access_token}`,
         },
       });
 
-      const kakaoUser = userResponse.data;
+      console.log("Kakao user info:", userResponse.data);
 
-      // JWT 토큰 생성 시 구조를 Google 로그인과 맞춤
+      // JWT 토큰 생성
       const token = jwt.sign(
         {
-          userId: kakaoUser.id.toString(),
-          userNick: kakaoUser.properties?.nickname || "카카오 사용자",
+          userId: userResponse.data.id.toString(),
+          userNick: userResponse.data.properties.nickname,
         },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
 
-      // 리다이렉션을 Google 로그인과 동일한 방식으로 변경
-      const redirectUrl = `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${token}`;
-      return res.redirect(redirectUrl);
+      console.log("Generated JWT token:", token); // 추가된 로그
+
+      // Lambda 환경에서의 응답
+      return {
+        statusCode: 302,
+        headers: {
+          Location: `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${token}`,
+          "Access-Control-Allow-Origin":
+            "https://main.d2agnx57wvpluz.amplifyapp.com",
+          "Access-Control-Allow-Credentials": "true",
+          "Cache-Control": "no-cache",
+        },
+      };
     } catch (error) {
       console.error("Kakao callback error:", error);
-      console.error("Error details:", error.response?.data || error.message);
-      res.redirect(
-        "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed"
-      );
+      return {
+        statusCode: 302,
+        headers: {
+          Location:
+            "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed",
+          "Access-Control-Allow-Origin":
+            "https://main.d2agnx57wvpluz.amplifyapp.com",
+          "Access-Control-Allow-Credentials": "true",
+        },
+      };
     }
   });
 

@@ -22,16 +22,19 @@ const LoginForm = () => {
 
   // Kakao 로그인
   const handleKakaoLogin = () => {
-    // 카카오 로그인 URL을 직접 구성
     const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
     const CLIENT_ID = "26a4b372c5672f44eb37762116d25ca8";
     const REDIRECT_URI = encodeURIComponent(
       "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
     );
+    const STATE = encodeURIComponent(Math.random().toString(36).substring(7));
 
-    const kakaoAuthURL = `${KAKAO_AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
+    // state 파라미터 추가
+    const kakaoAuthURL = `${KAKAO_AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
 
-    // 직접 URL로 리다이렉션
+    // localStorage에 state 저장
+    localStorage.setItem("kakaoAuthState", STATE);
+
     window.location.href = kakaoAuthURL;
   };
 
@@ -45,18 +48,15 @@ const LoginForm = () => {
 
   // URL에서 JWT 토큰 추출 및 저장
   useEffect(() => {
-    console.log("Checking URL for token");
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
-    console.log("Token from URL:", token);
+    const error = urlParams.get("error");
 
     if (token) {
-      console.log("Token found, storing in localStorage");
       localStorage.setItem("token", token);
-      console.log("Navigating to home page");
       navigate("/");
-    } else {
-      console.log("No token found in URL");
+    } else if (error) {
+      setLoginFail(true);
     }
   }, [navigate]);
 
@@ -87,25 +87,6 @@ const LoginForm = () => {
       console.log("Cleaning up message listener");
       window.removeEventListener("message", handleSocialLogin);
     };
-  }, [navigate]);
-
-  // 소셜 로그인 완료 후 처리를 위한 이벤트 리스너
-  useEffect(() => {
-    const handleSocialLogin = (event) => {
-      if (
-        event.origin !==
-        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com"
-      )
-        return;
-
-      if (event.data.token) {
-        localStorage.setItem("token", event.data.token);
-        navigate("/");
-      }
-    };
-
-    window.addEventListener("message", handleSocialLogin);
-    return () => window.removeEventListener("message", handleSocialLogin);
   }, [navigate]);
 
   const handleEmailChange = (e) => {
