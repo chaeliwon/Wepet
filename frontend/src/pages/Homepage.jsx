@@ -87,10 +87,10 @@ const Homepage = () => {
       </div>
 
       {showOptions && (
-        <div className="home-chatbot-options">
+        <div className="home-chatbot-options-home">
           {/* Maru */}
-          <div className="maru-wrapper">
-            <Link to="/chatbot" className="icon-wrapper">
+          <div className="maru-wrapper-home">
+            <Link to="/chatbot" className="icon-wrapper-home">
               <div className="balloon-maru">
                 <img
                   src={`${process.env.PUBLIC_URL}/static/maru-balloon.png`}
@@ -107,8 +107,8 @@ const Homepage = () => {
           </div>
 
           {/* Naru */}
-          <div className="naru-wrapper">
-            <Link to="/chatbot2" className="icon-wrapper">
+          <div className="naru-wrapper-home">
+            <Link to="/chatbot2" className="icon-wrapper-home">
               <img src={NaruIcon} alt="나루 챗봇" className="option-button naru-option-home" />
               <div className="balloon-naru">
                 <img
@@ -127,7 +127,7 @@ const Homepage = () => {
       )}
 
       {/* Swiper 슬라이더 */}
-      <div className="homepage-swiper-container">
+      <div className="homepage-swiper-container-home">
         <Swiper
           slidesPerView={3}
           centeredSlides={true}
@@ -137,7 +137,7 @@ const Homepage = () => {
           }}
           navigation={true}
           modules={[Pagination, Navigation]}
-          className="homepage-swiper"
+          className="homepage-swiper-home"
         >
           {images.map((image, index) => (
             <SwiperSlide key={image.pet_num || index}>

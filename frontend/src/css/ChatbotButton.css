@@ -1,4 +1,4 @@
-.home-chatbot-button-container {
+.home-chatbot-button-container-botbtn {
   position: absolute;
   right: 15px;
   bottom: 15px;
@@ -6,18 +6,18 @@
   filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
 }
 
-.home-chatbot-button {
+.home-chatbot-button-botbtn {
   width: 60px;
   height: 60px;
   cursor: pointer;
   transition: transform 0.2s;
 }
 
-.home-chatbot-button:hover {
+.home-chatbot-button-botbtn:hover {
   transform: scale(1.1);
 }
 
-.home-chatbot-options {
+.home-chatbot-options-botbtn {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -32,9 +32,11 @@
   display: flex;
   align-items: center;
 }
-
-.maru-option,
-.naru-option {
+.icon-wrapper-botbtn:hover{
+  transform: scale(1.1);
+}
+.maru-option-botbtn,
+.naru-option-botbtn {
   width: 50px;
   height: 50px;
   padding-bottom: 5px;

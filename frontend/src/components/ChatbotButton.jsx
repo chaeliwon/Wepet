@@ -13,16 +13,16 @@ const ChatbotButton = () => {
   };
 
   return (
-    <div className="home-chatbot-button-container">
+    <div className="home-chatbot-button-container-botbtn">
       <img
         src={chatbotIcon}
         alt="챗봇 버튼"
-        className="home-chatbot-button"
+        className="home-chatbot-button-botbtn"
         onClick={toggleOptions}
       />
 
       {showOptions && (
-        <div className="home-chatbot-options">
+        <div className="home-chatbot-options-botbtn">
           <Link to="/chatbot" className="icon-wrapper-botbtn">
             <div className="balloon-botbtn">
               <img
@@ -35,10 +35,10 @@ const ChatbotButton = () => {
                 <span className="bold-text-botbtn">AI마루</span>입니다! 멍!
               </span>
             </div>
-            <img src={MaruIcon} alt="마루 챗봇" className="option-button maru-option" />
+            <img src={MaruIcon} alt="마루 챗봇" className="option-button maru-option-botbtn" />
           </Link>
           <Link to="/chatbot2" className="icon-wrapper-botbtn">
-            <div className="balloon">
+            <div className="balloon-botbtn">
               <img
                 src={`${process.env.PUBLIC_URL}/static/TxtMessage.png`}
                 alt="말풍선"
@@ -49,7 +49,7 @@ const ChatbotButton = () => {
                 <span className="bold-text-botbtn">AI나루</span>다, 냥!
               </span>
             </div>
-            <img src={NaruIcon} alt="나루 챗봇" className="option-button naru-option" />
+            <img src={NaruIcon} alt="나루 챗봇" className="option-button naru-option-botbtn" />
           </Link>
         </div>
       )}
