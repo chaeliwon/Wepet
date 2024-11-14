@@ -122,8 +122,9 @@
 }
 .detailInfo {
   margin-top: 15px;
-
   text-align: left;
+  font-size: 9px;
+  color: #9c9b9b;
 }
 
 .detailBottomTxt {

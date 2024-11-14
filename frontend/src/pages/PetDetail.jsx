@@ -20,6 +20,10 @@ const PetDetail = () => {
   const loc = useLocation();
   const nav = useNavigate();
 
+  const baseUrl = "https://main.d2agnx57wvpluz.amplifyapp.com";
+  const pathUrl = location.pathname;
+  const currentUrl = baseUrl + pathUrl;
+
   useEffect(() => {
     const fetchPetDetail = async () => {
       try {
@@ -147,6 +151,15 @@ const PetDetail = () => {
     setShowModal(false);
   };
 
+  const copyUrl = async (url) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("복사완료");
+    } catch (error) {
+      alert("복사실패");
+    }
+  };
+
   let appendNumber = 4;
   let prependNumber = 1;
   let petInfo = petDetail?.pet || {};
@@ -194,8 +207,13 @@ const PetDetail = () => {
                     }`}
                     onClick={() => toggleLike(petDetail.pet.pet_num)}
                   ></div>
-                  <img className="detailIcon" src="/static/chat.png" alt="" />
-                  <img className="detailIcon" src="/static/share.png" alt="" />
+                  <img
+                    className="detailIcon"
+                    src="/static/share.png"
+                    onClick={() => {
+                      copyUrl(currentUrl);
+                    }}
+                  />
                 </div>
                 <div className="detailHashTag">
                   <span>
