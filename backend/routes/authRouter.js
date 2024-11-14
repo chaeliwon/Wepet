@@ -48,52 +48,42 @@ module.exports = function () {
 
   // Kakao OAuth
   router.get("/kakao", (req, res) => {
-    console.log("Handling Kakao auth request");
-    console.log("KAKAO_CLIENT_ID:", process.env.KAKAO_CLIENT_ID);
-
     try {
-      if (!process.env.KAKAO_CLIENT_ID) {
-        throw new Error("Missing KAKAO_CLIENT_ID");
-      }
+      console.log("Starting Kakao authentication");
 
-      const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
-        process.env.KAKAO_CLIENT_ID
-      }&redirect_uri=${encodeURIComponent(
+      // 카카오 로그인 URL 직접 구성
+      const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
+      const CLIENT_ID = "26a4b372c5672f44eb37762116d25ca8"; // 하드코딩된 클라이언트 ID
+      const REDIRECT_URI = encodeURIComponent(
         "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
-      )}`;
+      );
 
-      console.log("Generated Kakao Auth URL:", kakaoAuthURL);
+      const kakaoAuthURL = `${KAKAO_AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
 
-      // Express의 response 객체를 사용하지 않고 직접 Lambda 응답 객체 반환
-      if (!res.headersSent) {
-        const response = {
-          statusCode: 302,
-          headers: {
-            Location: kakaoAuthURL,
-            "Access-Control-Allow-Origin":
-              "https://main.d2agnx57wvpluz.amplifyapp.com",
-            "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type,Authorization",
-            "Access-Control-Allow-Credentials": "true",
-            "Cache-Control": "no-cache",
-          },
-          body: JSON.stringify({ url: kakaoAuthURL }),
-        };
-        console.log("Sending response:", response);
-        res.status(302).set(response.headers).send(response.body);
-      }
-    } catch (error) {
-      console.error("Kakao auth error:", error);
-      const errorResponse = {
-        statusCode: 500,
+      console.log("Redirecting to:", kakaoAuthURL);
+
+      // Lambda 응답 형식
+      const response = {
+        statusCode: 302,
         headers: {
+          Location: kakaoAuthURL,
           "Access-Control-Allow-Origin":
             "https://main.d2agnx57wvpluz.amplifyapp.com",
           "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Cache-Control": "no-cache",
         },
-        body: JSON.stringify({ error: error.message }),
+        body: JSON.stringify({ redirectUrl: kakaoAuthURL }),
       };
-      res.status(500).set(errorResponse.headers).json(errorResponse.body);
+
+      res.status(302).set(response.headers).json(response);
+    } catch (error) {
+      console.error("Kakao auth error:", error);
+      res.status(500).json({
+        error: "Authentication failed",
+        details: error.message,
+      });
     }
   });
 
