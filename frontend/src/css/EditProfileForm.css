@@ -33,6 +33,7 @@ form {
   padding: 10px;
   border-radius: 8px;
   align-items: center;
+  margin-top: 240px;
 }
 
 .edit-label {
@@ -100,4 +101,5 @@ input {
 .changePwd {
   width: 100%;
   text-align: left;
+  margin-top: 20px;
 }
