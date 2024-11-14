@@ -17,6 +17,10 @@ const BottomNaviBar = () => {
         return location.pathname === "/mypage"
           ? "/static/MyOn.png"
           : "/static/MyOff.png";
+      case "/findpet":
+        return location.pathname === "/findpet"
+          ? "/static/FindOn.png"
+          : "/static/FindOff.png";
     }
   };
   return (
@@ -29,6 +33,16 @@ const BottomNaviBar = () => {
             alt="찜 아이콘"
           />
           <span>찜</span>
+        </div>
+      </Link>
+      <Link to="/findpet">
+        <div className="naviContainer">
+          <img
+            className="naviIcon"
+            src={getIconSrc("/findpet")}
+            alt="둘러보기 아이콘"
+          />
+          <span>둘러보기</span>
         </div>
       </Link>
       <Link to="/">
