@@ -21,15 +21,32 @@ const LoginForm = () => {
   const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 
   // Kakao 로그인
-  const handleKakaoLogin = () => {
-    console.log("Initiating Kakao login");
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${
-      process.env.REACT_APP_KAKAO_CLIENT_ID
-    }&redirect_uri=${encodeURIComponent(
-      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
-    )}&response_type=code`;
+  const handleKakaoLogin = async () => {
+    try {
+      console.log("Starting Kakao login process");
+      const response = await fetch(
+        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao",
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
-    window.location.href = kakaoAuthUrl; // 팝업 대신 전체 페이지 리다이렉션
+      const data = await response.json();
+      console.log("Received response:", data);
+
+      if (response.status === 302 && data.url) {
+        console.log("Redirecting to:", data.url);
+        window.location.href = data.url;
+      } else if (response.headers.get("Location")) {
+        console.log("Redirecting to:", response.headers.get("Location"));
+        window.location.href = response.headers.get("Location");
+      } else {
+        console.error("No redirect URL found in response");
+      }
+    } catch (error) {
+      console.error("Error during Kakao login:", error);
+    }
   };
 
   // Google 로그인

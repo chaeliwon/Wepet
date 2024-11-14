@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
@@ -5,13 +6,11 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const serverless = require("serverless-http");
 
+// 다른 라우터들 import
 const userRouter = require("./routes/userRouter");
 const mainRouter = require("./routes/mainRouter");
-const authRouter = require("./routes/authRouter");
 const likeRouter = require("./routes/likeRouter");
 const findfetRouter = require("./routes/findfetRouter");
-
-require("./config/passport");
 
 const app = express();
 const FRONTEND_ORIGIN = "https://main.d2agnx57wvpluz.amplifyapp.com";
@@ -33,6 +32,12 @@ const corsOptions = {
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
+
+console.log("Environment variables:", {
+  KAKAO_CLIENT_ID: process.env.KAKAO_CLIENT_ID,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  JWT_SECRET: process.env.JWT_SECRET,
+});
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
@@ -56,10 +61,10 @@ app.use(
   })
 );
 
-// 환경 변수 로깅 추가
-console.log("Environment variables:", {
-  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+// authRouter 초기화 및 설정
+const authRouter = require("./routes/authRouter")({
   KAKAO_CLIENT_ID: process.env.KAKAO_CLIENT_ID,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   JWT_SECRET: process.env.JWT_SECRET,
 });
 
@@ -91,7 +96,7 @@ module.exports.handler = async (event, context) => {
     "Access-Control-Allow-Headers":
       "Content-Type,Authorization,X-Requested-With,Accept,Cookie",
     "Access-Control-Allow-Credentials": "true",
-    "Access-Control-Expose-Headers": "Set-Cookie,Location", // Location 헤더 추가
+    "Access-Control-Expose-Headers": "Set-Cookie,Location",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   };
@@ -119,15 +124,36 @@ module.exports.handler = async (event, context) => {
     // Express 앱 처리
     const response = await handler(event, context);
 
-    // 리다이렉트 응답 처리
+    // 로깅 추가
+    console.log("Raw response:", response);
+
+    // 카카오 로그인 리다이렉션 특별 처리
+    if (event.path === "/auth/kakao") {
+      console.log("Processing Kakao auth request");
+      const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+        process.env.KAKAO_CLIENT_ID
+      }&redirect_uri=${encodeURIComponent(
+        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
+      )}`;
+
+      console.log("Redirecting to:", kakaoAuthURL);
+      return {
+        statusCode: 302,
+        headers: {
+          Location: kakaoAuthURL,
+          ...corsHeaders,
+        },
+      };
+    }
+
+    // 일반적인 리다이렉트 응답 처리
     if (response.statusCode === 302 && response.headers?.Location) {
       console.log("Processing redirect to:", response.headers.Location);
       return {
         statusCode: 302,
         headers: {
           Location: response.headers.Location,
-          "Access-Control-Allow-Origin": FRONTEND_ORIGIN,
-          "Access-Control-Allow-Credentials": "true",
+          ...corsHeaders,
         },
       };
     }
@@ -142,23 +168,26 @@ module.exports.handler = async (event, context) => {
     }
 
     const finalResponse = {
-      statusCode: response.statusCode,
+      statusCode: response.statusCode || 200,
       headers: {
         ...corsHeaders,
         "Content-Type": "application/json",
       },
-      multiValueHeaders: {
-        "Set-Cookie": cookies.map(
-          (cookie) => `${cookie}; Secure; SameSite=None`
-        ),
-      },
+      multiValueHeaders:
+        cookies.length > 0
+          ? {
+              "Set-Cookie": cookies.map(
+                (cookie) => `${cookie}; Secure; SameSite=None`
+              ),
+            }
+          : undefined,
       body:
         typeof response.body === "string"
           ? response.body
           : JSON.stringify(response.body || ""),
     };
 
-    console.log("Final response headers:", finalResponse.headers);
+    console.log("Final response:", finalResponse);
     return finalResponse;
   } catch (error) {
     console.error("Handler error:", error);
