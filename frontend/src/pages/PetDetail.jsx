@@ -31,31 +31,18 @@ const PetDetail = () => {
       try {
         const token = localStorage.getItem("token");
 
-        // 펫 상세정보와 목록을 병렬로 가져오기
-        const [detailResponse, petsResponse] = await Promise.all([
-          api.post(
-            `/findfet/petdetails`,
-            {
-              pet_num: petNum,
+        // 펫 상세정보 가져오기
+        const detailResponse = await api.post(
+          `/findfet/petdetails`,
+          {
+            pet_num: petNum,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          ),
-          api.post(
-            "/findfet",
-            {
-              params: { type: "" },
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          ),
-        ]);
+          }
+        );
 
         // 상세 정보 처리
         if (detailResponse.data && detailResponse.data.pet) {
@@ -67,8 +54,18 @@ const PetDetail = () => {
           throw new Error("Invalid detail response structure");
         }
 
-        // 다른 펫 목록 처리
-        if (petsResponse.data && Array.isArray(petsResponse.data.pets)) {
+        // 다른 펫 목록 따로 가져오기
+        const petsResponse = await api.post(
+          "/findfet",
+          { params: { type: "" } },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (petsResponse.data && petsResponse.data.pets) {
           const shuffleArray = (array) => {
             const newArray = [...array];
             for (let i = newArray.length - 1; i > 0; i--) {
@@ -78,11 +75,15 @@ const PetDetail = () => {
             return newArray;
           };
 
-          const shuffledPets = shuffleArray(petsResponse.data.pets).slice(0, 6);
+          // 현재 보고 있는 펫을 제외한 다른 펫들만 필터링
+          const otherPets = petsResponse.data.pets.filter(
+            (pet) => pet.pet_num !== petNum
+          );
+
+          const shuffledPets = shuffleArray(otherPets).slice(0, 6);
           setImages(shuffledPets);
-        } else {
-          console.warn("No pets data available in response");
-          setImages([]);
+
+          console.log("Swiper images:", shuffledPets); // 데이터 확인용
         }
       } catch (error) {
         console.error("데이터 로딩 실패:", error);
@@ -272,7 +273,7 @@ const PetDetail = () => {
           )}
 
           {/* Swiper 섹션 */}
-          {images.length > 0 && (
+          {images && images.length > 0 && (
             <>
               <div className="detailBottomTxt">또 다른 친구들 둘러보기</div>
               <Swiper
@@ -293,6 +294,7 @@ const PetDetail = () => {
                       src={image.pet_img}
                       alt=""
                       onClick={() => moveDetail(image)}
+                      style={{ width: "100%", height: "auto" }} // 이미지 크기 조정
                     />
                   </SwiperSlide>
                 ))}

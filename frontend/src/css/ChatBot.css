@@ -93,6 +93,7 @@
   border-radius: 10px;
   max-width: 80%;
   display: inline-block;
+  white-space: pre-wrap;
 }
 
 .bot {
