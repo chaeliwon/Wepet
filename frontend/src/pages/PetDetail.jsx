@@ -21,7 +21,7 @@ const PetDetail = () => {
   const nav = useNavigate();
 
   const baseUrl = "https://main.d2agnx57wvpluz.amplifyapp.com";
-  const currentUrl = `${baseUrl}${location.pathname}`;
+  const currentUrl = `${baseUrl}${loc.pathname}`;
 
   useEffect(() => {
     const fetchPetDetail = async () => {
