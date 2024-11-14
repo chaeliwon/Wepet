@@ -99,8 +99,8 @@ input {
   top: 40%;
   transform: translateY(-50%);
   font-size: 12px;
-  background-color: #4caf50;
-  color: white;
+  background-color: #cceb5c;
+  color: #404040;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
@@ -114,8 +114,8 @@ input {
   top: 50%;
   /* transform: translateY(-50%); */
   font-size: 12px;
-  background-color: #4caf50;
-  color: white;
+  background-color: #cceb5c;
+  color: #404040;
   border: none;
   border-radius: 5px;
   padding: 5%;
@@ -131,8 +131,8 @@ input {
   top: 50%;
   /* transform: translateY(-50%); */
   font-size: 12px;
-  background-color: #4caf50;
-  color: white;
+  background-color: #cceb5c;
+  color: #404040;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -143,18 +143,17 @@ input {
 
 .signup-btn {
   padding: 10px 20px;
-  background-color: #fffff0;
-  border: 2px solid #c7d2ad;
+  background-color: #cceb5c;
   border-radius: 10px;
   font-size: 18px;
-  color: #855b3b;
+  color: #404040;
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: 20px;
 }
 
 .signup-btn:hover {
-  background-color: #e0e8c0;
+  background-color: #a1b948;
 }
 
 .validation-error {
@@ -190,4 +189,11 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.signup-form {
+  background-color: #fffff0b3;
+  border-radius: 8px;
+  max-width: 340px;
+  padding: 10px;
 }
