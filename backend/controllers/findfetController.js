@@ -155,7 +155,7 @@ exports.getPetDetails = async (req, res) => {
 exports.addFavorite = (req, res) => {
   try {
     const { pet_num } = req.body;
-    const user_id = getUserIdFromToken(req);
+    const user_id = getUserIdFromTokenOptional(req);
     console.log("찜하기 확인", user_id);
 
     const checkSql =

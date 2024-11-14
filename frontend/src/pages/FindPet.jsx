@@ -125,7 +125,12 @@ const FindPet = () => {
         />
       )}
       {filterVisible && <div className="overlay" onClick={closeFilter}></div>}
-      <input type="button" className="filter-button" onClick={toggleFilter} />
+      <img
+        src="static\filterButton.png"
+        className="filter-button"
+        alt="필터 버튼"
+        onClick={toggleFilter}
+      />
 
       <div className="petGallery">
         {images.map((image) => (

@@ -141,8 +141,6 @@ const EditProfileForm = () => {
 
   return (
     <div className="homepage-background">
-      <h1 className="edit-title">회원 조회 / 수정</h1>
-
       {userType === "unknown" ? (
         <p>로딩 중...</p>
       ) : userType === "normal" && !checkPwdstate ? (
@@ -163,14 +161,15 @@ const EditProfileForm = () => {
         </form>
       ) : (
         <form onSubmit={handleSubmit}>
-          <label htmlFor="nickname" className="edit-label">
-            닉네임
-          </label>
-          <div className="input-container">
+          <div className="changePwd">
+            <label htmlFor="nickname" className="edit-label">
+              닉네임
+            </label>
             <input
               type="text"
               id="nickname"
               name="nickname"
+              className="changePwdinput"
               value={nickname || ""}
               onChange={handleNicknameChange}
               placeholder="닉네임 변경 시 입력해주세요 (최대 8글자)"

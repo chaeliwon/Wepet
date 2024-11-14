@@ -179,7 +179,6 @@ const PetDetail = () => {
       {error && <div>에러 발생: {error}</div>}
       {!loading && !error && petDetail && petDetail.pet && (
         <>
-          <div className="detailHeadTxt">희망 친구들</div>
           <div>
             <div className="detailBox">
               <div className="detailProfilBox">

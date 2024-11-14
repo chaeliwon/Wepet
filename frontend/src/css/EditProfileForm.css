@@ -24,19 +24,6 @@ body {
   align-items: center;
 }
 
-.edit-title {
-  font-family: "KCC-Ganpan", sans-serif;
-  font-size: 30px;
-  color: #c7d2ad;
-  -webkit-text-stroke: 0.9px #855b3b;
-  margin-top: 100px;
-  margin-bottom: 20px;
-  text-align: left;
-  width: 100%;
-  padding-left: 50px;
-  padding-bottom: 20px;
-}
-
 form {
   display: flex;
   flex-direction: column;
@@ -46,6 +33,7 @@ form {
   padding: 10px;
   border-radius: 8px;
   align-items: center;
+  margin-top: 240px;
 }
 
 .edit-label {
@@ -53,6 +41,7 @@ form {
   color: #855b3b;
   width: 100%;
   text-align: left;
+  margin-bottom: 15px;
 }
 
 .input-container {
@@ -66,6 +55,14 @@ input {
   padding: 10px;
   border: 2px solid #c7d2ad;
   border-radius: 8px;
+}
+
+.changePwdinput {
+  width: 100%; /* 입력창 전체 너비 고정 */
+  padding: 10px;
+  border: 2px solid #c7d2ad;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 
 .check-nickname-btn {
@@ -83,11 +80,10 @@ input {
 
 .edit-btn {
   padding: 10px 20px;
-  background-color: #fffff0;
-  border: 2px solid #c7d2ad;
+  background-color: #cceb5c;
   border-radius: 10px;
   font-size: 18px;
-  color: #855b3b;
+  color: #4a4a4a;
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: 20px;
@@ -96,7 +92,7 @@ input {
 }
 
 .edit-btn:hover {
-  background-color: #e0e8c0;
+  background-color: #a1b948;
 }
 
 .jelly-icon {
@@ -109,4 +105,10 @@ input {
   color: red;
   font-size: 12px;
   margin-bottom: 10px;
+}
+
+.changePwd {
+  width: 100%;
+  text-align: left;
+  margin-top: 20px;
 }

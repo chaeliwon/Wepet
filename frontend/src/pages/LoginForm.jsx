@@ -21,32 +21,18 @@ const LoginForm = () => {
   const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 
   // Kakao 로그인
-  const handleKakaoLogin = async () => {
-    try {
-      console.log("Starting Kakao login process");
-      const response = await fetch(
-        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao",
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
+  const handleKakaoLogin = () => {
+    // 카카오 로그인 URL을 직접 구성
+    const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
+    const CLIENT_ID = "26a4b372c5672f44eb37762116d25ca8";
+    const REDIRECT_URI = encodeURIComponent(
+      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
+    );
 
-      const data = await response.json();
-      console.log("Received response:", data);
+    const kakaoAuthURL = `${KAKAO_AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
 
-      if (response.status === 302 && data.url) {
-        console.log("Redirecting to:", data.url);
-        window.location.href = data.url;
-      } else if (response.headers.get("Location")) {
-        console.log("Redirecting to:", response.headers.get("Location"));
-        window.location.href = response.headers.get("Location");
-      } else {
-        console.error("No redirect URL found in response");
-      }
-    } catch (error) {
-      console.error("Error during Kakao login:", error);
-    }
+    // 직접 URL로 리다이렉션
+    window.location.href = kakaoAuthURL;
   };
 
   // Google 로그인
