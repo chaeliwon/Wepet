@@ -24,44 +24,69 @@ const PetDetail = () => {
   const currentUrl = `${baseUrl}${loc.pathname}`;
 
   useEffect(() => {
-    const fetchPetDetail = async () => {
+    const loadData = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        setLoading(true);
-        setError(null);
         const token = localStorage.getItem("token");
-        const response = await api.post(
-          `/findfet/petdetails`,
-          {
-            pet_num: petNum,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
+
+        // 펫 상세정보와 목록을 병렬로 가져오기
+        const [detailResponse, petsResponse] = await Promise.all([
+          api.post(
+            `/findfet/petdetails`,
+            {
+              pet_num: petNum,
             },
-          }
-        );
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          ),
+          api.post(
+            "/findfet",
+            {
+              params: { type: "" },
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          ),
+        ]);
 
-        // 응답 구조 확인을 위한 로깅
-        console.log("API Response:", response.data);
-
-        if (response.data && response.data.pet) {
-          setPetDetail(response.data);
-          if (response.data.pet.isFavorite) {
+        // 상세 정보 처리
+        if (detailResponse.data && detailResponse.data.pet) {
+          setPetDetail(detailResponse.data);
+          if (detailResponse.data.pet.isFavorite) {
             setLikedImages((prev) => new Set(prev).add(petNum));
           }
         } else {
           throw new Error("Invalid response structure");
         }
+
+        // 다른 펫 목록 처리
+        const shuffleArray = (array) => {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+          return array;
+        };
+
+        const shuffledPets = shuffleArray(petsResponse.data.pets).slice(0, 6);
+        setImages(shuffledPets);
       } catch (error) {
-        console.error("펫 상세 정보 가져오기 실패:", error);
+        console.error("데이터 로딩 실패:", error);
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPetDetail();
-    fetchPets();
+    loadData();
   }, [petNum]);
 
   const fetchPets = async (type = "") => {
@@ -175,85 +200,101 @@ const PetDetail = () => {
           onClose={closeModal}
         />
       )}
-      {loading && <div>로딩중...</div>}
-      {error && <div>에러 발생: {error}</div>}
-      {!loading && !error && petDetail && petDetail.pet && (
+
+      {loading ? (
+        <div>로딩중...</div>
+      ) : error ? (
+        <div>에러 발생: {error}</div>
+      ) : (
         <>
-          <div>
-            <div className="detailBox">
-              <div className="detailProfilBox">
-                <div className="detailProfilIcon">
+          {/* DetailBox 섹션 */}
+          {petDetail && petDetail.pet && (
+            <div>
+              <div className="detailBox">
+                <div className="detailProfilBox">
+                  <div className="detailProfilIcon">
+                    <img
+                      src="/static/DetailIcon.png"
+                      alt="프로필"
+                      className="detailProfilIcon"
+                    />
+                  </div>
+                  <div className="detailProfilTxtbox">
+                    <img
+                      src="/static/DetailLogoBlack.png"
+                      alt="프로필 이름"
+                      className="detailProfilTxt"
+                    />
+                  </div>
+                </div>
+                <div className="detailPhotoBox">
                   <img
-                    src="/static/DetailIcon.png"
-                    alt="프로필"
-                    className="detailProfilIcon"
+                    className="detailPhoto"
+                    src={petDetail.pet.pet_img}
+                    alt="사진"
                   />
                 </div>
-                <div className="detailProfilTxtbox">
-                  <img
-                    src="/static/DetailLogoBlack.png"
-                    alt="프로필 이름"
-                    className="detailProfilTxt"
-                  />
+                <div className="detailInsideBox">
+                  <div className="detailIconBox">
+                    <div
+                      className={`detailHeartIcon ${
+                        likedImages.has(petDetail.pet.pet_num)
+                          ? "detailFilledHeart detailAnimateHeart"
+                          : ""
+                      }`}
+                      onClick={() => toggleLike(petDetail.pet.pet_num)}
+                    ></div>
+                    <img
+                      className="detailIcon"
+                      src="/static/share.png"
+                      onClick={copyUrl}
+                    />
+                  </div>
+                  <div className="detailHashTag">
+                    <span>
+                      #{petDetail.pet.pet_breed} #{petDetail.pet.pet_color} #
+                      {petDetail.pet.pet_age} #{petDetail.pet.pet_gender} #
+                      {petDetail.pet.pet_weight}kg #중성화 여부 :{" "}
+                      {petDetail.pet.pet_neutered} #{petDetail.pet.pet_shelter}{" "}
+                      #{petDetail.pet.pet_shelter_phone}
+                    </span>
+                  </div>
+                  <div className="detailInfo">{petDetail.pet.pet_info}</div>
                 </div>
-              </div>
-              <div className="detailPhotoBox">
-                <img
-                  className="detailPhoto"
-                  src={petDetail.pet.pet_img}
-                  alt="사진"
-                />
-              </div>
-              <div className="detailInsideBox">
-                <div className="detailIconBox">
-                  <div
-                    className={`detailHeartIcon ${
-                      likedImages.has(petDetail.pet.pet_num)
-                        ? "detailFilledHeart detailAnimateHeart"
-                        : ""
-                    }`}
-                    onClick={() => toggleLike(petDetail.pet.pet_num)}
-                  ></div>
-                  <img
-                    className="detailIcon"
-                    src="/static/share.png"
-                    onClick={copyUrl}
-                  />
-                </div>
-                <div className="detailHashTag">
-                  <span>
-                    #{petDetail.pet.pet_breed} #{petDetail.pet.pet_color} #
-                    {petDetail.pet.pet_age} #{petDetail.pet.pet_gender} #
-                    {petDetail.pet.pet_weight}kg #중성화 여부 :{" "}
-                    {petDetail.pet.pet_neutered} #{petDetail.pet.pet_shelter} #
-                    {petDetail.pet.pet_shelter_phone}
-                  </span>
-                </div>
-                <div className="detailInfo">{petDetail.pet.pet_info}</div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Swiper 섹션 */}
+          {images.length > 0 && (
+            <>
+              <div className="detailBottomTxt">또 다른 친구들 둘러보기</div>
+              <Swiper
+                onSwiper={setSwiperRef}
+                slidesPerView={3}
+                centeredSlides={true}
+                spaceBetween={30}
+                pagination={{
+                  type: "fraction",
+                }}
+                navigation={true}
+                modules={[Pagination, Navigation]}
+                className="detailSwiper"
+              >
+                {images.map((image, index) => (
+                  <SwiperSlide key={image.pet_num || index}>
+                    <img
+                      src={image.pet_img}
+                      alt=""
+                      onClick={() => moveDetail(image)}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </>
+          )}
         </>
       )}
-      <div className="detailBottomTxt">또 다른 친구들 둘러보기</div>
-      <Swiper
-        onSwiper={setSwiperRef}
-        slidesPerView={3}
-        centeredSlides={true}
-        spaceBetween={30}
-        pagination={{
-          type: "fraction",
-        }}
-        navigation={true}
-        modules={[Pagination, Navigation]}
-        className="detailSwiper"
-      >
-        {images.map((image, index) => (
-          <SwiperSlide key={image.pet_num || index}>
-            <img src={image.pet_img} alt="" onClick={() => moveDetail(image)} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
     </div>
   );
 };
