@@ -160,6 +160,7 @@ body {
 
 .filter-options {
   padding: 20px;
+  margin-bottom: env(safe-area-inset-bottom, 70px);
 }
 
 .viewAnimalBtn {
