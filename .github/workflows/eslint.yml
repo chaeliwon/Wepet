@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16" # 원하는 Node.js 버전으로 설정
+          node-version: "20" # 원하는 Node.js 버전으로 설정
 
       - name: Install dependencies for backend
         working-directory: ./backend
