@@ -16,7 +16,7 @@
   flex-direction: column;
   padding: 20px;
   box-sizing: border-box;
-  gap: 20px; /* 카드 사이 간격 */
+  gap: 25px; /* 카드 사이 간격 */
   overflow-y: auto; /* 세로 스크롤 활성화 */
   overflow-x: hidden; /* 가로 스크롤 비활성화 */
 }
@@ -50,6 +50,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 100px;
 }
 
 .sponsorHeader1 {
@@ -57,7 +58,8 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .sponsorName1 {
@@ -69,19 +71,19 @@
 .sponsorButton1 {
   padding: 10px 15px;
   font-size: 14px;
-  background-color: #fffff0;
-  border: 1px solid #c7d2ad;
+  background-color: #cceb5c;
+  border: 1px solid #ffffff;
   border-radius: 10px;
-  color: #855b3b;
+  color: #404040;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .sponsorButton1:hover {
-  background-color: #a1b56a;
-  border: 1px solid #fffff0;
+  background-color:  #a1b948;
+  /* border: 1px solid #fffff0; */
   border-radius: 10px;
-  color: #ffffff;
+  color: #000000;
 }
 
 .sponsorImgWrapper1 {
@@ -128,25 +130,26 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .sponsorButton2 {
   padding: 10px 15px;
   font-size: 14px;
-  background-color: #fffff0;
-  border: 1px solid #c7d2ad;
+  background-color: #cceb5c;
+  border: 1px solid #ffffff;
   border-radius: 10px;
-  color: #855b3b;
+  color: #404040;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .sponsorButton2:hover {
   background-color: #a1b56a;
-  border: 1px solid #fffff0;
+  border: 1px solid #ffffff;
   border-radius: 10px;
-  color: #ffffff;
+  color: #000000;
 }
 
 .sponsorName2 {
@@ -198,7 +201,8 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .sponsorName3 {
@@ -210,19 +214,19 @@
 .sponsorButton3 {
   padding: 10px 15px;
   font-size: 14px;
-  background-color: #fffff0;
-  border: 1px solid #c7d2ad;
+  background-color: #cceb5c;
+  border: 1px solid #ffffff;
   border-radius: 10px;
-  color: #855b3b;
+  color: #404040;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .sponsorButton3:hover {
   background-color: #a1b56a;
-  border: 1px solid #fffff0;
+  border: 1px solid #ffffff;
   border-radius: 10px;
-  color: #ffffff;
+  color: #000000;
 }
 
 .sponsorImgWrapper3 {
@@ -268,25 +272,26 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .sponsorButton4 {
   padding: 10px 10px;
   font-size: 14px;
-  background-color: #fffff0;
-  border: 1px solid #c7d2ad;
+  background-color: #cceb5c;
+  border: 1px solid #ffffff;
   border-radius: 10px;
-  color: #855b3b;
+  color: #404040;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .sponsorButton4:hover {
   background-color: #a1b56a;
-  border: 1px solid #fffff0;
+  border: 1px solid #ffffff;
   border-radius: 10px;
-  color: #ffffff;
+  color: #000000;
 }
 
 .sponsorName4 {

@@ -13,15 +13,16 @@
 }
 
 .signup-title {
-  font-family: "KCC-Ganpan", sans-serif;
-  font-size: 35px;
-  color: #c7d2ad;
-  -webkit-text-stroke: 0.3px #855b3b;
+  /* font-family: "KCC-Ganpan", sans-serif; */
+  font-size: 31px;
+  color: #855b3b;
   width: 100%;
   text-align: left;
-  margin-top: 30px;
-  margin-bottom: 5px; /* 간격을 줄여줌 */
-  padding-left: 80px;
+  margin-top: 50px;
+  margin-bottom: 5px;
+  padding-left: 77px;
+  /* letter-spacing: 3px; */
+  /* 글자 사이간격 */
 }
 
 .signup-subtitle {
@@ -197,4 +198,5 @@ input[type="number"]::-webkit-inner-spin-button {
   max-width: 340px;
   padding: 10px;
   margin: 0px;
+  padding-bottom: 25px;
 }
