@@ -148,7 +148,7 @@ body {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   z-index: 100;
-  margin-bottom: env(safe-area-inset-bottom, 70px); /* iOS 안전영역 고려 */
+ 
 }
 
 .filter-section.visible {
