@@ -81,7 +81,7 @@
 }
 
 .detailIconBox {
-  width: 80%;
+  width: 100%;
   text-align: left;
   display: flex;
 }
@@ -95,7 +95,7 @@
 .detailHeartIcon {
   margin-top: 20px;
   margin-right: 12px;
-  width: 21px;
+  width: 23px;
   height: 20px;
   background-image: url("../assets/heart-outline.png");
   background-size: cover;
@@ -125,11 +125,12 @@
   width: 80%;
   display: flex;
   color: #4a4a4a;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   margin-left: 26px;
-  margin-top: 10px;
+  margin-top: -5px;
   font-weight: bold;
   font-size: 18px;
+  padding-bottom: 15px;
 }
 
 #app {
@@ -157,7 +158,7 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 20px;
-  margin-top: -10px;
+  margin-top: -20px;
 }
 
 
@@ -188,8 +189,8 @@ body {
 }
 
 .detailSwiper .swiper-button-prev{
-  color: #ffffff;
-  background-color: #B8CE86;
+  color: #000000;
+  background-color: #CCEB5C;
   width: 25px;
   height: 25px;
   --swiper-navigation-size: 10px;
@@ -197,8 +198,8 @@ body {
 }
 
 .detailSwiper .swiper-button-next {
-  color: #ffffff;
-  background-color: #B8CE86;
+  color: #000000;
+  background-color: #CCEB5C;
   width: 25px;
   height: 25px;
   --swiper-navigation-size: 10px;
@@ -213,21 +214,26 @@ body {
 }
 
 .detail-modal-content {
-  background-color: beige;
+  background-color: rgb(255, 255, 255);
   width: 200px;
   height: 120px;
   border-radius: 15px;
   display: grid;
+  align-items: center;
+  
 }
 
 .modal-text {
   margin-top: 30px;
   position: relative;
 }
+
 .modal-close-btn {
-  cursor: pointer;
+  /* background-color: #CCEB5C; */
   margin-bottom: 20px;
+  cursor: pointer;
 }
+
 p {
   margin-top: 30px;
 }

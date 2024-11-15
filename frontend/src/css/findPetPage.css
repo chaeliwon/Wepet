@@ -47,7 +47,10 @@ body {
   width: 90%; /* 갤러리가 화면에 잘 맞도록 폭 설정 */
   max-height: 100%; /* 스크롤 가능한 영역의 높이 */
   overflow-y: auto; /* 스크롤바가 필요할 때만 표시되도록 자동으로 설정 */
-  padding: 20px; /* 갤러리 내부 여백 */
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
 }
 
 .petImage {
@@ -129,6 +132,7 @@ body {
   top: 0px;
   border: 0;
   margin-bottom: 10px;
+  margin-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 .filter-section {
@@ -136,13 +140,14 @@ body {
   bottom: -400px;
   left: 0;
   right: 0;
-  height: 260px;
+  height: 240px;
   background-color: white;
   border: 1px solid #ccc;
   transition: bottom 0.5s ease;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   z-index: 100;
+  margin-bottom: env(safe-area-inset-bottom, 20px); /* iOS 안전영역 고려 */
 }
 
 .filter-section.visible {
