@@ -169,7 +169,8 @@ a {
   text-align: center;
   color: #4a4a4a;
   margin-bottom: 20px;
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: bold;
 }
 
 .homeSwiper {
@@ -197,7 +198,7 @@ a {
 }
 
 .homeSwiper .swiper-button-prev{
-  color: rgb(50, 50, 50) !important;
+  color: rgb(0, 0, 0) !important;
   background-color: #CCEB5C;
   width: 20px;
   height: 25px;
@@ -209,7 +210,7 @@ a {
 }
 
 .homeSwiper .swiper-button-next {
-  color: rgb(50, 50, 50) !important;
+  color: rgb(0, 0, 0) !important;
   background-color: #CCEB5C;
   width: 20px;
   height: 25px;
@@ -221,6 +222,6 @@ a {
 }
 
 .homeSwiper .swiper-pagination-fraction {
-  font-size: 12px;
+  font-size: 10px;
   margin-top:50px;
 }
