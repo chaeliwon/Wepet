@@ -150,15 +150,15 @@ const Homepage = () => {
       {/* Swiper 섹션 */}
       {images && images.length > 0 && (
         <div className="home-swiper-section">
-          <div className="home-bottom-text">가족이 되어주세요!</div>
+          <div className="home-bottom-text">🍀가족이 되어주세요🍀🐕</div>
           <Swiper
             onSwiper={setSwiperRef}
             slidesPerView={3}
             centeredSlides={true}
             spaceBetween={30}
-            pagination={{
-              type: "fraction",
-            }}
+            // pagination={{
+            //   type: "fraction", //슬라이드에서 페이지 넘버
+            // }}
             navigation={true}
             modules={[Pagination, Navigation]}
             className="homeSwiper"
