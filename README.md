@@ -13,6 +13,7 @@
 
 | 구분 | 기술 |
 |:--|:--|
+| Frontend | ![React](https://img.shields.io/badge/REACT-61DAFB?style=flat-square&logo=React&logoColor=black) ![AWS Amplify](https://img.shields.io/badge/AWS_AMPLIFY-FF9900?style=flat-square&logo=awsamplify&logoColor=white) |
 | Backend | ![NodeJS](https://img.shields.io/badge/NODE.JS-339933?style=flat-square&logo=Node.js&logoColor=white) ![FastAPI](https://img.shields.io/badge/FASTAPI-009688?style=flat-square&logo=FastAPI&logoColor=white) ![Python](https://img.shields.io/badge/PYTHON-3776AB?style=flat-square&logo=Python&logoColor=white) |
 | Infrastructure & Deployment | ![Docker](https://img.shields.io/badge/DOCKER-2496ED?style=flat-square&logo=Docker&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=AmazonAWS&logoColor=white) ![API Gateway](https://img.shields.io/badge/API_GATEWAY-FF4F8B?style=flat-square&logo=amazonapigateway&logoColor=white) ![AWS Lambda](https://img.shields.io/badge/AWS_LAMBDA-FF9900?style=flat-square&logo=awslambda&logoColor=white) ![Amazon S3](https://img.shields.io/badge/AMAZON_S3-569A31?style=flat-square&logo=amazons3&logoColor=white) ![CloudWatch](https://img.shields.io/badge/CLOUDWATCH-FF4F8B?style=flat-square&logo=amazoncloudwatch&logoColor=white) |
 | Database | ![MySQL](https://img.shields.io/badge/MYSQL-4479A1?style=flat-square&logo=MySQL&logoColor=white) |
