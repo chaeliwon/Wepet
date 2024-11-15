@@ -81,7 +81,7 @@ module.exports = function () {
 
   // authRouter.js의 카카오 콜백 부분 수정
   router.get("/kakao/callback", async (req, res) => {
-    console.log("Kakao callback reached"); // 추가된 로그
+    console.log("Kakao callback reached");
 
     try {
       const code = req.query.code;
@@ -130,11 +130,12 @@ module.exports = function () {
         { expiresIn: "1h" }
       );
 
-      console.log("Generated JWT token:", token); // 추가된 로그
+      console.log("Generated JWT token:", token);
 
       // Lambda 환경에서의 응답
-      return {
+      const response = {
         statusCode: 302,
+        body: JSON.stringify({ token }), // body에 토큰을 포함
         headers: {
           Location: `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${token}`,
           "Access-Control-Allow-Origin":
@@ -143,20 +144,25 @@ module.exports = function () {
           "Cache-Control": "no-cache",
         },
       };
+
+      console.log("Sending response:", response);
+      return response;
     } catch (error) {
       console.error("Kakao callback error:", error);
       return {
         statusCode: 302,
         headers: {
-          Location:
-            "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed",
+          Location: `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${encodeURIComponent(
+            token
+          )}`,
           "Access-Control-Allow-Origin":
             "https://main.d2agnx57wvpluz.amplifyapp.com",
           "Access-Control-Allow-Credentials": "true",
+          "Cache-Control": "no-cache",
         },
+        body: JSON.stringify({ token }),
       };
     }
   });
-
   return router;
 };

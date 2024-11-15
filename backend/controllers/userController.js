@@ -7,12 +7,11 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
-    user: process.env.EMAIL_USER, // .env에 설정한 이메일 계정
-    pass: process.env.EMAIL_PASS, // .env에 설정한 이메일 비밀번호
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
-// 이메일 인증 코드 저장 객체 (단순히 메모리에 저장, 실제로는 Redis 등의 스토리지가 권장됨)
 const verificationCodes = {};
 
 // JWT Secret Key
@@ -21,7 +20,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 // 일반 회원가입 로직
 exports.join = (req, res) => {
   let { id, pw, nick } = req.body;
-  let type = "normal"; // 일반 회원가입이므로 'normal'로 설정
+  let type = "normal"; // 일반 회원가입이므로 normal로 설정
 
   let insertSql = `INSERT INTO user_info (user_id, user_pw, user_nick, user_type) VALUES (?, SHA2(?, 256), ?, ?)`;
   conn.query(insertSql, [id, pw, nick, type], (err, rows) => {
@@ -37,9 +36,8 @@ exports.join = (req, res) => {
 
 // 이메일 중복 확인 API
 exports.checkEmail = (req, res) => {
-  let { id } = req.body; // 중복 확인할 이메일
+  let { id } = req.body;
 
-  // 이메일 중복 확인 SQL
   let checkEmailSql = `SELECT * FROM user_info WHERE user_id = ?`;
   conn.query(checkEmailSql, [id], (err, result) => {
     if (err) {
@@ -118,7 +116,7 @@ exports.checkLoginStatus = (req, res) => {
   if (!token && req.headers.authorization) {
     const authHeader = req.headers.authorization;
     if (authHeader.startsWith("Bearer ")) {
-      token = authHeader.substring(7); // 'Bearer ' 부분을 제외한 토큰
+      token = authHeader.substring(7);
     }
   }
 
@@ -240,7 +238,6 @@ exports.updateUser = (req, res) => {
     const userId = decoded.userId;
     const { nick, pw } = req.body;
 
-    // SQL 쿼리와 파라미터를 동적으로 구성
     let updateSql = "UPDATE user_info SET";
     const params = [];
 
