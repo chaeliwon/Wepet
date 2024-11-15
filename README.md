@@ -30,6 +30,9 @@
 
 # 📌ER 다이어그램
 
+![image](https://github.com/user-attachments/assets/b813dd2f-db8d-470e-9a1c-cf543cf68315)
+
+
 # 📷화면 구성
 
 # 👪팀원 소개
