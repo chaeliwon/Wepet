@@ -56,9 +56,7 @@ exports.toggleFavorite = (req, res) => {
 
     const checkSql =
       "SELECT * FROM favorite_info WHERE pet_num = ? AND user_id = ?";
-    conn.query(checkSql, [pet_num, user_id], (err, results) => {
-      // 나머지 코드는 동일
-    });
+    conn.query(checkSql, [pet_num, user_id], (err, results) => {});
   } catch (error) {
     console.error("토큰 검증 실패:", error);
     res.status(401).json({ result: "인증 실패" });
