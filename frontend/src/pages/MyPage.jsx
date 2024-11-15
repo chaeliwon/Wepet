@@ -9,7 +9,7 @@ import mydelete from "../assets/mydelete.png";
 import myuseredit from "../assets/myuseredit.png";
 import mydonation from "../assets/mydonation.png";
 import api from "../api";
-import leaveDogIcon from "../assets/leavedog.png"; 
+import leaveDogIcon from "../assets/leavedog.png";
 import ChatbotButton from "../components/ChatbotButton";
 
 const MyPage = () => {
@@ -48,22 +48,24 @@ const MyPage = () => {
   }, []); // userData 의존성 제거
 
   // 닉네임 가져오기
-  const getNick = async () => {
+  const getNick = async (retryCount = 0) => {
     try {
       const token = localStorage.getItem("token");
       const response = await api.get("/user/send-nick-mypage", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (response.data.rows && response.data.rows.length > 0) {
+      if (response.data?.rows && response.data.rows.length > 0) {
         setUserNick(response.data.rows[0].user_nick);
       } else {
         console.error("닉네임 데이터가 없습니다.");
       }
     } catch (error) {
       console.error("닉네임 가져오기 실패:", error);
+      if (retryCount < 3) {
+        console.log(`재시도 중: ${retryCount + 1}`);
+        await getNick(retryCount + 1);
+      }
     }
   };
 
@@ -81,15 +83,30 @@ const MyPage = () => {
         api
           .post("/user/logout", {}, { withCredentials: true })
           .then(() => {
+            // 로컬 스토리지에서 토큰 제거
+            localStorage.removeItem("token");
+            // 로그인 상태 업데이트
+            setIsLoggedIn(false);
+            // userNick과 userData 초기화
+            setUserNick(null);
+            setUserData(null);
+
             Swal.fire(
               "로그아웃 완료",
               "성공적으로 로그아웃 되었습니다.",
               "success"
-            );
-            navigate("/login");
+            ).then(() => {
+              // 알림창이 닫힌 후 로그인 페이지로 이동
+              navigate("/login");
+            });
           })
           .catch((error) => {
             console.error("로그아웃 중 오류:", error);
+            Swal.fire(
+              "오류 발생",
+              "로그아웃 처리 중 문제가 발생했습니다.",
+              "error"
+            );
           });
       }
     });
@@ -155,7 +172,7 @@ const MyPage = () => {
           </div>
 
           {/* ChatbotButton 컴포넌트 추가 */}
-        <ChatbotButton /> 
+          <ChatbotButton />
 
           <div className="menu-list">
             <div className="menu-item" onClick={handleLogout}>

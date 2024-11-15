@@ -30,29 +30,34 @@ const FindPet = () => {
   };
 
   // 유기동물 이미지 불러오기 함수
-  const fetchPets = async (type = "") => {
+  const fetchPets = async (type = "", retryCount = 0) => {
     try {
       const token = getTokenFromCookies();
       const response = await api.post(
         "/findfet",
         { type },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      const petsData = response.data.pets;
-      console.log("받은 데이터:", petsData);
 
-      const likedSet = new Set(
-        petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
-      );
+      const petsData = response.data?.pets || [];
+      if (petsData.length > 0) {
+        const likedSet = new Set(
+          petsData.filter((pet) => pet.isFavorite).map((pet) => pet.pet_num)
+        );
 
-      setImages(petsData);
-      setLikedImages(likedSet);
+        setImages(petsData);
+        setLikedImages(likedSet);
+      } else {
+        console.error("유기동물 목록이 비어 있습니다.");
+      }
     } catch (error) {
       console.error("유기동물 목록 가져오기 실패:", error);
+      if (retryCount < 3) {
+        console.log(`재시도 중: ${retryCount + 1}`);
+        await fetchPets(type, retryCount + 1);
+      }
     }
   };
 
