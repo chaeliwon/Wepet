@@ -24,18 +24,27 @@ def search_similar_embeddings(query_embedding, top_n=5):
                     continue
                 db_embedding = db_embedding / (norm + 1e-10)
                 cosine_similarity = np.dot(query_embedding, db_embedding) / (
-                    np.linalg.norm(query_embedding) * np.linalg.norm(db_embedding) + 1e-10
+                    np.linalg.norm(query_embedding) * np.linalg.norm(db_embedding)
+                    + 1e-10
                 )
-                similarities.append({"pet_num": pet_num, "pet_img": pet_img, "cosine_similarity": cosine_similarity})
+                similarities.append(
+                    {
+                        "pet_num": pet_num,
+                        "pet_img": pet_img,
+                        "cosine_similarity": cosine_similarity,
+                    }
+                )
 
             if similarities:
-                similarities = sorted(similarities, key=lambda x: x["cosine_similarity"], reverse=True)[:top_n]
+                similarities = sorted(
+                    similarities, key=lambda x: x["cosine_similarity"], reverse=True
+                )[:top_n]
             print(f"유사도 계산 완료: {similarities}")
             return [
                 {
                     "pet_num": similarity["pet_num"],
                     "pet_img": similarity["pet_img"],
-                    "cosine_similarity": float(similarity["cosine_similarity"])
+                    "cosine_similarity": float(similarity["cosine_similarity"]),
                 }
                 for similarity in similarities
             ]
@@ -43,7 +52,6 @@ def search_similar_embeddings(query_embedding, top_n=5):
         connection.close()
         end_time = time.time()
         print(f"search_similar_embeddings 함수 실행 시간: {end_time - start_time:.2f}초")
-
 
 
 # search_by_keywords 함수 내 필터링 로직 적용
@@ -67,23 +75,29 @@ def search_by_keywords(text_embedding, top_n=5):
 
             # 코사인 유사도 계산
             cosine_similarity = np.dot(text_embedding, db_embedding)
-            cosine_similarity /= (np.linalg.norm(text_embedding) * np.linalg.norm(db_embedding) + 1e-10)
+            cosine_similarity /= (
+                np.linalg.norm(text_embedding) * np.linalg.norm(db_embedding) + 1e-10
+            )
 
-            similarities.append({
-                "pet_num": pet_num,
-                "pet_img": pet_img,
-                "cosine_similarity": cosine_similarity
-            })
+            similarities.append(
+                {
+                    "pet_num": pet_num,
+                    "pet_img": pet_img,
+                    "cosine_similarity": cosine_similarity,
+                }
+            )
 
         # 상위 n개의 결과 반환
-        top_similarities = sorted(similarities, key=lambda x: x["cosine_similarity"], reverse=True)[:top_n]
+        top_similarities = sorted(
+            similarities, key=lambda x: x["cosine_similarity"], reverse=True
+        )[:top_n]
         print(f"키워드 기반 유사도 계산 완료: {top_similarities}")
 
         return [
             {
                 "pet_num": similarity["pet_num"],
                 "pet_img": similarity["pet_img"],
-                "cosine_similarity": float(similarity["cosine_similarity"])
+                "cosine_similarity": float(similarity["cosine_similarity"]),
             }
             for similarity in top_similarities
         ]

@@ -92,7 +92,9 @@ def calculate_roc_auroc(db_connection, validation_data):
 
     for image_path, test_id in validation_data:
         try:
-            query_embedding, similarities = analyze_single_image(image_path, test_id, db_connection)
+            query_embedding, similarities = analyze_single_image(
+                image_path, test_id, db_connection
+            )
             if query_embedding is None:
                 continue
 
@@ -106,7 +108,9 @@ def calculate_roc_auroc(db_connection, validation_data):
             continue
 
     if not y_true or not y_scores:
-        raise ValueError("No valid predictions could be made. Check your validation data.")
+        raise ValueError(
+            "No valid predictions could be made. Check your validation data."
+        )
 
     print(f"\nOverall Statistics:")
     print(f"Total predictions: {len(y_true)}")
@@ -122,23 +126,24 @@ def calculate_roc_auroc(db_connection, validation_data):
 
     # ROC 곡선 그리기
     plt.figure(figsize=(10, 8))
-    plt.plot(fpr, tpr, color='darkorange', lw=2,
-             label=f'ROC curve (AUC = {roc_auc:.3f})')
-    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.plot(
+        fpr, tpr, color="darkorange", lw=2, label=f"ROC curve (AUC = {roc_auc:.3f})"
+    )
+    plt.plot([0, 1], [0, 1], color="navy", lw=2, linestyle="--")
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("Receiver Operating Characteristic (ROC) Curve")
     plt.legend(loc="lower right")
     plt.grid(True)
 
     # results 폴더 생성
-    if not os.path.exists('results'):
-        os.makedirs('results')
+    if not os.path.exists("results"):
+        os.makedirs("results")
 
     # 결과 저장
-    plt.savefig('results/roc_curve.png')
+    plt.savefig("results/roc_curve.png")
     plt.close()
 
     return roc_auc
@@ -147,10 +152,10 @@ def calculate_roc_auroc(db_connection, validation_data):
 def evaluate_threshold_performance(db_connection, validation_data, threshold=0.9):
     """특정 임계값에서의 모델 성능을 평가하는 함수"""
     metrics = {
-        'true_positives': 0,  # 항상 0이어야 함 (테스트 이미지는 DB에 없음)
-        'false_positives': 0,  # threshold 이상의 유사도를 가진 경우
-        'true_negatives': 0,  # threshold 미만의 유사도를 가진 경우
-        'false_negatives': 0  # 항상 0이어야 함 (테스트 이미지는 DB에 없음)
+        "true_positives": 0,  # 항상 0이어야 함 (테스트 이미지는 DB에 없음)
+        "false_positives": 0,  # threshold 이상의 유사도를 가진 경우
+        "true_negatives": 0,  # threshold 미만의 유사도를 가진 경우
+        "false_negatives": 0,  # 항상 0이어야 함 (테스트 이미지는 DB에 없음)
     }
 
     for image_path, test_id in validation_data:
@@ -166,21 +171,25 @@ def evaluate_threshold_performance(db_connection, validation_data, threshold=0.9
 
                 for pet_num, embedding_data in results:
                     db_embedding = np.array(json.loads(embedding_data)).flatten()
-                    similarity = calculate_cosine_similarity(query_embedding, db_embedding)
+                    similarity = calculate_cosine_similarity(
+                        query_embedding, db_embedding
+                    )
 
                     # 테스트 이미지는 DB에 없으므로, threshold를 넘는 경우는 모두 false positive
                     if similarity >= threshold:
-                        metrics['false_positives'] += 1
+                        metrics["false_positives"] += 1
                     else:
-                        metrics['true_negatives'] += 1
+                        metrics["true_negatives"] += 1
 
         except Exception as e:
             print(f"Error processing image {image_path}: {str(e)}")
             continue
 
     # 성능 지표 계산
-    total_predictions = metrics['true_negatives'] + metrics['false_positives']
-    metrics['accuracy'] = metrics['true_negatives'] / total_predictions if total_predictions > 0 else 0
+    total_predictions = metrics["true_negatives"] + metrics["false_positives"]
+    metrics["accuracy"] = (
+        metrics["true_negatives"] / total_predictions if total_predictions > 0 else 0
+    )
 
     return metrics
 
@@ -204,7 +213,9 @@ if __name__ == "__main__":
         print(f"AUROC: {auroc}")
 
         print("\nEvaluating model performance at threshold 0.9...")
-        performance = evaluate_threshold_performance(connection, validation_data, threshold=0.9)
+        performance = evaluate_threshold_performance(
+            connection, validation_data, threshold=0.9
+        )
 
         print("\nModel Performance Metrics:")
         print(f"Accuracy: {performance['accuracy']:.3f}")

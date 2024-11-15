@@ -25,3 +25,4 @@ yarn-error.log*
 .env
 u2net.onnx
 venv
+db.py

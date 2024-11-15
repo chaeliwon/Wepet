@@ -10,7 +10,6 @@ clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 
-
 embedding_cache = {}
 
 # CLIP을 이용한 텍스트 임베딩 생성 함수
@@ -26,7 +25,7 @@ def generate_text_embedding(text):
         text_embedding = clip_model.get_text_features(**inputs).cpu().numpy()
 
     # L2 정규화
-    text_embedding /= (np.linalg.norm(text_embedding, axis=1, keepdims=True) + 1e-10)
+    text_embedding /= np.linalg.norm(text_embedding, axis=1, keepdims=True) + 1e-10
 
     embedding_cache[text] = text_embedding.flatten().tolist()  # 캐시에 저장
     print("텍스트 임베딩 생성 완료")
@@ -34,17 +33,21 @@ def generate_text_embedding(text):
 
     return embedding_cache[text]
 
+
 # CLIP을 이용한 이미지 임베딩 생성 함수
 def generate_image_embedding(image):
     start_time = time.time()
     inputs = clip_processor(images=image, return_tensors="pt").to("cpu")
     with torch.no_grad():
         image_embedding = clip_model.get_image_features(**inputs).cpu().numpy()
-    image_embedding = image_embedding / (np.linalg.norm(image_embedding, axis=1, keepdims=True) + 1e-10)
+    image_embedding = image_embedding / (
+        np.linalg.norm(image_embedding, axis=1, keepdims=True) + 1e-10
+    )
     print("이미지 임베딩 생성 완료")
     end_time = time.time()
     print(f"generate_image_embedding 함수 실행 시간: {end_time - start_time:.2f}초")
     return image_embedding.flatten().tolist()
+
 
 # 이미지 전처리 함수 (rembg 사용)
 def preprocess_image(image):
