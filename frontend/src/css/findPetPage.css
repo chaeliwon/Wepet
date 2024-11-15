@@ -54,11 +54,11 @@ body {
 }
 
 .petImage {
-  width: 100px;
-  height: 100px; /* 이미지를 조금 더 크게 */
-  object-fit: cover; /* 이미지가 영역을 넘지 않도록 크기 조정 */
+  width: 100px;   /* imageWrapper에 맞추도록 수정 */
+  height: 100px;
+  object-fit: cover;
   border-radius: 8px;
-  transition: transform 0.2s ease-in-out; /* 호버 애니메이션 추가 */
+  transition: transform 0.2s ease-in-out;
 }
 
 .petImage:hover {
@@ -86,13 +86,14 @@ body {
 
 .heartIcon {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 17px;
-  height: 15px;
+  bottom: 12px;  /* 하단 여백 줄임 */
+  right: 12px;   /* 우측 여백 줄임 */
+  width: 19px;
+  height: 18px;
   background-image: url("../assets/heart-outline.png");
   background-size: cover;
-  transition: transform 0.2s ease-in-out; /* 애니메이션 효과 */
+  transition: transform 0.2s ease-in-out;
+  z-index: 10;  /* 이미지 위에 표시되도록 z-index 추가 */
 }
 
 /* 채워진 하트 스타일 */
@@ -137,7 +138,7 @@ body {
 
 .filter-section {
   position: absolute;
-  bottom: -400px;
+  bottom: -400%;
   left: 0;
   right: 0;
   height: 220px;
@@ -151,11 +152,11 @@ body {
 }
 
 .filter-section.visible {
-  bottom: -5px; /* 원하는 위치로 필터가 올라오게 설정 */
+  bottom: -0.5%; /* 원하는 위치로 필터가 올라오게 설정 */
 }
 
 .filter-section.hidden {
-  bottom: -410px; /* 필터가 숨겨진 상태 */
+  bottom: -410%; /* 필터가 숨겨진 상태 */
 }
 
 .filter-options {
@@ -228,7 +229,7 @@ input {
 }
 
 .find-modal-content {
-  background-color: beige;
+  background-color: rgb(255, 255, 255);
   width: 200px;
   height: 120px;
   border-radius: 15px;
