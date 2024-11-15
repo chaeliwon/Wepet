@@ -132,7 +132,7 @@ body {
   top: 0px;
   border: 0;
   margin-bottom: 10px;
-  margin-bottom: env(safe-area-inset-bottom, 20px);
+  margin-bottom: env(safe-area-inset-bottom, 40px);
 }
 
 .filter-section {
@@ -140,14 +140,14 @@ body {
   bottom: -400px;
   left: 0;
   right: 0;
-  height: 240px;
+  height: 220px;
   background-color: white;
   border: 1px solid #ccc;
   transition: bottom 0.5s ease;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   z-index: 100;
-  margin-bottom: env(safe-area-inset-bottom, 20px); /* iOS 안전영역 고려 */
+  margin-bottom: env(safe-area-inset-bottom, 40px); /* iOS 안전영역 고려 */
 }
 
 .filter-section.visible {
@@ -163,7 +163,7 @@ body {
 }
 
 .viewAnimalBtn {
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 10px 20px;
   background-color: #cceb5c;
   border-radius: 10px;
