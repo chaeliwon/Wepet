@@ -61,12 +61,12 @@ label {
   width: 100%;
 }
 
-.password-label {
+.password-label-login {
   text-align: left;
   margin-top: 10px; /* 비밀번호 입력창 위에 여백 추가 */
 }
 
-.input-container {
+.input-container-login {
   position: relative;
   width: 100%;
 }
@@ -80,7 +80,7 @@ input {
   box-sizing: border-box;
 }
 
-.email-domain {
+.email-domain-login {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -91,7 +91,7 @@ input {
   opacity: 0.8;
 }
 
-.find-link {
+.find-link-login {
   margin-bottom: 8px;
   color: #855b3b;
   font-size: 14px;
@@ -101,13 +101,13 @@ input {
   margin-top: 5px;
 }
 
-.login-btn {
+.login-btn-login {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px;
-  background-color: #fffff0;
-  border: 2px solid #c7d2ad;
+  background-color:#cceb5c;
+  border: 2px solid #ffffff;
   border-radius: 10px;
   font-size: 20px;
   color: #855b3b;
@@ -118,18 +118,12 @@ input {
   margin-top: 15px;
 }
 
-.login-btn img.jellyicon {
-  width: 20px; /* 이미지 크기 조정 */
-  height: 20px;
-  margin-left: 10px; /* 이미지와 텍스트 사이 간격 설정 */
+.login-btn-login:hover {
+  background-color: #a1b948;
+  /* transform: translateY(-2px); */
 }
 
-.login-btn:hover {
-  background-color: #e0e8c0;
-  transform: translateY(-2px);
-}
-
-.validation-error {
+.validation-error-login {
   color: red;
   font-size: 14px;
   margin-top: 5px;

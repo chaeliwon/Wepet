@@ -149,7 +149,7 @@ const LoginForm = () => {
       />
       <form onSubmit={handleSubmit}>
         <label htmlFor="useremail">이메일</label>
-        <div className="input-container">
+        <div className="input-container-login">
           <input
             type="text"
             id="useremail"
@@ -161,14 +161,14 @@ const LoginForm = () => {
             onBlur={() => setShowDomain(email === "")}
             required
           />
-          {showDomain && <span className="email-domain">@email.com</span>}
+          {showDomain && <span className="email-domain-login">@email.com</span>}
         </div>
         {emailError && (
-          <p className="validation-error">
+          <p className="validation-error-login">
             이메일 주소를 정확하게 입력해주세요.
           </p>
         )}
-        <label htmlFor="password" className="password-label">
+        <label htmlFor="password" className="password-label-login">
           비밀번호
         </label>
         <input
@@ -181,20 +181,19 @@ const LoginForm = () => {
           required
         />
         {passwordError && (
-          <p className="validation-error">비밀번호를 정확하게 입력해주세요.</p>
+          <p className="validation-error-login">비밀번호를 정확하게 입력해주세요.</p>
         )}
 
         <Link
           to="/find-id-password"
-          className="find-link"
+          className="find-link-login"
           style={{ textDecoration: "none" }}
         >
           비밀번호 찾기
         </Link>
 
-        <button type="submit" className="login-btn">
-          로그인
-          <img src={jelly} alt="paw" className="jelleyicon" />
+        <button type="submit" className="login-btn-login">
+          로그인 🐾
         </button>
         {loginFail && (
           <p className="validation-error-login">입력 정보를 확인해주세요.</p>
