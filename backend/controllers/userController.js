@@ -156,37 +156,10 @@ exports.checkLoginStatus = (req, res) => {
 // 로그아웃 로직
 exports.logout = (req, res) => {
   try {
-    // 세션에서 user_id 삭제
-    req.session.destroy((err) => {
-      if (err) {
-        console.error("세션 삭제 오류:", err);
-        res.status(500).json({ result: "로그아웃 실패" });
-        return;
-      }
-
-      // 쿠키에서 토큰 삭제
-      res.clearCookie("jwtToken", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        path: "/",
-      });
-
-      // 세션 쿠키 삭제
-      res.clearCookie("connect.sid", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        path: "/",
-      });
-
-      console.log("세션 및 쿠키 삭제 완료");
-
-      // 클라이언트에 로그아웃 성공 응답
-      res.status(200).json({
-        result: "로그아웃 성공",
-        message: "Successfully logged out",
-      });
+    // 단순히 성공 메시지만 반환
+    res.status(200).json({
+      result: "로그아웃 성공",
+      message: "Successfully logged out",
     });
   } catch (error) {
     console.error("로그아웃 처리 중 오류 발생:", error);
