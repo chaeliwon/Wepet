@@ -35,7 +35,6 @@ exports.getFilteredPets = (req, res) => {
         " WHERE pet_breed NOT LIKE '%개%' AND pet_breed NOT LIKE '%고양이%'";
     }
 
-    // 무작위 정렬과 54개 제한 추가
     sql += " ORDER BY RAND() LIMIT 54";
 
     // 동물 데이터 가져오기
