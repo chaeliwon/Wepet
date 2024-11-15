@@ -137,54 +137,71 @@ module.exports.handler = async (event, context) => {
       }
     }
 
-    // 카카오 콜백 경로 특별 처리
-    if (event.rawPath.includes("/auth/kakao/callback")) {
-      console.log("Processing kakao callback");
-      const response = await handler(event, context);
-      console.log("Kakao callback response:", response);
-
-      if (response.body && typeof response.body === "string") {
-        try {
-          const parsedBody = JSON.parse(response.body);
-          if (parsedBody.token) {
-            console.log("Token found in response:", parsedBody.token);
-            return {
-              statusCode: 302,
-              headers: {
-                ...corsHeaders,
-                Location: `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${parsedBody.token}`,
-                "Cache-Control": "no-cache",
-              },
-            };
-          }
-        } catch (e) {
-          console.error("Error parsing response body:", e);
-        }
-      }
-
-      // 기본 리다이렉션
-      return {
-        statusCode: 302,
-        headers: {
-          ...corsHeaders,
-          Location:
-            "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed",
-          "Cache-Control": "no-cache",
-        },
-      };
-    }
-
     // Express 앱 처리
     const response = await handler(event, context);
 
-    // 리다이렉트 응답 처리
+    // 카카오 콜백 경로 특별 처리
+    if (event.rawPath.includes("/auth/kakao/callback")) {
+      try {
+        console.log("Starting kakao callback process");
+        const kakaoResponse = await handler(event, context);
+        console.log(
+          "Full kakao response:",
+          JSON.stringify(kakaoResponse, null, 2)
+        );
+
+        // kakaoResponse에서 직접 token 추출
+        let redirectUrl;
+        if (kakaoResponse && kakaoResponse.body) {
+          const body = JSON.parse(kakaoResponse.body);
+          if (body.token) {
+            redirectUrl = `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${encodeURIComponent(
+              body.token
+            )}`;
+          }
+        }
+
+        if (!redirectUrl) {
+          redirectUrl =
+            "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed";
+        }
+
+        console.log("Redirecting to:", redirectUrl);
+
+        return {
+          statusCode: 302,
+          headers: {
+            Location: redirectUrl,
+            "Access-Control-Allow-Origin": FRONTEND_ORIGIN,
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type,Authorization",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+          },
+        };
+      } catch (error) {
+        console.error("Kakao callback error:", error);
+        return {
+          statusCode: 302,
+          headers: {
+            Location:
+              "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed",
+            "Access-Control-Allow-Origin": FRONTEND_ORIGIN,
+            "Access-Control-Allow-Credentials": "true",
+            "Cache-Control": "no-cache",
+          },
+        };
+      }
+    }
+
+    // 일반 리다이렉트 응답 처리
     if (response.statusCode === 302 && response.headers?.Location) {
-      console.log("Processing redirect to:", response.headers.Location);
       return {
         statusCode: 302,
         headers: {
           ...corsHeaders,
           Location: response.headers.Location,
+          "Cache-Control": "no-cache",
         },
       };
     }
@@ -195,10 +212,10 @@ module.exports.handler = async (event, context) => {
       cookies = Array.isArray(response.headers["set-cookie"])
         ? response.headers["set-cookie"]
         : [response.headers["set-cookie"]];
-      console.log("Processing cookies:", cookies);
     }
 
-    const finalResponse = {
+    // 일반 응답 처리
+    return {
       statusCode: response.statusCode || 200,
       headers: {
         ...corsHeaders,
@@ -208,7 +225,7 @@ module.exports.handler = async (event, context) => {
         cookies.length > 0
           ? {
               "Set-Cookie": cookies.map(
-                (cookie) => `${cookie}; Secure; SameSite=None`
+                (cookie) => `${cookie}; SameSite=None; Secure;`
               ),
             }
           : undefined,
@@ -217,9 +234,6 @@ module.exports.handler = async (event, context) => {
           ? response.body
           : JSON.stringify(response.body || ""),
     };
-
-    console.log("Final response headers:", finalResponse.headers);
-    return finalResponse;
   } catch (error) {
     console.error("Handler error:", error);
     return {
@@ -228,7 +242,6 @@ module.exports.handler = async (event, context) => {
       body: JSON.stringify({
         error: "Internal Server Error",
         message: error.message,
-        stack: error.stack,
       }),
     };
   }

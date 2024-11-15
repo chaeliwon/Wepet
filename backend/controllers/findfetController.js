@@ -23,7 +23,6 @@ exports.getFilteredPets = (req, res) => {
     const user_id = getUserIdFromTokenOptional(req);
     console.log("User ID (optional):", user_id);
 
-    // 기본 쿼리에 RAND()와 LIMIT 추가
     let sql = "SELECT pet_img, pet_num FROM pet_info";
 
     // 필터링 조건 추가
@@ -132,7 +131,6 @@ exports.getPetDetails = async (req, res) => {
         })
       : Promise.resolve(false);
 
-    // Promise.all 결과를 다른 변수명으로 받기
     const [petDetails, favoriteStatus] = await Promise.all([
       getPetDetails,
       checkFavorite,
