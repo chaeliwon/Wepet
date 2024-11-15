@@ -139,59 +139,43 @@ module.exports.handler = async (event, context) => {
 
     // Express 앱 처리
     const response = await handler(event, context);
+    console.log("Express response:", response);
 
     // 카카오 콜백 경로 특별 처리
     if (event.rawPath.includes("/auth/kakao/callback")) {
-      try {
-        console.log("Starting kakao callback process");
-        const kakaoResponse = await handler(event, context);
-        console.log(
-          "Full kakao response:",
-          JSON.stringify(kakaoResponse, null, 2)
-        );
+      if (response.body) {
+        try {
+          const bodyObj =
+            typeof response.body === "string"
+              ? JSON.parse(response.body)
+              : response.body;
 
-        // kakaoResponse에서 직접 token 추출
-        let redirectUrl;
-        if (kakaoResponse && kakaoResponse.body) {
-          const body = JSON.parse(kakaoResponse.body);
-          if (body.token) {
-            redirectUrl = `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${encodeURIComponent(
-              body.token
-            )}`;
+          if (bodyObj.token) {
+            console.log("Found token, redirecting with token");
+            return {
+              statusCode: 302,
+              headers: {
+                ...corsHeaders,
+                Location: `https://main.d2agnx57wvpluz.amplifyapp.com/login?token=${bodyObj.token}`,
+                "Cache-Control": "no-cache",
+              },
+            };
           }
+        } catch (e) {
+          console.error("Error parsing response:", e);
         }
-
-        if (!redirectUrl) {
-          redirectUrl =
-            "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed";
-        }
-
-        console.log("Redirecting to:", redirectUrl);
-
-        return {
-          statusCode: 302,
-          headers: {
-            Location: redirectUrl,
-            "Access-Control-Allow-Origin": FRONTEND_ORIGIN,
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type,Authorization",
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-          },
-        };
-      } catch (error) {
-        console.error("Kakao callback error:", error);
-        return {
-          statusCode: 302,
-          headers: {
-            Location:
-              "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed",
-            "Access-Control-Allow-Origin": FRONTEND_ORIGIN,
-            "Access-Control-Allow-Credentials": "true",
-            "Cache-Control": "no-cache",
-          },
-        };
       }
+
+      console.log("No token found, redirecting to error page");
+      return {
+        statusCode: 302,
+        headers: {
+          ...corsHeaders,
+          Location:
+            "https://main.d2agnx57wvpluz.amplifyapp.com/login?error=auth_failed",
+          "Cache-Control": "no-cache",
+        },
+      };
     }
 
     // 일반 리다이렉트 응답 처리
@@ -206,34 +190,31 @@ module.exports.handler = async (event, context) => {
       };
     }
 
-    // 쿠키 처리
-    let cookies = [];
-    if (response.headers?.["set-cookie"]) {
-      cookies = Array.isArray(response.headers["set-cookie"])
-        ? response.headers["set-cookie"]
-        : [response.headers["set-cookie"]];
-    }
-
     // 일반 응답 처리
-    return {
+    const finalResponse = {
       statusCode: response.statusCode || 200,
       headers: {
         ...corsHeaders,
         "Content-Type": "application/json",
       },
-      multiValueHeaders:
-        cookies.length > 0
-          ? {
-              "Set-Cookie": cookies.map(
-                (cookie) => `${cookie}; SameSite=None; Secure;`
-              ),
-            }
-          : undefined,
       body:
         typeof response.body === "string"
           ? response.body
           : JSON.stringify(response.body || ""),
     };
+
+    // 쿠키가 있는 경우 처리
+    if (response.headers?.["set-cookie"]) {
+      finalResponse.multiValueHeaders = {
+        "Set-Cookie": Array.isArray(response.headers["set-cookie"])
+          ? response.headers["set-cookie"].map(
+              (cookie) => `${cookie}; SameSite=None; Secure;`
+            )
+          : [`${response.headers["set-cookie"]}; SameSite=None; Secure;`],
+      };
+    }
+
+    return finalResponse;
   } catch (error) {
     console.error("Handler error:", error);
     return {
