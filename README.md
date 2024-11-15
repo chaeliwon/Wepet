@@ -11,32 +11,14 @@
 
 # ⚙️시스템 아키텍쳐
 
-## Backend
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white)
-
-## Infrastructure & Deployment
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
-![Amazon API Gateway](https://img.shields.io/badge/API_Gateway-FF4F8B?style=for-the-badge&logo=amazonapigateway&logoColor=white)
-![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)
-![Amazon S3](https://img.shields.io/badge/Amazon_S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
-![Amazon CloudWatch](https://img.shields.io/badge/CloudWatch-FF4F8B?style=for-the-badge&logo=amazoncloudwatch&logoColor=white)
-
-## Database
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-
-## Development Tools
-![Visual Studio Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
-![PyCharm](https://img.shields.io/badge/PyCharm-000000?style=for-the-badge&logo=pycharm&logoColor=white)
-
-## Collaboration Tools
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
-![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
-
-## Design Tool
-![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+| 구분 | 기술 |
+|:--|:--|
+| Backend | ![NodeJS](https://img.shields.io/badge/NODE.JS-339933?style=flat-square&logo=Node.js&logoColor=white) ![FastAPI](https://img.shields.io/badge/FASTAPI-009688?style=flat-square&logo=FastAPI&logoColor=white) ![Python](https://img.shields.io/badge/PYTHON-3776AB?style=flat-square&logo=Python&logoColor=white) |
+| Infrastructure & Deployment | ![Docker](https://img.shields.io/badge/DOCKER-2496ED?style=flat-square&logo=Docker&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=AmazonAWS&logoColor=white) ![API Gateway](https://img.shields.io/badge/API_GATEWAY-FF4F8B?style=flat-square&logo=amazonapigateway&logoColor=white) ![AWS Lambda](https://img.shields.io/badge/AWS_LAMBDA-FF9900?style=flat-square&logo=awslambda&logoColor=white) ![Amazon S3](https://img.shields.io/badge/AMAZON_S3-569A31?style=flat-square&logo=amazons3&logoColor=white) ![CloudWatch](https://img.shields.io/badge/CLOUDWATCH-FF4F8B?style=flat-square&logo=amazoncloudwatch&logoColor=white) |
+| Database | ![MySQL](https://img.shields.io/badge/MYSQL-4479A1?style=flat-square&logo=MySQL&logoColor=white) |
+| Development Tools | ![VS Code](https://img.shields.io/badge/VS_CODE-007ACC?style=flat-square&logo=VisualStudioCode&logoColor=white) ![PyCharm](https://img.shields.io/badge/PYCHARM-000000?style=flat-square&logo=PyCharm&logoColor=white) |
+| Collaboration Tools | ![GitHub](https://img.shields.io/badge/GITHUB-181717?style=flat-square&logo=GitHub&logoColor=white) ![Notion](https://img.shields.io/badge/NOTION-000000?style=flat-square&logo=Notion&logoColor=white) |
+| Design Tool | ![Figma](https://img.shields.io/badge/FIGMA-F24E1E?style=flat-square&logo=Figma&logoColor=white) |
 
 # 🔔유스케이스
 
