@@ -275,15 +275,15 @@ const PetDetail = () => {
           {/* Swiper 섹션 */}
           {images && images.length > 0 && (
             <>
-              <div className="detailBottomTxt">또 다른 친구들 둘러보기</div>
+              <div className="detailBottomTxt">🐾&nbsp;&nbsp;&nbsp;또 다른 친구들 둘러보기</div>
               <Swiper
                 onSwiper={setSwiperRef}
                 slidesPerView={3}
                 centeredSlides={true}
-                spaceBetween={30}
-                pagination={{
-                  type: "fraction",
-                }}
+                spaceBetween={10}
+                // pagination={{
+                //   type: "fraction",
+                // }}
                 navigation={true}
                 modules={[Pagination, Navigation]}
                 className="detailSwiper"

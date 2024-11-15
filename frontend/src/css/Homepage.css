@@ -159,7 +159,7 @@ a {
 
 /* Swiper 스타일 */
 .home-swiper-section {
-  width: 95%;
+  width: 94%;
   margin-top: 280px;
   padding-top: 20px;
   padding-bottom: 30px;
@@ -176,7 +176,7 @@ a {
 }
 
 .homeSwiper {
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
 }
 
@@ -207,6 +207,7 @@ a {
   height: 30px;
   --swiper-navigation-size: 17px;
   border-radius: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
   /* 추가: 위치 이동 */
   position: absolute; /* 또는 relative, 필요에 따라 설정 */
   left: 0px; /* 원하는 만큼 이동 */
@@ -219,6 +220,7 @@ a {
   height: 30px;
   --swiper-navigation-size: 17px;
   border-radius: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
   /* 추가: 위치 이동 */
   position: absolute; /* 또는 relative, 필요에 따라 설정 */
   right: 0px; /* 원하는 만큼 이동 */

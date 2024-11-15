@@ -78,7 +78,7 @@ const Homepage = () => {
           return newArray;
         };
 
-        const shuffledPets = shuffleArray(response.data.pets).slice(0, 6);
+        const shuffledPets = shuffleArray(response.data.pets).slice(0, 8);
         setImages(shuffledPets);
         console.log("Swiper images:", shuffledPets);
       }
