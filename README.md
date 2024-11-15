@@ -24,9 +24,14 @@
 
 # 🔔유스케이스
 
+![WePet 다이어그램](https://github.com/user-attachments/assets/6c909b3b-ab01-48a3-b9ee-56c5d05fefc0)
+
 # 📌서비스 흐름도
 
 # 📌ER 다이어그램
+
+![image](https://github.com/user-attachments/assets/b813dd2f-db8d-470e-9a1c-cf543cf68315)
+
 
 # 📷화면 구성
 
