@@ -101,7 +101,7 @@ const ChatBot = () => {
       const botReply = (
         <div>
           <p className="chatbot-message">
-            이 친구들은 어떠세요?
+            이 다섯 친구들은 어떠세요?
             <br />
             사진을 눌러 이 친구들에 대해 더 알아봐요!
             <br />
