@@ -54,14 +54,10 @@ exports.kakaoCallback = async (req, res) => {
       expiresIn: "1h",
     });
 
-    // LoginForm.jsx에 맞춰서 수정
-    const redirectUrl = `${process.env.FRONTEND_URL}/login?token=${token}`;
-
-    // 리다이렉트 응답
-    res
+    return res
       .status(302)
       .set({
-        Location: redirectUrl,
+        Location: `${process.env.FRONTEND_URL}/login?token=${token}`,
         "Cache-Control": "no-cache",
         "Access-Control-Allow-Origin": process.env.FRONTEND_URL,
         "Access-Control-Allow-Credentials": "true",
@@ -69,7 +65,7 @@ exports.kakaoCallback = async (req, res) => {
       .send();
   } catch (error) {
     console.error("Kakao login error:", error);
-    res
+    return res
       .status(302)
       .set({
         Location: `${process.env.FRONTEND_URL}/login?error=auth_failed`,
