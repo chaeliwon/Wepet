@@ -2,7 +2,7 @@ const passport = require("passport");
 const KakaoStrategy = require("passport-kakao").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const jwt = require("jsonwebtoken");
-const conn = require("./config/db");
+const conn = require("../config/db");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;

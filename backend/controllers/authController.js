@@ -11,7 +11,14 @@ exports.kakaoLogin = (req, res) => {
   const STATE = Math.random().toString(36).substring(7);
 
   const authUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
-  res.redirect(authUrl);
+
+  return res
+    .status(302)
+    .set({
+      Location: authUrl,
+      "Cache-Control": "no-cache",
+    })
+    .send();
 };
 
 // 카카오 콜백
@@ -19,7 +26,6 @@ exports.kakaoCallback = async (req, res) => {
   const { code } = req.query;
 
   try {
-    // 액세스 토큰 요청
     const tokenResponse = await axios.post(
       "https://kauth.kakao.com/oauth/token",
       null,
@@ -29,14 +35,12 @@ exports.kakaoCallback = async (req, res) => {
           client_id: process.env.KAKAO_CLIENT_ID,
           redirect_uri: process.env.KAKAO_REDIRECT_URI,
           code: code,
-          client_secret: process.env.KAKAO_CLIENT_SECRET,
         },
       }
     );
 
     const accessToken = tokenResponse.data.access_token;
 
-    // 사용자 정보 요청
     const userResponse = await axios.get("https://kapi.kakao.com/v2/user/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -46,20 +50,34 @@ exports.kakaoCallback = async (req, res) => {
     const kakaoId = userResponse.data.id;
     const userNick = userResponse.data.properties?.nickname || "KakaoUser";
 
-    // JWT 토큰 생성
     const token = jwt.sign({ userId: kakaoId, userNick }, JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    res.cookie("jwtToken", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-    });
-    res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);
+    // LoginForm.jsx에 맞춰서 수정
+    const redirectUrl = `${process.env.FRONTEND_URL}/login?token=${token}`;
+
+    // 리다이렉트 응답
+    res
+      .status(302)
+      .set({
+        Location: redirectUrl,
+        "Cache-Control": "no-cache",
+        "Access-Control-Allow-Origin": process.env.FRONTEND_URL,
+        "Access-Control-Allow-Credentials": "true",
+      })
+      .send();
   } catch (error) {
     console.error("Kakao login error:", error);
-    res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+    res
+      .status(302)
+      .set({
+        Location: `${process.env.FRONTEND_URL}/login?error=auth_failed`,
+        "Cache-Control": "no-cache",
+        "Access-Control-Allow-Origin": process.env.FRONTEND_URL,
+        "Access-Control-Allow-Credentials": "true",
+      })
+      .send();
   }
 };
 

@@ -4,9 +4,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const serverless = require("serverless-http");
 const passport = require("passport");
-require("./config/passport"); // passport 설정 로드
+require("./config/passport");
 
-// 다른 라우터들 import
 const userRouter = require("./routes/userRouter");
 const mainRouter = require("./routes/mainRouter");
 const likeRouter = require("./routes/likeRouter");
@@ -19,7 +18,7 @@ const FRONTEND_ORIGIN = [
   "http://localhost:3000",
 ];
 
-// CORS 옵션 설정
+// CORS 옵션 설정 - location 헤더 추가
 const corsOptions = {
   origin: FRONTEND_ORIGIN,
   credentials: true,
@@ -30,8 +29,9 @@ const corsOptions = {
     "X-Requested-With",
     "Accept",
     "Cookie",
+    "Location",
   ],
-  exposedHeaders: ["Set-Cookie"],
+  exposedHeaders: ["Set-Cookie", "Location"],
   maxAge: 86400,
 };
 
@@ -41,14 +41,12 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// 라우터 설정
 app.use("/user", userRouter);
 app.use("/main", mainRouter);
 app.use("/findfet", findfetRouter);
 app.use("/like", likeRouter);
 app.use("/auth", authRouter);
 
-// Lambda 핸들러
 const handler = serverless(app);
 
 module.exports.handler = async (event, context) => {
@@ -56,7 +54,6 @@ module.exports.handler = async (event, context) => {
 
   console.log("Incoming event:", JSON.stringify(event, null, 2));
 
-  // 요청의 origin을 확인하고 허용된 origin 반환
   const origin = event.headers?.origin || event.headers?.Origin;
   const allowedOrigin = FRONTEND_ORIGIN.includes(origin)
     ? origin
@@ -66,7 +63,7 @@ module.exports.handler = async (event, context) => {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS,PATCH",
     "Access-Control-Allow-Headers":
-      "Content-Type,Authorization,X-Requested-With,Accept,Cookie",
+      "Content-Type,Authorization,X-Requested-With,Accept,Cookie,Location", // location 헤더 추가
     "Access-Control-Allow-Credentials": "true",
     "Access-Control-Expose-Headers": "Set-Cookie,Location",
     "Access-Control-Max-Age": "86400",
@@ -74,7 +71,6 @@ module.exports.handler = async (event, context) => {
   };
 
   try {
-    // 경로 처리
     if (event.rawPath) {
       const path = event.rawPath.replace("/dev", "");
       event.path = path;
@@ -84,7 +80,6 @@ module.exports.handler = async (event, context) => {
       }
     }
 
-    // OPTIONS 요청 처리
     if (event.requestContext?.http?.method === "OPTIONS") {
       return {
         statusCode: 200,
@@ -93,8 +88,18 @@ module.exports.handler = async (event, context) => {
       };
     }
 
-    // 일반 요청 처리
     const response = await handler(event, context);
+
+    // 리다이렉트 응답 처리
+    if (response.statusCode === 302 || response.statusCode === 301) {
+      return {
+        statusCode: response.statusCode,
+        headers: {
+          ...corsHeaders,
+          Location: response.headers.location || response.headers.Location,
+        },
+      };
+    }
 
     // 쿠키 처리
     let cookies = [];
@@ -105,7 +110,7 @@ module.exports.handler = async (event, context) => {
       console.log("Processing cookies:", cookies);
     }
 
-    // 응답 반환
+    // 일반 응답 처리
     return {
       statusCode: response.statusCode || 200,
       headers: {

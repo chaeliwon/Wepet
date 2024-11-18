@@ -22,13 +22,13 @@ const LoginForm = () => {
 
   // Kakao 로그인
   const handleKakaoLogin = () => {
-    const authUrl = `https://your-backend-url/dev/auth/kakao`;
+    const authUrl = `https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao`;
     window.location.href = authUrl;
   };
 
   // Google 로그인
   const handleGoogleLogin = () => {
-    const authUrl = `https://your-backend-url/dev/auth/google`;
+    const authUrl = `https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google`;
     window.location.href = authUrl;
   };
 
@@ -46,34 +46,34 @@ const LoginForm = () => {
     }
   }, [navigate]);
 
-  // 소셜 로그인 완료 후 처리를 위한 이벤트 리스너
-  useEffect(() => {
-    console.log("Setting up social login message listener");
+  // // 소셜 로그인 완료 후 처리를 위한 이벤트 리스너
+  // useEffect(() => {
+  //   console.log("Setting up social login message listener");
 
-    const handleSocialLogin = (event) => {
-      console.log("Received message:", event);
+  //   const handleSocialLogin = (event) => {
+  //     console.log("Received message:", event);
 
-      if (
-        event.origin !==
-        "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com"
-      ) {
-        console.log("Message from unauthorized origin:", event.origin);
-        return;
-      }
+  //     if (
+  //       event.origin !==
+  //       "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com"
+  //     ) {
+  //       console.log("Message from unauthorized origin:", event.origin);
+  //       return;
+  //     }
 
-      if (event.data.token) {
-        console.log("Received token from social login:", event.data.token);
-        localStorage.setItem("token", event.data.token);
-        navigate("/");
-      }
-    };
+  //     if (event.data.token) {
+  //       console.log("Received token from social login:", event.data.token);
+  //       localStorage.setItem("token", event.data.token);
+  //       navigate("/");
+  //     }
+  //   };
 
-    window.addEventListener("message", handleSocialLogin);
-    return () => {
-      console.log("Cleaning up message listener");
-      window.removeEventListener("message", handleSocialLogin);
-    };
-  }, [navigate]);
+  //   window.addEventListener("message", handleSocialLogin);
+  //   return () => {
+  //     console.log("Cleaning up message listener");
+  //     window.removeEventListener("message", handleSocialLogin);
+  //   };
+  // }, [navigate]);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -212,7 +212,7 @@ const LoginForm = () => {
 
       <Link to="/signup" className="signup-link-login">
         <p className="not-member-login" style={{ textDecoration: "none" }}>
-          아직 회원이 아니신가요? 
+          아직 회원이 아니신가요?
           <span className="signup-text-login">회원가입하기!</span>
         </p>
       </Link>
