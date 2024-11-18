@@ -152,7 +152,7 @@ body {
 
 .filter-section.visible {
   bottom: -0.5%; /* 원하는 위치로 필터가 올라오게 설정 */
-  padding-bottom: 0px 0 calc(env(safe-area-inset-bottom) + 5%);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 40px);
 }
 
 .filter-section.hidden {
