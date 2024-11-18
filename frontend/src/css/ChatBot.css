@@ -269,9 +269,14 @@ button {
   width: 125px;
   height: 125px;
   object-fit: cover;
+  border-radius: 15px;
 }
 
 .loading-image {
   width: 393px;
   height: auto;
+}
+
+.chatbot-message {
+  margin: 0px;
 }
