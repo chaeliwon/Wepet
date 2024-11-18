@@ -121,16 +121,6 @@ input {
   /* transform: translateY(-2px); */
 }
 
-.validation-error-login {
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  align-self: flex-start;
-  position: relative;
-  z-index: 10;
-}
-
 .social-login-box {
   display: flex;
   margin-top: 10px;
@@ -178,6 +168,12 @@ input {
   text-decoration: underline;
 }
 
+.not-member-login {
+  text-decoration: underline;
+  margin-top: 15px;
+
+}
+
 .signup-text-login {
   display: block;  /* 다음 줄로 내리기 */
   font-weight: bold;  /* 글씨 굵게 */
@@ -193,3 +189,17 @@ input {
   position: relative;
   z-index: 10;
 }
+
+.validation-error-login-last {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  display: flex;             /* flexbox 사용 */
+  justify-content: center;   /* 가로축 중앙 정렬 */
+  align-items: center;       /* 세로축 중앙 정렬 */
+}
+
