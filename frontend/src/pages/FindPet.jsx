@@ -95,6 +95,11 @@ const FindPet = () => {
     }
   };
 
+  // 새로고침 함수
+  const reload = () => {
+    window.location.reload();
+  };
+
   // 상세정보창 이동 함수
   const moveDetail = (pet) => {
     nav(`/findpet/petdetail/${pet.pet_num}`);
@@ -154,6 +159,14 @@ const FindPet = () => {
             ></div>
           </div>
         ))}
+        <div className="reloadSection" onClick={reload}>
+          <img
+            src="./static/reload.png"
+            alt="새로고침 아이콘"
+            className="reloadIcon"
+          />
+          <span className="reloadText">새로운 친구들 불러오기</span>
+        </div>
       </div>
 
       <ChatbotButton />

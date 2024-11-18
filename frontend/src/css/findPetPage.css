@@ -235,3 +235,39 @@ input {
   border-radius: 15px;
   display: grid;
 }
+
+.reloadSection {
+  position: relative;
+  display: flex;
+  width: 150%;
+  height: 40px;
+  border-radius: 10px;
+  margin: 0 auto;
+  transform: translateX(57%);
+  margin-top: 20%;
+  font-size: 12px;
+  align-content: center;
+  flex-wrap: wrap;
+  background-color: #cceb5c;
+  cursor: pointer;
+}
+
+.reloadSection:hover {
+  background-color: #a1b948;
+}
+
+.reloadIcon {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  margin-left: 5%;
+}
+
+.reloadText {
+  position: relative;
+  height: 20px;
+  width: auto;
+  display: flex;
+  align-items: center;
+  margin-left: 5%;
+}
