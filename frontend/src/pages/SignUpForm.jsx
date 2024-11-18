@@ -42,13 +42,18 @@ const SignupForm = () => {
   };
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    const newPassword = e.target.value;
+    setPassword(newPassword);
     setPasswordError(false);
+    if (confirmPassword) {
+      setConfirmPasswordError(newPassword !== confirmPassword);
+    }
   };
 
   const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
-    setConfirmPasswordError(false);
+    const newConfirmPassword = e.target.value;
+    setConfirmPassword(newConfirmPassword);
+    setConfirmPasswordError(password !== newConfirmPassword);
   };
 
   const handleNicknameChange = (e) => {
