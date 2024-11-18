@@ -97,6 +97,7 @@ module.exports.handler = async (event, context) => {
         headers: {
           ...corsHeaders,
           Location: response.headers.location || response.headers.Location,
+          "Cache-Control": "no-cache",
         },
       };
     }
