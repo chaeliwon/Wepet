@@ -278,5 +278,6 @@ button {
 }
 
 .chatbot-message {
-  margin: 0px;
+  margin-top: 0px;
+  margin-bottom: 20px;
 }
