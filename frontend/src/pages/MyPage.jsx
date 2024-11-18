@@ -24,6 +24,10 @@ const MyPage = () => {
     const checkLoginStatus = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) {
+          setIsLoggedIn(false);
+          return; // 토큰이 없으면 여기서 종료
+        }
         const response = await api.get("/user/checkLoginStatus", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -33,41 +37,31 @@ const MyPage = () => {
         if (response.data.isLoggedIn) {
           setIsLoggedIn(true);
           setUserData({ userId: response.data.userId });
-          // 로그인 상태 확인 후 바로 getNick 호출
-          getNick();
+          // getNick 함수 호출을 여기서 직접 처리
+          try {
+            const nickResponse = await api.get("/user/send-nick-mypage", {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (nickResponse.data?.rows && nickResponse.data.rows.length > 0) {
+              setUserNick(nickResponse.data.rows[0].user_nick);
+            }
+          } catch (error) {
+            console.error("닉네임 가져오기 실패:", error);
+          }
         } else {
           setIsLoggedIn(false);
+          localStorage.removeItem("token"); // 유효하지 않은 토큰 제거
         }
       } catch (error) {
         console.error("로그인 상태 확인 오류:", error);
         setIsLoggedIn(false);
+        localStorage.removeItem("token"); // 오류 발생 시 토큰 제거
       }
     };
 
     checkLoginStatus();
-  }, []); // userData 의존성 제거
-
-  // 닉네임 가져오기
-  const getNick = async (retryCount = 0) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await api.get("/user/send-nick-mypage", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.data?.rows && response.data.rows.length > 0) {
-        setUserNick(response.data.rows[0].user_nick);
-      } else {
-        console.error("닉네임 데이터가 없습니다.");
-      }
-    } catch (error) {
-      console.error("닉네임 가져오기 실패:", error);
-      if (retryCount < 3) {
-        console.log(`재시도 중: ${retryCount + 1}`);
-        await getNick(retryCount + 1);
-      }
-    }
-  };
+  }, []);
 
   const handleLogout = () => {
     Swal.fire({
