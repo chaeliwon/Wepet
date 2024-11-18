@@ -48,7 +48,7 @@ form {
   padding: 20px;
   border-radius: 8px;
   margin: 0 auto;
-  align-items: center;
+  /* align-items: stretch;   */
 }
 
 label {
@@ -184,22 +184,18 @@ input {
 .validation-error-login {
   color: red;
   font-size: 14px;
-  margin-top: 5px;
-  margin-bottom: 10px;
   position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
   z-index: 10;
+  width: 100%;      /* 전체 너비 사용 */
+  text-align: left; /* 왼쪽 정렬 */
+  align-self: flex-start; /* flex 컨테이너 내에서 왼쪽 정렬 */
 }
 
-.validation-error-login-last {
+.validity-message {
   color: red;
   font-size: 14px;
-  margin-top: 5px;
-  margin-bottom: 10px;
   position: relative;
-  z-index: 10;
-  text-align: center;
-  display: flex;             /* flexbox 사용 */
-  justify-content: center;   /* 가로축 중앙 정렬 */
-  align-items: center;       /* 세로축 중앙 정렬 */
+  margin-top: -5px;
 }
-

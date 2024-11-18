@@ -184,7 +184,7 @@ const LoginForm = () => {
           로그인 🐾
         </button>
         {loginFail && (
-          <p className="validation-error-login-last">입력 정보를 확인해주세요.</p>
+          <p className="validity-message">입력 정보를 확인해주세요.</p>
         )}
       </form>
 
