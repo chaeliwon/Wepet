@@ -54,7 +54,7 @@ body {
 }
 
 .petImage {
-  width: 100px;   /* imageWrapper에 맞추도록 수정 */
+  width: 100px; /* imageWrapper에 맞추도록 수정 */
   height: 100px;
   object-fit: cover;
   border-radius: 8px;
@@ -86,14 +86,14 @@ body {
 
 .heartIcon {
   position: absolute;
-  bottom: 12px;  /* 하단 여백 줄임 */
-  right: 12px;   /* 우측 여백 줄임 */
+  bottom: 12px; /* 하단 여백 줄임 */
+  right: 12px; /* 우측 여백 줄임 */
   width: 19px;
   height: 18px;
   background-image: url("../assets/heart-outline.png");
   background-size: cover;
   transition: transform 0.2s ease-in-out;
-  z-index: 10;  /* 이미지 위에 표시되도록 z-index 추가 */
+  z-index: 10; /* 이미지 위에 표시되도록 z-index 추가 */
 }
 
 /* 채워진 하트 스타일 */
@@ -148,11 +148,11 @@ body {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   z-index: 100;
- 
 }
 
 .filter-section.visible {
   bottom: -0.5%; /* 원하는 위치로 필터가 올라오게 설정 */
+  padding-bottom: 0px 0 calc(env(safe-area-inset-bottom) + 5%);
 }
 
 .filter-section.hidden {
