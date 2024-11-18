@@ -3,12 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const serverless = require("serverless-http");
+const passport = require("passport");
+require("./config/passport"); // passport 설정 로드
 
 // 다른 라우터들 import
 const userRouter = require("./routes/userRouter");
 const mainRouter = require("./routes/mainRouter");
 const likeRouter = require("./routes/likeRouter");
 const findfetRouter = require("./routes/findfetRouter");
+const authRouter = require("./routes/authRouter");
 
 const app = express();
 const FRONTEND_ORIGIN = [
@@ -30,10 +33,9 @@ const corsOptions = {
   ],
   exposedHeaders: ["Set-Cookie"],
   maxAge: 86400,
-  preflightContinue: false,
-  optionsSuccessStatus: 200,
 };
 
+app.use(passport.initialize());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
@@ -44,6 +46,7 @@ app.use("/user", userRouter);
 app.use("/main", mainRouter);
 app.use("/findfet", findfetRouter);
 app.use("/like", likeRouter);
+app.use("/auth", authRouter);
 
 // Lambda 핸들러
 const handler = serverless(app);
@@ -93,12 +96,30 @@ module.exports.handler = async (event, context) => {
     // 일반 요청 처리
     const response = await handler(event, context);
 
+    // 쿠키 처리
+    let cookies = [];
+    if (response.headers?.["set-cookie"]) {
+      cookies = Array.isArray(response.headers["set-cookie"])
+        ? response.headers["set-cookie"]
+        : [response.headers["set-cookie"]];
+      console.log("Processing cookies:", cookies);
+    }
+
+    // 응답 반환
     return {
       statusCode: response.statusCode || 200,
       headers: {
         ...corsHeaders,
         "Content-Type": "application/json",
       },
+      multiValueHeaders:
+        cookies.length > 0
+          ? {
+              "Set-Cookie": cookies.map(
+                (cookie) => `${cookie}; SameSite=None; Secure; Path=/`
+              ),
+            }
+          : undefined,
       body:
         typeof response.body === "string"
           ? response.body

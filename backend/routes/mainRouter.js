@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const conn = require("../config/db"); // pool이 아닌 conn 사용
+const conn = require("../config/db");
 
 // 메인 페이지 동물 이미지 가져오기
 router.get("/", (req, res) => {

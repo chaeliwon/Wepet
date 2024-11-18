@@ -22,28 +22,14 @@ const LoginForm = () => {
 
   // Kakao 로그인
   const handleKakaoLogin = () => {
-    const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
-    const CLIENT_ID = "26a4b372c5672f44eb37762116d25ca8";
-    const REDIRECT_URI = encodeURIComponent(
-      "https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/kakao/callback"
-    );
-    const STATE = encodeURIComponent(Math.random().toString(36).substring(7));
-
-    // state 파라미터 추가
-    const kakaoAuthURL = `${KAKAO_AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
-
-    // localStorage에 state 저장
-    localStorage.setItem("kakaoAuthState", STATE);
-
-    window.location.href = kakaoAuthURL;
+    const authUrl = `https://your-backend-url/dev/auth/kakao`;
+    window.location.href = authUrl;
   };
 
   // Google 로그인
   const handleGoogleLogin = () => {
-    console.log("Initiating Google login");
-    const googleAuthUrl = `https://5zld3up4c4.execute-api.ap-northeast-2.amazonaws.com/dev/auth/google`;
-
-    window.location.href = googleAuthUrl; // 팝업 대신 전체 페이지 리다이렉션
+    const authUrl = `https://your-backend-url/dev/auth/google`;
+    window.location.href = authUrl;
   };
 
   // URL에서 JWT 토큰 추출 및 저장
@@ -181,7 +167,9 @@ const LoginForm = () => {
           required
         />
         {passwordError && (
-          <p className="validation-error-login">비밀번호를 정확하게 입력해주세요.</p>
+          <p className="validation-error-login">
+            비밀번호를 정확하게 입력해주세요.
+          </p>
         )}
 
         <Link
