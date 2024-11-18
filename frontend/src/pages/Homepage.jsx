@@ -28,6 +28,10 @@ const Homepage = () => {
   const logInState = async () => {
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        setIsLoggedIn(false);
+        return;
+      }
       const response = await api.get("/user/checkLoginStatus", {
         headers: {
           Authorization: token ? `Bearer ${token}` : undefined,

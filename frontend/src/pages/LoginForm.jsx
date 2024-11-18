@@ -190,19 +190,19 @@ const LoginForm = () => {
 
       {/* 소셜 로그인 부분을 form 밖으로 이동 */}
       <div className="social-login-box">
-        <div className="social-login">
+        <div className="social-login-lg">
           <button
             type="button"
-            className="kakao-login"
+            className="kakao-login-lg"
             onClick={handleKakaoLogin}
           >
             <img src={kakaoIcon} alt="Kakao" />
           </button>
         </div>
-        <div className="social-login">
+        <div className="social-login-lg">
           <button
             type="button"
-            className="google-login"
+            className="google-login-lg"
             onClick={handleGoogleLogin}
           >
             <img src={googleIcon} alt="Google" />
@@ -210,9 +210,10 @@ const LoginForm = () => {
         </div>
       </div>
 
-      <Link to="/signup" className="signup-link">
-        <p className="not-member" style={{ textDecoration: "none" }}>
-          아직 회원이 아니신가요?
+      <Link to="/signup" className="signup-link-login">
+        <p className="not-member-login" style={{ textDecoration: "none" }}>
+          아직 회원이 아니신가요? 
+          <span className="signup-text-login">회원가입하기!</span>
         </p>
       </Link>
     </div>

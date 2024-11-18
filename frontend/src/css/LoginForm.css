@@ -32,15 +32,12 @@ body,
   width: 200px;
   height: auto;
   margin-bottom: 50px;
+  display: block;
+  position: absolute; /* 절대 위치로 변경 */
+  top: 170px; /* 상단에서의 거리 */
+  left: 50%;
+  transform: translateX(-50%); /* 가운데 정렬 */
 }
-
-/* h1 {
-  font-family: 'KCC-Ganpan', sans-serif; 
-  font-size: 35px;
-  color: #c7d2ad;
-  margin-bottom: 20px;
-  -webkit-text-stroke: 0.3px #855b3b;
-} */
 
 form {
   display: flex;
@@ -116,6 +113,7 @@ input {
   width: 130px; /* 버튼의 적절한 너비 설정 */
   height: 50px; /* 버튼의 높이 설정 */
   margin-top: 15px;
+  margin-bottom: 20px;;
 }
 
 .login-btn-login:hover {
@@ -135,16 +133,16 @@ input {
 
 .social-login-box {
   display: flex;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
-.social-login {
+.social-login-lg {
   display: flex;
   justify-content: center;
   margin-top: 5px;
 }
 
-.social-login button {
+.social-login-lg button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,47 +153,36 @@ input {
   background: none;
 }
 
-.social-login img {
+.social-login-lg img {
   width: 40px;
   height: 40px;
 }
 
-.kakao-login {
+.kakao-login-lg {
   background-color: transparent;
 }
 
-.google-login {
+.google-login-lg {
   background-color: transparent;
 }
 
-.signup-link {
+.signup-link-login {
   display: inline; /* 링크가 텍스트만큼의 크기만 차지하게 설정 */
   text-decoration: none;
+  margin-bottom: 30px; /*아래에서 로그인 폼을 밀어주고있어용*/
 }
 
-.signup-link .not-member {
+.signup-link-login .not-member-login {
   font-size: 14px;
   color: #855b3b;
   text-decoration: underline;
 }
 
-/* 챗봇 페이지로 가는 버튼 */
-.chatbot-button-container {
-  position: absolute; /* login-container 안에서 위치 고정 */
-  right: 20px; /* 오른쪽에서 20px 떨어진 위치 */
-  bottom: 10px; /* 아래쪽에서 10px 떨어진 위치 */
-  z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
-}
-
-.chatbot-button {
-  width: 60px; /* 버튼 크기 조정 */
-  height: 60px;
-  cursor: pointer;
-  transition: transform 0.2s; /* 클릭 시 애니메이션 효과 */
-}
-
-.chatbot-button:hover {
-  transform: scale(1.1); /* 호버 시 버튼 확대 */
+.signup-text-login {
+  display: block;  /* 다음 줄로 내리기 */
+  font-weight: bold;  /* 글씨 굵게 */
+  margin-top: 5px;  /* 위 텍스트와의 간격 조절 (선택사항) */
+  font-size: 16px;
 }
 
 .validation-error-login {
