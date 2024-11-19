@@ -1,19 +1,18 @@
 {
   "env": {
     "node": true,
-    "commonjs": true,
     "es2021": true
   },
-  "extends": ["eslint:recommended"],
+  "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 2021,
-    "sourceType": "module"
-  },
-  "globals": {
-    "process": true
+    "ecmaVersion": 2021
   },
   "rules": {
     "no-undef": "error",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "try-catch-shadow": "off"
+  },
+  "globals": {
+    "process": true
   }
 }

@@ -15,31 +15,24 @@ const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 const generateJWT = (userId) =>
   jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1h" });
 
-// 사용자 찾기 또는 생성 헬퍼 함수
+// 사용자 찾기 또는 생성 함수
 const findOrCreateUser = async (userId, userNick, userType) => {
-  try {
-    // 사용자 찾기
-    const existingUser = await knex("user_info")
-      .where("user_id", userId)
-      .first();
+  // try/catch 제거하고 함수 내부에서 발생하는 에러를 상위로 전파
+  const existingUser = await knex("user_info").where("user_id", userId).first();
 
-    if (existingUser) {
-      const token = generateJWT(userId);
-      return { userId, token };
-    }
-
-    // 새 사용자 생성
-    await knex("user_info").insert({
-      user_id: userId,
-      user_nick: userNick,
-      user_type: userType,
-    });
-
+  if (existingUser) {
     const token = generateJWT(userId);
     return { userId, token };
-  } catch (error) {
-    throw error;
   }
+
+  await knex("user_info").insert({
+    user_id: userId,
+    user_nick: userNick,
+    user_type: userType,
+  });
+
+  const token = generateJWT(userId);
+  return { userId, token };
 };
 
 // Kakao OAuth 전략

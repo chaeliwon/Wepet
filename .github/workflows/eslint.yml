@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # v3에서 v4로 업데이트
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4 # v3에서 v4로 업데이트
         with:
-          node-version: "20" # 원하는 Node.js 버전으로 설정
+          node-version: "20"
 
       - name: Install dependencies for backend
         working-directory: ./backend
