@@ -2,7 +2,7 @@ const passport = require("passport");
 const KakaoStrategy = require("passport-kakao").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const jwt = require("jsonwebtoken");
-const conn = require("../config/db");
+const knex = require("../config/db");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;
@@ -15,6 +15,33 @@ const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 const generateJWT = (userId) =>
   jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1h" });
 
+// 사용자 찾기 또는 생성 헬퍼 함수
+const findOrCreateUser = async (userId, userNick, userType) => {
+  try {
+    // 사용자 찾기
+    const existingUser = await knex("user_info")
+      .where("user_id", userId)
+      .first();
+
+    if (existingUser) {
+      const token = generateJWT(userId);
+      return { userId, token };
+    }
+
+    // 새 사용자 생성
+    await knex("user_info").insert({
+      user_id: userId,
+      user_nick: userNick,
+      user_type: userType,
+    });
+
+    const token = generateJWT(userId);
+    return { userId, token };
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Kakao OAuth 전략
 passport.use(
   new KakaoStrategy(
@@ -23,25 +50,12 @@ passport.use(
       callbackURL: KAKAO_REDIRECT_URI,
     },
     async (accessToken, refreshToken, profile, done) => {
-      const userId = `kakao_${profile.id}`;
-      const userNick = profile.displayName || "Kakao User";
-
       try {
-        const findSql = `SELECT * FROM user_info WHERE user_id = ?`;
-        conn.query(findSql, [userId], (err, rows) => {
-          if (err) return done(err);
-          if (rows.length > 0) {
-            const token = generateJWT(userId);
-            return done(null, { userId, token });
-          } else {
-            const insertSql = `INSERT INTO user_info (user_id, user_nick, user_type) VALUES (?, ?, 'kakao')`;
-            conn.query(insertSql, [userId, userNick], (err) => {
-              if (err) return done(err);
-              const token = generateJWT(userId);
-              return done(null, { userId, token });
-            });
-          }
-        });
+        const userId = `kakao_${profile.id}`;
+        const userNick = profile.displayName || "Kakao User";
+
+        const user = await findOrCreateUser(userId, userNick, "kakao");
+        return done(null, user);
       } catch (error) {
         return done(error);
       }
@@ -58,25 +72,12 @@ passport.use(
       callbackURL: GOOGLE_REDIRECT_URI,
     },
     async (accessToken, refreshToken, profile, done) => {
-      const userId = `google_${profile.id}`;
-      const userNick = profile.displayName || profile.emails[0].value;
-
       try {
-        const findSql = `SELECT * FROM user_info WHERE user_id = ?`;
-        conn.query(findSql, [userId], (err, rows) => {
-          if (err) return done(err);
-          if (rows.length > 0) {
-            const token = generateJWT(userId);
-            return done(null, { userId, token });
-          } else {
-            const insertSql = `INSERT INTO user_info (user_id, user_nick, user_type) VALUES (?, ?, 'google')`;
-            conn.query(insertSql, [userId, userNick], (err) => {
-              if (err) return done(err);
-              const token = generateJWT(userId);
-              return done(null, { userId, token });
-            });
-          }
-        });
+        const userId = `google_${profile.id}`;
+        const userNick = profile.displayName || profile.emails[0].value;
+
+        const user = await findOrCreateUser(userId, userNick, "google");
+        return done(null, user);
       } catch (error) {
         return done(error);
       }

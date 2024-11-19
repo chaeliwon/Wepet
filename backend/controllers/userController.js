@@ -1,9 +1,8 @@
 require("dotenv").config();
-const conn = require("../config/db");
+const knex = require("../config/db");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
-// nodemailer 설정
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
@@ -14,129 +13,89 @@ const transporter = nodemailer.createTransport({
 
 const verificationCodes = {};
 
-// JWT Secret Key
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
+// 일반 회원가입
+exports.join = async (req, res) => {
+  const { id, pw, nick } = req.body;
+  try {
+    await knex("user_info").insert({
+      user_id: id,
+      user_pw: knex.raw("SHA2(?, 256)", [pw]),
+      user_nick: nick,
+      user_type: "normal",
+    });
 
-// 일반 회원가입 로직
-exports.join = (req, res) => {
-  let { id, pw, nick } = req.body;
-  let type = "normal"; // 일반 회원가입이므로 normal로 설정
-
-  let insertSql = `INSERT INTO user_info (user_id, user_pw, user_nick, user_type) VALUES (?, SHA2(?, 256), ?, ?)`;
-  conn.query(insertSql, [id, pw, nick, type], (err, rows) => {
-    if (err) {
-      console.error("가입 실패", err);
-      res.json({ result: "가입 실패" });
-      return;
-    }
-    console.log("가입 성공", rows);
     res.json({ result: "가입 성공" });
-  });
+  } catch (err) {
+    console.error("가입 실패", err);
+    res.json({ result: "가입 실패" });
+  }
 };
 
-// 이메일 중복 확인 API
-exports.checkEmail = (req, res) => {
-  let { id } = req.body;
+// 이메일 중복 확인
+exports.checkEmail = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const result = await knex("user_info").where("user_id", id).first();
 
-  let checkEmailSql = `SELECT * FROM user_info WHERE user_id = ?`;
-  conn.query(checkEmailSql, [id], (err, result) => {
-    if (err) {
-      console.error("이메일 중복 검사 오류", err);
-      res.json({ result: "에러발생" });
-      return;
-    }
-
-    if (result.length > 0) {
-      // 이메일이 이미 존재하는 경우
-      res.json({ result: "이메일 중복" });
-    } else {
-      // 사용 가능한 이메일
-      res.json({ result: "사용 가능" });
-    }
-  });
+    res.json({ result: result ? "이메일 중복" : "사용 가능" });
+  } catch (err) {
+    console.error("이메일 중복 검사 오류", err);
+    res.json({ result: "에러발생" });
+  }
 };
 
-// 로그인 로직
-exports.login = (req, res) => {
-  let { id, pw } = req.body;
-  console.log("Login attempt for:", id);
+// 로그인
+exports.login = async (req, res) => {
+  const { id, pw } = req.body;
+  try {
+    const user = await knex("user_info")
+      .where("user_id", id)
+      .where(knex.raw("user_pw = SHA2(?, 256)", [pw]))
+      .first();
 
-  const loginsql = `SELECT * FROM user_info WHERE user_id = ? AND user_pw = SHA2(?, 256)`;
-  conn.query(loginsql, [id, pw], (err, rows) => {
-    if (err) {
-      console.error("Login query error:", err);
-      return res.status(500).json({ result: "에러 발생" });
-    }
+    if (user) {
+      const token = jwt.sign({ userId: id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
 
-    if (rows.length > 0) {
-      console.log("Login successful for:", id);
-
-      const token = jwt.sign({ userId: id }, JWT_SECRET, { expiresIn: "1h" });
-      console.log("Generated token:", token);
-
-      // 쿠키 옵션 설정
-      const cookieOptions = {
+      res.cookie("jwtToken", token, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
         path: "/",
         maxAge: 3600000,
-      };
+      });
 
-      res.cookie("jwtToken", token, cookieOptions);
-
-      // Authorization 헤더 설정
       res.setHeader("Authorization", `Bearer ${token}`);
-
-      console.log("Setting cookie with options:", cookieOptions);
-      console.log("Cookie header:", res.getHeader("Set-Cookie"));
 
       return res.status(200).json({
         result: "로그인 성공",
         userId: id,
-        token: token,
+        token,
       });
     }
 
-    console.log("Login failed for:", id);
     return res.status(401).json({ result: "로그인 실패" });
-  });
+  } catch (err) {
+    console.error("Login query error:", err);
+    return res.status(500).json({ result: "에러 발생" });
+  }
 };
 
-// 로그인 상태 확인 로직
-exports.checkLoginStatus = (req, res) => {
-  // 요청 헤더와 쿠키 로깅
-  console.log("Request headers:", req.headers);
-  console.log("Request cookies:", req.cookies);
-
-  // 쿠키나 Authorization 헤더에서 토큰 찾기
-  let token = req.cookies?.jwtToken;
-
-  // 쿠키에 토큰이 없으면 Authorization 헤더에서 확인
-  if (!token && req.headers.authorization) {
-    const authHeader = req.headers.authorization;
-    if (authHeader.startsWith("Bearer ")) {
-      token = authHeader.substring(7);
-    }
-  }
-
-  console.log("Found token:", token);
+// 로그인 상태 확인
+exports.checkLoginStatus = async (req, res) => {
+  const token =
+    req.cookies?.jwtToken || req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    console.log("No token found in cookies or Authorization header");
     return res.status(401).json({
       isLoggedIn: false,
       message: "No token found",
-      debug: {
-        cookies: req.cookies,
-        headers: req.headers,
-      },
     });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Successfully decoded token:", decoded);
 
     return res.status(200).json({
       isLoggedIn: true,
@@ -153,227 +112,190 @@ exports.checkLoginStatus = (req, res) => {
   }
 };
 
-// 로그아웃 로직
-exports.logout = (req, res) => {
+// 로그아웃
+exports.logout = async (req, res) => {
   try {
-    // 단순히 성공 메시지만 반환
-    res.status(200).json({
+    // 쿠키 삭제
+    res.clearCookie("jwtToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+    });
+
+    return res.status(200).json({
       result: "로그아웃 성공",
       message: "Successfully logged out",
     });
   } catch (error) {
     console.error("로그아웃 처리 중 오류 발생:", error);
-    res.status(500).json({
+    return res.status(500).json({
       result: "로그아웃 실패",
       error: error.message,
     });
   }
 };
 
-exports.sendNickMypage = (req, res) => {
-  // JWT 토큰에서 user_id 가져오기
+// 마이페이지 닉네임 조회
+exports.sendNickMypage = async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ result: "인증이 필요합니다" });
   }
 
   try {
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(
+      authHeader.split(" ")[1],
+      process.env.JWT_SECRET
+    );
     const userId = decoded.userId;
 
-    const sendSql = `SELECT user_nick, user_type FROM user_info WHERE user_id = ?`;
-    conn.query(sendSql, [userId], (err, rows) => {
-      if (err) {
-        console.log("닉네임 가져오기 실패:", err);
-        return res.status(500).json({ result: "닉네임 가져오기 실패" });
-      }
+    const user = await knex("user_info")
+      .select("user_nick", "user_type")
+      .where("user_id", userId)
+      .first();
 
-      console.log("닉네임 가져오기 성공", rows);
-      return res.json({ result: "닉네임 가져오기 성공", rows });
+    if (!user) {
+      return res.status(404).json({ result: "사용자를 찾을 수 없습니다" });
+    }
+
+    return res.json({
+      result: "닉네임 가져오기 성공",
+      rows: [user],
     });
   } catch (error) {
-    console.error("토큰 검증 실패:", error);
+    console.error("닉네임 가져오기 실패:", error);
     return res.status(401).json({ result: "인증 실패" });
   }
 };
 
-// 회원정보 수정 로직
-exports.updateUser = (req, res) => {
+// 회원정보 수정
+exports.updateUser = async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ result: "인증이 필요합니다" });
   }
 
   try {
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(
+      authHeader.split(" ")[1],
+      process.env.JWT_SECRET
+    );
     const userId = decoded.userId;
     const { nick, pw } = req.body;
 
-    let updateSql = "UPDATE user_info SET";
-    const params = [];
+    const updateData = {};
+    if (nick) updateData.user_nick = nick;
+    if (pw) updateData.user_pw = knex.raw("SHA2(?, 256)", [pw]);
 
-    if (nick && pw) {
-      // 둘 다 변경하는 경우
-      updateSql += " user_nick = ?, user_pw = SHA2(?, 256)";
-      params.push(nick, pw);
-    } else if (nick) {
-      // 닉네임만 변경하는 경우
-      updateSql += " user_nick = ?";
-      params.push(nick);
-    } else if (pw) {
-      // 비밀번호만 변경하는 경우
-      updateSql += " user_pw = SHA2(?, 256)";
-      params.push(pw);
-    } else {
+    if (Object.keys(updateData).length === 0) {
       return res.status(400).json({ result: "변경할 정보가 없습니다" });
     }
 
-    updateSql += " WHERE user_id = ?";
-    params.push(userId);
+    await knex("user_info").where("user_id", userId).update(updateData);
 
-    conn.query(updateSql, params, (err, result) => {
-      if (err) {
-        console.error("회원정보 수정 실패:", err);
-        return res.status(500).json({ result: "회원정보 수정 실패" });
-      }
-
-      console.log("회원정보 수정 성공:", result);
-      return res.json({
-        result: "회원정보 수정 성공",
-        message:
-          nick && pw
-            ? "닉네임과 비밀번호가 변경되었습니다"
-            : nick
-            ? "닉네임이 변경되었습니다"
-            : "비밀번호가 변경되었습니다",
-      });
+    return res.json({
+      result: "회원정보 수정 성공",
+      message: getUpdateMessage(nick, pw),
     });
   } catch (error) {
-    console.error("토큰 검증 실패:", error);
+    console.error("회원정보 수정 실패:", error);
     return res.status(401).json({ result: "인증 실패" });
   }
 };
 
-// 회원탈퇴 로직
-exports.deleteUser = (req, res) => {
+// 회원 탈퇴
+exports.deleteUser = async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ result: "인증이 필요합니다" });
   }
 
   try {
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(
+      authHeader.split(" ")[1],
+      process.env.JWT_SECRET
+    );
     const userId = decoded.userId;
 
-    const deleteFavoritesSql = `DELETE FROM favorite_info WHERE user_id = ?`;
-    const deleteUserSql = `DELETE FROM user_info WHERE user_id = ?`;
-
-    // 먼저 favorite_info에서 사용자 관련 레코드 삭제
-    conn.query(deleteFavoritesSql, [userId], (err, result) => {
-      if (err) {
-        console.error("찜 정보 삭제 실패:", err);
-        return res.status(500).json({ result: "찜 정보 삭제 실패" });
-      }
-
-      // 이후 user_info에서 사용자 삭제
-      conn.query(deleteUserSql, [userId], (err, result) => {
-        if (err) {
-          console.error("회원 탈퇴 실패:", err);
-          return res.status(500).json({ result: "회원 탈퇴 실패" });
-        }
-
-        console.log("회원 탈퇴 성공:", result);
-
-        // 로컬 스토리지의 토큰 삭제 요청
-        return res.json({ result: "회원 탈퇴 성공" });
-      });
+    await knex.transaction(async (trx) => {
+      await trx("favorite_info").where("user_id", userId).delete();
+      await trx("user_info").where("user_id", userId).delete();
     });
+
+    return res.json({ result: "회원 탈퇴 성공" });
   } catch (error) {
-    console.error("토큰 검증 실패:", error);
+    console.error("회원 탈퇴 실패:", error);
     return res.status(401).json({ result: "인증 실패" });
   }
 };
 
-// 비밀번호 찾기 및 회원가입 - 인증 코드 전송
-exports.sendResetCode = (req, res) => {
-  const { email, type } = req.body; // 'type' 추가 ('signup' 또는 'reset')
+// 비밀번호 찾기 - 인증 코드 전송
+exports.sendResetCode = async (req, res) => {
+  const { email, type } = req.body;
 
-  // 해당 이메일로 가입된 사용자가 있는지 확인
-  const sql = `SELECT * FROM user_info WHERE user_id = ?`;
-  conn.query(sql, [email], (err, result) => {
-    if (err) {
-      console.error("사용자 조회 실패:", err);
-      return res.status(500).json({ result: "에러 발생" });
-    }
+  try {
+    const user = await knex("user_info").where("user_id", email).first();
 
-    if (type === "signup" && result.length > 0) {
-      // 회원가입 시 이미 이메일이 존재하는 경우
+    if (type === "signup" && user) {
       return res.status(400).json({ result: "이미 가입된 이메일" });
     }
 
-    if (type === "reset" && result.length === 0) {
-      // 비밀번호 찾기 시 이메일이 존재하지 않는 경우
+    if (type === "reset" && !user) {
       return res.status(404).json({ result: "존재하지 않는 이메일" });
     }
 
-    // 인증 코드 생성 및 저장
     const verificationCode = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
     verificationCodes[email] = verificationCode;
 
-    // 이메일 전송 설정
     const subject =
       type === "signup" ? "회원가입 인증 코드" : "비밀번호 재설정 인증 코드";
-    const text = `${subject}: ${verificationCode}`;
-    const mailOptions = {
+    await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: subject,
-      text: text,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("이메일 전송 실패:", error);
-        return res.status(500).json({ result: "이메일 전송 실패" });
-      }
-      console.log("이메일 전송 성공:", info.response);
-      res.json({ result: "인증 코드 전송 성공" });
+      subject,
+      text: `${subject}: ${verificationCode}`,
     });
-  });
+
+    res.json({ result: "인증 코드 전송 성공" });
+  } catch (error) {
+    console.error("이메일 전송 실패:", error);
+    res.status(500).json({ result: "이메일 전송 실패" });
+  }
 };
 
 // 인증 코드 검증
 exports.verifyResetCode = (req, res) => {
   const { email, code } = req.body;
-
-  // 인증 코드 확인
   if (verificationCodes[email] !== code) {
     return res.status(400).json({ result: "인증 코드 불일치" });
   }
-
-  // 인증 코드가 일치하는 경우
   res.json({ result: "인증 코드 일치" });
 };
 
 // 비밀번호 재설정
-exports.resetPassword = (req, res) => {
+exports.resetPassword = async (req, res) => {
   const { email, newPassword } = req.body;
 
-  // 비밀번호 재설정 진행
-  const updateSql = `UPDATE user_info SET user_pw = SHA2(?, 256) WHERE user_id = ?`;
-  conn.query(updateSql, [newPassword, email], (err, result) => {
-    if (err) {
-      console.error("비밀번호 재설정 실패:", err);
-      return res.status(500).json({ result: "비밀번호 재설정 실패" });
-    }
+  try {
+    await knex("user_info")
+      .where("user_id", email)
+      .update({
+        user_pw: knex.raw("SHA2(?, 256)", [newPassword]),
+      });
 
-    // 인증 코드 삭제
     delete verificationCodes[email];
     res.json({ result: "비밀번호 재설정 성공" });
-  });
+  } catch (error) {
+    console.error("비밀번호 재설정 실패:", error);
+    res.status(500).json({ result: "비밀번호 재설정 실패" });
+  }
+};
+
+const getUpdateMessage = (nick, pw) => {
+  if (nick && pw) return "닉네임과 비밀번호가 변경되었습니다";
+  if (nick) return "닉네임이 변경되었습니다";
+  return "비밀번호가 변경되었습니다";
 };
