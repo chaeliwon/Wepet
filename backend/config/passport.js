@@ -1,3 +1,4 @@
+/* eslint-env node */
 const passport = require("passport");
 const KakaoStrategy = require("passport-kakao").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
