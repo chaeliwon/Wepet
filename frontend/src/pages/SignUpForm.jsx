@@ -225,7 +225,7 @@ const SignupForm = () => {
         <label htmlFor="nickname" className="signup-label">
           닉네임
         </label>
-        <div className="input-container">
+        <div className="input-container-signup">
           <input
             type="text"
             id="nickname"
@@ -238,7 +238,7 @@ const SignupForm = () => {
           />
         </div>
         {nicknameError && (
-          <p className="validation-error">
+          <p className="validation-error-signup">
             닉네임을 최대 8글자까지 입력해주세요.
           </p>
         )}
@@ -262,7 +262,7 @@ const SignupForm = () => {
           {showDomain}
           <input
             type="button"
-            className="check-email"
+            className="check-email-signup"
             onClick={emailCheck}
             value="중복확인"
           ></input>
@@ -274,7 +274,7 @@ const SignupForm = () => {
                 이메일 인증코드
               </label>
             </div>
-            <div className="input-container">
+            <div className="input-container-signup">
               <input
                 type="number"
                 placeholder="인증코드를 입력하세요"
@@ -302,13 +302,13 @@ const SignupForm = () => {
           ""
         )}
         {emailError && (
-          <p className="validation-error">이메일을 정확하게 입력해주세요.</p>
+          <p className="validation-error-signup">이메일을 정확하게 입력해주세요.</p>
         )}
         {showModal && <Modal message={modalMessage} onClose={closeModal} />}
         {codeSentMessage && (
-          <p className="validation-error">인증코드가 발송되었습니다.</p>
+          <p className="validation-erro-signupr">인증코드가 발송되었습니다.</p>
         )}
-        {matchCode && <p className="validation-error">{matchCode}</p>}
+        {matchCode && <p className="validation-error-signup">{matchCode}</p>}
         <label htmlFor="password" className="signup-label">
           비밀번호
         </label>
@@ -323,7 +323,7 @@ const SignupForm = () => {
           ref={pwdRef}
         />
         {passwordError && (
-          <p className="validation-error">
+          <p className="validation-error-signup">
             비밀번호는 10글자 이상으로 특수기호를 조합해서 사용해주세요.
           </p>
         )}
@@ -341,7 +341,7 @@ const SignupForm = () => {
           required
         />
         {confirmPasswordError && (
-          <p className="validation-error">비밀번호가 일치하지 않습니다.</p>
+          <p className="validation-error-signup">비밀번호가 일치하지 않습니다.</p>
         )}
 
         <button type="submit" className="signup-btn" onClick={joinMember}>

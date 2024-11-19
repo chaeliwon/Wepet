@@ -54,7 +54,7 @@ form {
   text-align: left;
 }
 
-.input-container {
+.input-container-signup {
   position: relative;
   width: 100%;
 }
@@ -92,7 +92,7 @@ input {
   display: flex;
 }
 
-.check-email {
+.check-email-signup {
   position: relative;
   right: 10px;
   width: 60px;
@@ -157,12 +157,16 @@ input {
   background-color: #a1b948;
 }
 
-.validation-error {
+.validation-error-signup {
   color: red;
-  font-size: 12px;
-  margin-bottom: 10px;
+  font-size: 13px;
+  margin-top: 10px;
+  margin-bottom: 5px;
   z-index: 1;
   position: relative;
+  display: block; /* 블록 요소로 변경 */
+  text-align: left !important;
+  width: 100%;
 }
 
 .modal-overlay {
@@ -179,11 +183,15 @@ input {
 }
 
 .modal-content {
-  background-color: white;
-  padding: 20px;
+  background-color:  rgba(255, 255, 255, 0.9) !important;
+  padding: 10px;
   border-radius: 8px;
   text-align: center;
   z-index: 1001;
+}
+
+.modal-content > p {
+  margin-top: 15px;
 }
 
 input[type="number"]::-webkit-outer-spin-button,

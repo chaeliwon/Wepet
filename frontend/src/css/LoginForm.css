@@ -181,6 +181,11 @@ input {
   font-size: 16px;
 }
 
+.signup-text-login:hover{
+  transform: scale(1.1);
+  transition: transform 0.3s ease; 
+}
+
 .validation-error-login {
   color: red;
   font-size: 14px;

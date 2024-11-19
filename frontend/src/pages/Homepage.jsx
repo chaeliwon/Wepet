@@ -16,6 +16,7 @@ const Homepage = () => {
   const [showOptions] = useState(true);
   const [pets, setPets] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userNick, setUserNick] = useState("");
   const [swiperRef, setSwiperRef] = useState(null);
   const [images, setImages] = useState([]);
   const nav = useNavigate();
@@ -30,6 +31,7 @@ const Homepage = () => {
       const token = localStorage.getItem("token");
       if (!token) {
         setIsLoggedIn(false);
+        setUserNick("");
         return;
       }
       const response = await api.get("/user/checkLoginStatus", {
@@ -37,12 +39,34 @@ const Homepage = () => {
           Authorization: token ? `Bearer ${token}` : undefined,
         },
       });
-      setIsLoggedIn(response.data.isLoggedIn || false);
+      
+      if (response.data.isLoggedIn) {
+        setIsLoggedIn(true);
+        // 닉네임 가져오기 API 호출
+        try {
+          const nickResponse = await api.get("/user/send-nick-mypage", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (nickResponse.data?.rows && nickResponse.data.rows.length > 0) {
+            setUserNick(nickResponse.data.rows[0].user_nick);
+          }
+        } catch (error) {
+          console.error("닉네임 가져오기 실패:", error);
+          setUserNick("사용자");
+        }
+      } else {
+        setIsLoggedIn(false);
+        setUserNick("");
+      }
     } catch (error) {
       console.error("로그인 상태 확인 중 오류 발생:", error);
       setIsLoggedIn(false);
+      setUserNick("");
     }
   };
+
+
 
   const logout = async () => {
     try {
@@ -99,17 +123,32 @@ const Homepage = () => {
     <div className="homepage-background">
       <img src={logo} alt="We Pet Logo" className="logo-home" />
 
-      <div className="login-buttons-home">
-        {isLoggedIn ? (
-          <button className="login-btn-home" onClick={logout}>
-            LOGOUT
-          </button>
-        ) : (
-          <Link to="/login">
-            <button className="login-btn-home">LOGIN</button>
-          </Link>
+      <div className="login-section">
+        <div className="login-buttons-home">
+          {isLoggedIn ? (
+            <>
+              <button className="login-btn-home" onClick={logout}>
+                LOGOUT
+              </button>
+              <div className="user-infor">
+              {userNick ? (
+                <>
+                  <span className="user-nick">{userNick}</span>
+                  <span className="user-suffix"> 님</span>
+                </>
+              ) : (
+                "로딩 중..."
+              )}
+              </div>
+
+            </>
+          ) : (
+            <Link to="/login">
+              <button className="login-btn-home">LOGIN</button>
+            </Link>
         )}
       </div>
+    </div>
 
       {showOptions && (
         <div className="home-chatbot-options">
