@@ -11,6 +11,8 @@ const EditProfileForm = () => {
   const [checkPwdError, setCheckPwdError] = useState(false);
   const [nicknameError, setNicknameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const [userData, setUserData] = useState(null);
   const [userType, setUserType] = useState("unknown"); // 초기값 명확히 설정
 
@@ -42,6 +44,11 @@ const EditProfileForm = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value || "");
     setPasswordError(false);
+  };
+
+  const showErrorModal = (message) => {
+    setModalMessage(message);
+    setShowModal(true);
   };
 
   const handleSubmit = (e) => {
@@ -114,6 +121,7 @@ const EditProfileForm = () => {
       }
     } catch (error) {
       console.error("회원정보 수정 실패:", error);
+      showErrorModal("회원정보 수정에 실패했습니다.");
     }
   };
 
@@ -138,9 +146,21 @@ const EditProfileForm = () => {
       setCheckPwdError(true);
     }
   };
+  const closeModal = () => setShowModal(false);
+  const Modal = ({ message, onClose }) => (
+    <div className="modal-overlay">
+      <div className="find-modal-content">
+        <p>{message}</p>
+        <button className="modal-close-btn" onClick={onClose}>
+          닫기
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="homepage-background">
+      {showModal && <Modal message={modalMessage} onClose={closeModal} />}
       {userType === "unknown" ? (
         <p>로딩 중...</p>
       ) : userType === "normal" && !checkPwdstate ? (
