@@ -239,7 +239,7 @@ button {
   transition: transform 0.05s; /* 크기 변경 애니메이션 부드럽게 */
 }
 
-.modal-overlay {
+.modal-overlay-chat1 {
   position: fixed;
   top: 0;
   left: 0;
@@ -249,14 +249,17 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: auto; /* 모달이 열려 있는 동안 외부 클릭 방지 */
+  z-index: 9999; /* 최상위 레이어 설정 */
+  pointer-events: auto; /* 외부 클릭 방지 */
 }
 
-.modal-content {
-  background: transparent;
+.modal-content-chat1 {
+  position: relative; /* 컨텐츠 내부 위치 설정 */
+  background: transparent !important; /* 배경 투명 유지 */
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  z-index: 10000; /* 컨텐츠를 다른 요소보다 위에 배치 */
 }
 
 .chatMySwiper {
@@ -272,9 +275,11 @@ button {
   border-radius: 15px;
 }
 
-.loading-image {
+.loading-image-chat1 {
   width: 393px;
   height: auto;
+  position: relative;
+  z-index: 10001; /* 이미지가 모든 요소보다 위에 표시되도록 설정 */
 }
 
 .chatbot-message {

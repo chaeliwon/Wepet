@@ -264,9 +264,9 @@ const ChatBot = () => {
   };
 
   const Modal = () => (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <img src={loadingImage} alt="로딩 중..." className="loading-image" />
+    <div className="modal-overlay-chat1">
+      <div className="modal-content-chat1">
+        <img src={loadingImage} alt="로딩 중..." className="loading-image-chat1" />
       </div>
     </div>
   );
