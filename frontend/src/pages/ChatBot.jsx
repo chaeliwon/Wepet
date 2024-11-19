@@ -111,7 +111,6 @@ const ChatBot = () => {
             centeredSlides={false}
             spaceBetween={5}
             grabCursor={true}
-            // pagination={{ clickable: true }}
             modules={[Pagination]}
             className="chatMySwiper"
           >
@@ -206,13 +205,17 @@ const ChatBot = () => {
       }));
       const botReply = (
         <div>
-          <p>이 친구들은 어떠세요?</p>
+          <p className="chatbot-message">
+            이 다섯 친구들은 어떠세요?
+            <br />
+            사진을 눌러 이 친구들에 대해 더 알아봐요!
+            <br />
+          </p>
           <Swiper
             slidesPerView={2}
             centeredSlides={false}
             spaceBetween={5}
             grabCursor={true}
-            pagination={{ clickable: true }}
             modules={[Pagination]}
             className="chatMySwiper"
           >
