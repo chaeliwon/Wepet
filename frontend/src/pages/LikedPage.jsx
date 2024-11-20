@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import api from "../api";
 import "../css/Liked.css";
+import ChatbotButton from "../components/ChatbotButton";
 
 const LikedPage = () => {
   const [likedPetInfo, setLikedPetInfo] = useState([]);
@@ -155,6 +156,7 @@ const LikedPage = () => {
 
   return (
     <div className="likedPageBG">
+    <ChatbotButton />
       {isLoggedIn ? (
         <div className="likedGallery">
           {likedPetInfo && likedPetInfo.length > 0 ? (
@@ -225,5 +227,7 @@ const LikedPage = () => {
     </div>
   );
 };
+
+
 
 export default LikedPage;
