@@ -193,6 +193,28 @@ input {
   width: 100%;
 }
 
+.validation-message {
+  font-size: 13px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  z-index: 1;
+  position: relative;
+  display: block;
+  text-align: left !important;
+  width: 100%;
+}
+
+.validation-message {
+  color: #2ecc71;
+  font-weight: 600;
+  text-align: center !important;
+  margin-top: 20px;
+}
+
+.validation-message.error {
+  color: red;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;

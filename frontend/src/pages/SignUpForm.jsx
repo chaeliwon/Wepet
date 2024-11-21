@@ -18,11 +18,12 @@ const SignupForm = () => {
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const [checkEmailDup, setCheckEmailDup] = useState(false);
   const [codeSentMessage, setCodeSentMessage] = useState(false);
-  const [matchCode, setMatchCode] = useState(false);
+  const [matchCode, setMatchCode] = useState({
+    message: "",
+    status: ""
+  });
 
-  // 이메일 형식 구성
-  const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
-  // 비밀번호 특수문자 포함
+  const pattern = /^[A-Za-z0-9_.@-]+@[A-Za-z0-9-]+\.[A-za-z0-9-]+/;
   const pwdSpecial = /[~`!@#$%^&*(),.?":{}|<>_\-/]/;
 
   const emailRef = useRef();
@@ -69,34 +70,30 @@ const SignupForm = () => {
     setPasswordError(false);
     setConfirmPasswordError(false);
 
-    let valid = true;
-
-    // 닉네임 검사
     if (nickname.length === 0 || nickname.length > 8) {
       setNicknameError(true);
-      valid = false;
+      return;
     }
 
     if (email === "") {
       setEmailError(true);
-      valid = false;
+      return;
     } else if (pattern.test(email) === false) {
       setEmailError(true);
-      valid = false;
+      return;
     }
 
     if (password.length < 10 || !pwdSpecial.test(password)) {
       setPasswordError(true);
-      valid = false;
+      return;
     }
 
     if (password !== confirmPassword) {
       setConfirmPasswordError(true);
-      valid = false;
+      return;
     }
 
     if (!isEmailChecked) {
-      // 중복확인을 누르지 않은 경우 모든 에러 메시지 표시
       setEmailError(true);
       setNicknameError(true);
       setPasswordError(true);
@@ -106,13 +103,9 @@ const SignupForm = () => {
       return;
     }
 
-    // if (valid) {
-    //   console.log("Form submitted successfully!");
-    //   // 가입 완료 로직을 여기서 처리합니다.
-    // }
+    console.log("Form submitted successfully!");
   };
 
-  // 이메일 중복확인
   const emailCheck = async (e) => {
     e.preventDefault();
 
@@ -179,7 +172,7 @@ const SignupForm = () => {
       setShowModal(true);
     }
   };
-  // 인증코드 발송
+
   const sendCode = async () => {
     let email = emailRef.current.value;
     let signup = "signup";
@@ -196,7 +189,6 @@ const SignupForm = () => {
     }
   };
 
-  // 인증코드 확인
   const checkCode = async () => {
     let code = codeRef.current.value;
     let email = emailRef.current.value;
@@ -207,16 +199,26 @@ const SignupForm = () => {
       });
       console.log(response);
       if (response.data.result === "인증 코드 일치") {
-        setMatchCode("코드가 확인됐습니다.");
+        setMatchCode({
+          message: "코드가 확인됐습니다.",
+          status: "success"
+        });
+        setCodeSentMessage(false);  // 여기에 추가
       } else {
-        setMatchCode("코드를 다시 확인해주세요");
+        setMatchCode({
+          message: "코드를 다시 확인해주세요",
+          status: "error"
+        });
       }
     } catch (error) {
       console.error("코드 확인 중 오류 발생:", error);
-      setMatchCode("코드를 다시 확인해주세요");
+      setMatchCode({
+        message: "코드를 다시 확인해주세요",
+        status: "error"
+      });
     }
   };
-
+  
   return (
     <div className="signup-container">
       <h1 className="signup-title">함께해요!</h1>
@@ -238,7 +240,7 @@ const SignupForm = () => {
           />
         </div>
         {nicknameError && (
-          <p className="validation-error-signup">
+          <p className=" dation-error-signup">
             닉네임을 최대 8글자까지 입력해주세요.
           </p>
         )}
@@ -296,6 +298,11 @@ const SignupForm = () => {
                   onClick={() => checkCode()}
                 ></input>
               </div>
+              {matchCode.message && (
+                <p className={`validation-message ${matchCode.status}`}>
+                  {matchCode.message}
+                </p>
+              )}
             </div>
           </div>
         ) : (
@@ -306,9 +313,9 @@ const SignupForm = () => {
         )}
         {showModal && <Modal message={modalMessage} onClose={closeModal} />}
         {codeSentMessage && (
-          <p className="validation-erro-signupr">인증코드가 발송되었습니다.</p>
+          <p className="validation-message">인증코드가 발송되었습니다.</p>
         )}
-        {matchCode && <p className="validation-error-signup">{matchCode}</p>}
+
         <label htmlFor="password" className="signup-label">
           비밀번호
         </label>
