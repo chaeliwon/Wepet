@@ -29,6 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # 요청 모델 정의
 class QuestionRequest(BaseModel):
     user_id: str

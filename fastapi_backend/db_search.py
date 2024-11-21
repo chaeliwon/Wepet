@@ -3,6 +3,7 @@ import numpy as np
 from db import get_database_connection
 import time
 
+
 # 데이터베이스에서 임베딩 데이터 검색 함수
 def search_similar_embeddings(query_embedding, top_n=5):
     start_time = time.time()
@@ -51,7 +52,9 @@ def search_similar_embeddings(query_embedding, top_n=5):
     finally:
         connection.close()
         end_time = time.time()
-        print(f"search_similar_embeddings 함수 실행 시간: {end_time - start_time:.2f}초")
+        print(
+            f"search_similar_embeddings 함수 실행 시간: {end_time - start_time:.2f}초"
+        )
 
 
 # search_by_keywords 함수 내 필터링 로직 적용
