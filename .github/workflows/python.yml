@@ -28,4 +28,4 @@ jobs:
         run: black --check ./fastapi_backend
 
       - name: Run Flake8
-        run: flake8 ./fastapi_backend
+        run: flake8 ./fastapi_backend --max-line-length 88
