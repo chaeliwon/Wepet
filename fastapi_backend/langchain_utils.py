@@ -89,8 +89,10 @@ def extract_keywords(text):
         start_time = time.time()
 
         # GPT 프롬프트 생성 (한국어 키워드 추출 및 영어 번역 요청)
-        prompt = (f"다음 문장에서 키워드만 추출하여 영어로 번역해주세요. "
-                  f"키워드는 털색, 견종, 크기와 관련된 단어들입니다. 예: 흰색 고양이 -> white, cat 문장: {text}")
+        prompt = (
+            f"다음 문장에서 키워드만 추출하여 영어로 번역해주세요. "
+            f"키워드는 털색, 견종, 크기와 관련된 단어들입니다. 예: 흰색 고양이 -> white, cat 문장: {text}"
+        )
         response = llm_model.invoke(prompt)
 
         # Response가 리스트 또는 객체일 수 있으므로 이를 확인하여 처리
