@@ -6,8 +6,6 @@ import json
 from db import get_database_connection
 from clip_embedding import preprocess_image, generate_image_embedding
 import os
-import requests
-from io import BytesIO
 
 
 def get_validation_data():
@@ -112,9 +110,9 @@ def calculate_roc_auroc(db_connection, validation_data):
             "No valid predictions could be made. Check your validation data."
         )
 
-    print(f"\nOverall Statistics:")
+    print("\nOverall Statistics:")
     print(f"Total predictions: {len(y_true)}")
-    print(f"Similarity score distribution:")
+    print("Similarity score distribution:")
     print(f"Min score: {min(y_scores):.3f}")
     print(f"Max score: {max(y_scores):.3f}")
     print(f"Mean score: {np.mean(y_scores):.3f}")
