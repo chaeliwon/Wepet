@@ -12,6 +12,7 @@ clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 embedding_cache = {}
 
+
 # CLIP을 이용한 텍스트 임베딩 생성 함수
 def generate_text_embedding(text):
     # 캐시를 사용하여 중복 생성을 방지
