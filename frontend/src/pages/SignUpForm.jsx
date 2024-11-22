@@ -64,46 +64,13 @@ const SignupForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    setEmailError(false);
-    setNicknameError(false);
-    setPasswordError(false);
-    setConfirmPasswordError(false);
-
-    if (nickname.length === 0 || nickname.length > 8) {
-      setNicknameError(true);
-      return;
-    }
-
-    if (email === "") {
-      setEmailError(true);
-      return;
-    } else if (pattern.test(email) === false) {
-      setEmailError(true);
-      return;
-    }
-
-    if (password.length < 10 || !pwdSpecial.test(password)) {
-      setPasswordError(true);
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setConfirmPasswordError(true);
-      return;
-    }
-
-    if (!isEmailChecked) {
-      setEmailError(true);
-      setNicknameError(true);
-      setPasswordError(true);
-      setConfirmPasswordError(true);
-      setModalMessage("중복 확인을 완료해주세요.");
-      setShowModal(true);
-      return;
-    }
-
-    console.log("Form submitted successfully!");
+    joinMember()
+      .then(() => {
+        console.log("Form submitted successfully!");
+      })
+      .catch((error) => {
+        console.error("Form submission failed:", error);
+      });
   };
 
   const emailCheck = async (e) => {
@@ -155,20 +122,65 @@ const SignupForm = () => {
   };
 
   const joinMember = async () => {
-    let email = emailRef.current.value;
-    let nick = nickRef.current.value;
-    let pwd = pwdRef.current.value;
-
-    const response = await api.post("/user/join", {
-      id: email,
-      pw: pwd,
-      nick: nick,
-    });
-    if (response.data.result === "가입 성공") {
-      setModalMessage("가입이 완료되었습니다.");
+    // 필수값 검증
+    if (nickname.length === 0 || nickname.length > 8) {
+      setNicknameError(true);
+      setModalMessage("닉네임을 확인해주세요.");
       setShowModal(true);
-    } else {
-      setModalMessage("가입에 실패했습니다.");
+      return;
+    }
+  
+    if (!email || !pattern.test(email)) {
+      setEmailError(true);
+      setModalMessage("이메일을 확인해주세요.");
+      setShowModal(true);
+      return;
+    }
+  
+    if (password.length < 10 || !pwdSpecial.test(password)) {
+      setPasswordError(true);
+      setModalMessage("비밀번호를 확인해주세요.");
+      setShowModal(true);
+      return;
+    }
+  
+    if (password !== confirmPassword) {
+      setConfirmPasswordError(true);
+      setModalMessage("비밀번호가 일치하지 않습니다.");
+      setShowModal(true);
+      return;
+    }
+  
+    if (!isEmailChecked) {
+      setModalMessage("이메일 중복 확인을 완료해주세요.");
+      setShowModal(true);
+      return;
+    }
+  
+    // 이메일 인증 코드 확인
+    if (matchCode.status !== "success") {
+      setModalMessage("이메일 인증을 완료해주세요.");
+      setShowModal(true);
+      return;
+    }
+  
+    try {
+      const response = await api.post("/user/join", {
+        id: email,
+        pw: password,
+        nick: nickname,
+      });
+      
+      if (response.data.result === "가입 성공") {
+        setModalMessage("가입이 완료되었습니다.");
+        setShowModal(true);
+      } else {
+        setModalMessage("가입에 실패했습니다.");
+        setShowModal(true);
+      }
+    } catch (error) {
+      console.error("회원가입 중 오류 발생:", error);
+      setModalMessage("회원가입 중 오류가 발생했습니다.");
       setShowModal(true);
     }
   };
@@ -351,7 +363,7 @@ const SignupForm = () => {
           <p className="validation-error-signup">비밀번호가 일치하지 않습니다.</p>
         )}
 
-        <button type="submit" className="signup-btn" onClick={joinMember}>
+        <button type="submit" className="signup-btn">
           가입 완료 🐾
         </button>
       </form>
